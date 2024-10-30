@@ -1,0 +1,37 @@
+#data-table .v-table__wrapper {
+    height: 100% !important;
+}
+
+#data-table .v-table .v-table__wrapper>table>tbody>tr:not(:last-child)>td,
+.v-table .v-table__wrapper>table>tbody>tr:not(:last-child)>th {
+    border: 0;
+}
+
+#data-table-footer {
+    box-shadow: inset 0 1px 0 rgba(var(--v-border-color), var(--v-border-opacity))
+}
+
+.grey-color {
+      color: #A5A5A5;
+    }
+.red-color {
+      color: red;
+    }
+.default-color {
+      color: black;
+    }
+.blue-color {
+      color: #2B99FF;
+    }
+.bg-grey-color{
+    background-color: #F5F5F5;
+}
+
+.v-table thead{
+    background-color: #F5F5F5;
+  }
+  
+
+.custom_table_class thead{
+    background-color: #F5F5F5;
+   }

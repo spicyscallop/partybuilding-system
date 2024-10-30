@@ -1,0 +1,7 @@
+// settings.scss
+@use 'vuetify/_settings'
+with ($body-font-family: ('Noto Sans SC', sans-serif));
+
+html {
+    overflow-y: auto
+}
