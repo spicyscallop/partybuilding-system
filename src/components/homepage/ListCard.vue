@@ -8,7 +8,7 @@
             </v-btn>
         </div>
         <v-list lines="one" class="py-0 pl-1 bg-grey-lighten-4">
-            <v-list-item v-for="item in content" :title="item.title" :subtitle="item.subtitle">
+            <v-list-item v-for="item in content" :title="item.title" :subtitle="item.subtitle" @click="goToUrl(item.url)">
                 <template v-slot:append>
                     <v-label class="ml-5" :text="item.date"></v-label>
                 </template>
@@ -47,6 +47,9 @@ export default {
       }
     },
     methods: {
+        goToUrl(url) {
+            window.open(url, '_blank');
+        },
         getMoreNotices(){
             //TODO: 更多
             this.$message({
