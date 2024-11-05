@@ -125,8 +125,8 @@
                 </v-col>
             </v-row>
             <v-row v-if="goTo.visiblePersonView" class="fill-height">
-                <EditPersonView v-if="goTo.subPage==1" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
-                </EditPersonView>
+                <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                </AddPersonView>
             </v-row>
         </v-col>
     </v-container>
@@ -136,7 +136,7 @@
 import { ref } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
-import EditPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/EditPersonView.vue'
+import AddPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddPersonView.vue'
 import { ElMessage } from 'element-plus'
 import { authentication } from '@/stores/authentication.js'
 const authenticationStore = authentication()
@@ -404,6 +404,12 @@ const headerRowStyle = () => {
         color: '#3E3E3E',
     };
 };
+
+const addPerson = (data) => {
+    tableData.value.push(data.value)
+    console.log(data.value)
+    goTo.value.visiblePersonView = false;
+}
 </script>
 
 

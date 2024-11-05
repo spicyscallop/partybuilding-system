@@ -41,7 +41,7 @@
                         style=" margin-top: 6px;margin-left:0px;width:23px;height=23px; float:right;">
                 </v-col>
             </v-row>
-            <v-row style="height: 80px;">
+            <v-row v-if="!goTo.visiblePersonView" style="height: 80px;">
                 <div
                     style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
                     <v-col cols="10">
@@ -61,11 +61,11 @@
                     </v-col>
                 </div>
             </v-row>
-            <v-row style="height: 100px;">
+            <v-row v-if="!goTo.visiblePersonView" style="height: 100px;">
                 <div style="padding-top: 10px;display: flex; width: 100%;">
                     <v-col cols="10">
                         <el-button class="redBtn" style="margin-left: -10px;" @click="showDialog">批量更改发展阶段</el-button>
-                        <el-button class="whiteBtn" style="border-color: #A5A5A5;">添加人员信息</el-button>
+                        <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
                     </v-col>
                     <v-col cols="2">
                         <AttributeSelection :optionList=colNames style="display: inline-block;float: right;"
@@ -73,7 +73,7 @@
                     </v-col>
                 </div>
             </v-row>
-            <v-row class="d-flex flex-column h-100">
+            <v-row v-if="!goTo.visiblePersonView" class="d-flex flex-column h-100">
                 <!-- 设置一个占满剩余空间的 div -->
                 <div class="flex-grow-1 overflow-auto">
                     <el-table ref="multipleTable" :data="tableData" max-height="80vh"
@@ -100,9 +100,9 @@
                     </el-table>
                 </div>
             </v-row>
-            <v-row style="background-color: #E9E9E9;">
+            <v-row v-if="!goTo.visiblePersonView" style="background-color: #E9E9E9;">
                 <v-col cols="5">
-                    <el-button class="redBtn" style="margin-left: 30px;">编辑</el-button>
+                    <el-button class="redBtn" style="margin-left: 30px;" @click="goToEditPersonView">编辑</el-button>
                     <el-button class="whiteBtn" style="border-color: #A5A5A5;">删除</el-button>
                 </v-col>
                 <v-col cols="7">
@@ -116,6 +116,12 @@
                     </div>
                 </v-col>
             </v-row>
+            <v-row v-if="goTo.visiblePersonView" class="fill-height">
+                <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                </AddPersonView>
+                <EditPersonView v-if="goTo.subPage==1" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                </EditPersonView>
+            </v-row>
         </v-col>
     </v-container>
 </template>
@@ -126,8 +132,17 @@ import { ref } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+import EditPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/EditPersonView.vue'
+import AddPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/AddPersonView.vue'
 import { ArrowDown } from '@element-plus/icons-vue';
 
+//页面显示变量
+const goTo = ref({
+    visiblePersonView: false,
+    subPage : 0,
+    pageType: 'Add',
+    data: null
+});
 const dialogVisible = ref(false)
 const applyTime = ref('');
 const tableBottom = ref({
@@ -244,6 +259,34 @@ const satifyStus = ref([
     // 更多数据...
 ])
 
+const goToAddPersonView = () => {
+    goTo.value.pageType = "Add"
+    goTo.value.data = {
+        userId: '',
+        name: '',
+        isParty: '',
+        talkerName: '',
+        applyTime: '',
+        submitTime: ''
+    }
+    goTo.value.subPage = 0
+    goTo.value.visiblePersonView = true;
+};
+
+const goToEditPersonView = () => {
+    goTo.value.pageType = "Edit"
+    goTo.value.data = {
+        userId: '',
+        name: '',
+        isParty: '',
+        talkerName: '',
+        applyTime: '',
+        submitTime: ''
+    }
+    goTo.value.subPage = 1
+    goTo.value.visiblePersonView = true;
+};
+
 // 批量更改发展阶段方法
 const showDialog = () => {
     // TODO 向服务器查询可以转正的人员赋值给satifyStus
@@ -266,6 +309,10 @@ const changeCheckCols = (indexList) => {
     checkedCols.value = new_checkedCols;
     handleCheckChange();
 };
+const addPerson = (data) => {
+    tableData.value.push(data.value)
+    goTo.value.visiblePersonView = false;
+}
 const handleOptionChange = (newOption) => {
     console.log('选项变化：', newOption);
     selectedOption.value = newOption;
