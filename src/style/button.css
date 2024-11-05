@@ -1,0 +1,75 @@
+.redBtn {
+    margin-left: 20px;
+    background-color: #C83C23;
+    border-color: #C83C23;
+    color: white;
+}
+
+.redBtn:hover {
+    background-color: #C83C23; /* 保持相同的颜色 */
+    border-color: #C83C23; /* 保持相同的颜色 */
+    color: white; /* 保持相同的颜色 */
+}
+
+.redBtn:active {
+    background-color: #A72E1B; /* 点击时的颜色 */
+    border-color: #A72E1B; /* 点击时的颜色 */
+}
+
+.whiteBtn {
+    margin-left: 20px;
+    background-color: #F7F7F7;
+    border-color: #C83C23;
+    color: #C83C23;
+}
+
+.whiteBtn:hover {
+    background-color: #F7F7F7; /* 保持相同的颜色 */
+    border-color: #F7F7F7; /* 保持相同的颜色 */
+    color: #C83C23; /* 保持相同的颜色 */
+}
+
+.whiteBtn:active {
+    background-color: #E7E7E7; /* 点击时的颜色 */
+    border-color: #E7E7E7; /* 点击时的颜色 */
+}
+
+.checkNextPhaseBtn {
+    margin-left: 20px;
+    background-color: #f7f7f7;
+    border-color: #898989;
+    color: #898989;
+}
+
+.checkNextPhaseBtn:hover {
+    background-color: #f7f7f7;
+    border-color: #898989;
+    color: #898989;
+}
+
+.checkNextPhaseBtn:active {
+    background-color: #cfcfcf; /* 点击时的背景颜色 */
+    border-color: #898989; /* 点击时的边框颜色 */
+    color: #898989; /* 点击时的文字颜色 */
+}
+
+.checkNextPhaseActiveBtn {
+    margin-left: 20px;
+    background-color: #37A0FF;
+    border-color: #37A0FF;
+    color: #ffffff;
+}
+
+.checkNextPhaseActiveBtn:hover {
+    margin-left: 20px;
+    background-color: #37A0FF;
+    border-color: #37A0FF;
+    color: #ffffff;
+}
+
+.checkNextPhaseActiveBtn:active {
+    margin-left: 20px;
+    background-color: #37A0FF;
+    border-color: #37A0FF;
+    color: #ffffff;
+}

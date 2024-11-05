@@ -1,0 +1,64 @@
+.lineActivate {
+    width: 3px;
+    background-color: #F35339;
+    /* z-index: 999; */
+}
+
+.lineUnActivate {
+    width: 3px;
+    background-color: #898989;
+    /* z-index: 999; */
+}
+
+.circleActivate {
+    width: 16px;
+    height: 16px;
+    background-color: #F35339;
+    /* 设置圆点的颜色 */
+    border-radius: 50%;
+    /* 将边框半径设置为50%，使其成为一个圆形 */
+    margin-top: auto;
+    margin-bottom: auto;
+    /* z-index: 999; */
+    /* 设置为比红色线更高的 z-index 值 */
+}
+
+.circleUnActivate {
+    width: 16px;
+    height: 16px;
+    background-color: #898989;
+    /* 设置圆点的颜色 */
+    border-radius: 50%;
+    /* 将边框半径设置为50%，使其成为一个圆形 */
+    margin-top: auto;
+    margin-bottom: auto;
+    /* z-index: 999; */
+    /* 设置为比红色线更高的 z-index 值 */
+}
+
+.positionLine {
+    margin-left: 80px;
+}
+
+.background-image-div {
+    position: absolute;
+    width: 65px;
+    height: 30px;
+    background-size: cover;
+    /* 控制背景图片的尺寸，cover 表示尽量覆盖整个容器 */
+    background-position: center;
+    /* 控制背景图片在容器中的位置，center 表示居中 */
+    background-repeat: no-repeat;
+    /* 防止背景图片重复显示 */
+}
+h4{
+    color: #898989;
+}
+
+.arrivePhase{
+    color: #F35339;
+}
+
+.unArrivePhase{
+    color: #898989;
+}

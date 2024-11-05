@@ -1,0 +1,139 @@
+.progress-bar {
+    --arrow-width: 12px;
+    --arrow-height: 15px;
+    --line-height: 3px;
+    --line-left-width: 100px;
+    --line-right-width: 100px;
+    --dot-size: 10px;
+
+    label {
+        color: #909090;
+    }
+}
+
+.v-tooltip {
+    :deep(.v-overlay__content) {
+        background: white;
+        box-shadow: rgba(70, 70, 70, 0.5) -2px 0px 15px 0px;
+        color: #2b99ff;
+        max-width: 200px ! important;
+    }
+
+}
+
+.v-tooltip :deep(.v-overlay__content::before) {
+    content: "";
+    z-index: 2001;
+    background: white;
+    position: absolute;
+    left: -10px;
+    height: 16px;
+    width: 10px;
+    clip-path: polygon(100% 100%, 0 50%, 100% 0);
+    display: block;
+}
+
+.mark {
+    color: #898989;
+
+    /* width: var(--line-width); */
+    height: var(--arrow-height);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+     /* Left Arrow */
+    >.arrow {
+        display: flex;
+        width: calc(var(--line-left-width) + var(--arrow-width));
+
+        &::before {
+            content: "";
+            margin-top: calc((var(--arrow-height) - var(--line-height)) / 2);
+            border-top: var(--line-height) solid currentColor;
+            width: var(--line-left-width);
+        }
+
+        &::after {
+            content: "";
+            background: currentColor;
+            width: var(--arrow-width);
+            height: var(--arrow-height);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+    }
+
+    >.dot {
+        margin-top: calc((var(--arrow-height) - var(--dot-size)) / 2);
+        margin-left: 10px;
+        margin-right: 10px;
+        border: 1.5px solid currentColor;
+        border-radius: calc(var(--dot-size) / 2);
+        width: var(--dot-size);
+        height: var(--dot-size);
+    }
+    >.dot_done {
+        margin-top: calc((var(--arrow-height) - var(--dot-size)) / 2);
+        margin-left: 10px;
+        margin-right: 10px;
+        border: 1.5px solid currentColor;
+        border-radius: calc(var(--dot-size) / 2);
+        width: var(--dot-size);
+        height: var(--dot-size);
+        background-color: currentColor;
+    }
+
+    /* // Right Arrow */
+    >.line {
+        display: flex;
+
+        width: var(--line-right-width);
+
+        &::before {
+            content: "";
+            margin-top: calc((var(--arrow-height) - var(--line-height)) / 2);
+            border-top: var(--line-height) solid currentColor;
+            width: var(--line-right-width);
+        }
+    }
+    >.dashed_line {
+        display: flex;
+    
+        width: var(--line-right-width);
+
+        &::before {
+            content: "";
+            margin-top: calc((var(--arrow-height) - var(--line-height)) / 2);
+            border-top: var(--line-height) dashed currentColor;
+            width: var(--line-right-width);
+        }
+    }
+    >.dashed_arrow {
+        display: flex;
+        width: calc(var(--line-left-width) + var(--arrow-width));
+
+        &::before {
+            content: "";
+            margin-top: calc((var(--arrow-height) - var(--line-height)) / 2);
+            border-top: var(--line-height) dashed currentColor;
+            width: var(--line-right-width);
+        }
+
+        &::after {
+            content: "";
+            background: currentColor;
+            width: var(--arrow-width);
+            height: var(--arrow-height);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+    }
+    .bg-white-color{
+        background-color: #ffffff;
+    }
+    .bg-grey-color{
+        background-color: #D6D6D6;
+    }
+    .red-color {
+        color: red;
+      }
+}

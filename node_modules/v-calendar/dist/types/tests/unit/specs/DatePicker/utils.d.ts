@@ -1,0 +1,11 @@
+import { UnwrapNestedRefs, ComponentPublicInstance } from 'vue';
+import { VueWrapper } from '@vue/test-utils';
+import { DatePickerContext } from '@/use/datePicker';
+export type DatePickerComponent = UnwrapNestedRefs<DatePickerContext> & ComponentPublicInstance;
+export declare function mountDp(props: any, slots?: any): Promise<VueWrapper<ComponentPublicInstance<DatePickerComponent, {}, {}, {}, {}, {}, DatePickerComponent, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}>>>;
+export declare function getDayClass(vm: DatePickerComponent, date: Date): string;
+export declare function getDayContentClass(vm: DatePickerComponent, date: Date): string;
+export declare function renderFnEvents(evts: Record<string, Function>): Record<string, Function>;
+export declare function mountWithInputs(props: any): Promise<VueWrapper<ComponentPublicInstance<DatePickerComponent, {}, {}, {}, {}, {}, DatePickerComponent, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}>>>;
+export declare function mountWithRangeInputs(props: any): Promise<VueWrapper<ComponentPublicInstance<DatePickerComponent, {}, {}, {}, {}, {}, DatePickerComponent, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}>>>;
+export declare function updateInputs(dp: VueWrapper<DatePickerComponent>, startValue: string, endValue?: string): Promise<unknown>;
