@@ -7,7 +7,7 @@
             <v-icon class="mt-1" icon="mdi-greater-than"></v-icon>
             </v-btn>
         </div>
-        <v-list lines="one" class="py-0 pl-1 bg-grey-lighten-4">
+        <v-list lines="one" class="py-0 pl-1 bg-grey-lighten-4 flex-grow-1">
             <v-list-item v-for="item in content" :title="item.title" :subtitle="item.subtitle" @click="goToUrl(item.url)">
                 <template v-slot:append>
                     <v-label class="ml-5" :text="item.date"></v-label>
@@ -15,9 +15,7 @@
             </v-list-item>
         </v-list>
         <v-btn-toggle class="justify-center mt-2" v-model="index" style="height: auto;" mandatory>
-            <v-btn class="bg-grey-lighten-2 mr-2" size="xx-small" rounded="xl" style="width: 15px;height: 15px; "></v-btn>
-            <v-btn class="bg-grey-lighten-2" size="xx-small" rounded="xl" style="width: 15px;height: 15px; "></v-btn>
-            <v-btn class="bg-grey-lighten-2 ml-2" size="xx-small" rounded="xl" style="width: 15px;height: 15px; "></v-btn>
+            <v-btn v-for="page in totalPages" class="bg-grey-lighten-2 mr-2" size="xx-small" rounded="xl" style="width: 15px;height: 15px; "></v-btn>
         </v-btn-toggle>
     </v-sheet>
 </template>
@@ -57,18 +55,30 @@ export default {
                         type: 'warning',
                         duration: 2000
                       });
+        },
+        updateContent() {
+            const start = this.index * this.pageSize;
+            const end = start + this.pageSize;
+            this.content = this.list.slice(start, end);
         }
     },
-    // 监听 index 的变化，更新 content 数组
-    watch:{
-        index(newValue,oldValue){
-            this.content = this.list.slice(newValue*this.pageSize,(newValue+1)*this.pageSize)
+    watch: {
+        index(newValue) {
+            this.updateContent();
+        },
+        list() {
+            this.updateContent();
         }
     },
-    // 初始化 content 数组
-    mounted(){
-        this.content = this.list.slice(0,this.pageSize)
+    mounted() {
+        this.updateContent();
     },
+    computed: {
+        // 计算总页数，向上取整
+        totalPages() {
+            return Math.ceil(this.list.length / this.pageSize);
+        }
+  }
 };
 
 </script>
