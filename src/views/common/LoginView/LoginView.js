@@ -2,7 +2,7 @@ import ListCard from '@/components/homepage/ListCard.vue';
 import ShowCase from '@/components/homepage/ShowCase.vue';
 import ImageCode from '@/components/ImageCode.vue';
 import { authentication } from '@/stores/authentication';
-import { userLogin,getCaptcha,getCaptchaVerify } from '@/http/api';
+import { userLogin,getCaptcha,getCaptchaVerify,getXtgg } from '@/http/api';
 import md5 from 'js-md5';
 import axios from 'axios';
 
@@ -110,9 +110,8 @@ export default {
                 this.loginForm.codeKey = res.data.key
             })
         },
-        getXtgg(){
-            axios.get('/api/systemMessages/page')
-            .then(response => {
+        getXtggV(){
+            getXtgg().then(response => {
               if (response.data.success) {
                 // 提取数据并格式化后存入 xtgg
                 this.xtgg = response.data.data.records.map(record => ({
@@ -131,7 +130,7 @@ export default {
         }
     },
     mounted(){
-        this.getXtgg()
+        this.getXtggV()
         this.getCaptchaV()
     }
 

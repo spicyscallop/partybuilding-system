@@ -214,3 +214,18 @@ export const getPartyHonors = () => {
         }
     })
 }
+
+/**
+ * 获取系统消息接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const getXtgg = () => {
+    return axios({
+        url: "/api/systemMessages/page",
+        method: "get",
+        data: {
+        }
+    })
+}
