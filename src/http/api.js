@@ -3,7 +3,7 @@ import axios from "./request"
 //get
 export const mokeGet = (data) => {
     return axios({
-        url: "/api/xxxx",
+        url: "/xxxx",
         method: "get",
         data,
         config: {
@@ -18,7 +18,7 @@ export const mokeGet = (data) => {
 //post
 export const mokePost = (data) => {
     return axios({
-        url: "/api/getCaptchaCode",
+        url: "/getCaptchaCode",
         method: "post",
         data,
         config: {
@@ -38,7 +38,7 @@ export const mokePost = (data) => {
  */
 export const getTest = () => {
     return axios({
-        url: "/api/getHello",
+        url: "/getHello",
         method: "get",
     })
 }
@@ -52,7 +52,7 @@ export const getTest = () => {
  */
 export const userLogin = (data) => {
     return axios({
-        url: "/api/user/login",
+        url: "/user/login",
         method: "post",
         data: data
     })
@@ -66,7 +66,7 @@ export const userLogin = (data) => {
  */
 export const getCaptcha = () => {
     return axios({
-        url: "/api/captcha",
+        url: "/captcha",
         method: "get",
     })
 }
@@ -79,7 +79,7 @@ export const getCaptcha = () => {
  */
 export const getCaptchaVerify = (verCode,verKey) => {
     return axios({
-        url: "/api/captcha/verify",
+        url: "/captcha/verify",
         method: "get",
         data: {
             verCode: verCode,
@@ -96,7 +96,7 @@ export const getCaptchaVerify = (verCode,verKey) => {
  */
 export const getPersonDetail = (userId) => {
     return axios({
-        url: "/api/users/findUser",
+        url: "/users/findUser",
         method: "get",
         data: {
             id: userId
@@ -112,7 +112,7 @@ export const getPersonDetail = (userId) => {
  */
 export const motifyPersonSetting = (dataFrame) => {
     return axios({
-        url: "/api/users/updateUser",
+        url: "/users/updateUser",
         method: "post",
         data: dataFrame // 传递要修改的个人信息数据对象
     })
@@ -126,7 +126,7 @@ export const motifyPersonSetting = (dataFrame) => {
  */
 export const getUserInfo = (userNumber) => {
     return axios({
-        url: "/api/users/info",
+        url: "/users/info",
         method: "get",
         data: {
             userNumber: userNumber,
@@ -142,7 +142,7 @@ export const getUserInfo = (userNumber) => {
  */
 export const getCenterNumber1 = (userNumber) => {
     return axios({
-        url: "/api/selfstudy/allstudyhour",
+        url: "/selfstudy/allstudyhour",
         method: "get",
         data: {
             userNumber: userNumber,
@@ -158,7 +158,7 @@ export const getCenterNumber1 = (userNumber) => {
  */
 export const getCenterNumber2 = (userNumber) => {
     return axios({
-        url: "/api/selfstudy/getallstudyhour/nowdevelopmentPhase",
+        url: "/selfstudy/getallstudyhour/nowdevelopmentPhase",
         method: "get",
         data: {
             userNumber: userNumber,
@@ -174,7 +174,7 @@ export const getCenterNumber2 = (userNumber) => {
  */
 export const getUnreadMessages = (userId) => {
     return axios({
-        url: "/api/userMessages/allmessagetext",
+        url: "/userMessages/allmessagetext",
         method: "get",
         data: {
             isRead: 0,
@@ -193,7 +193,7 @@ export const getUnreadMessages = (userId) => {
  */
 export const getBranchActivities = () => {
     return axios({
-        url: "/api/branchactivity/list/",
+        url: "/branchactivity/list/",
         method: "get",
         data: {
         }
@@ -208,7 +208,7 @@ export const getBranchActivities = () => {
  */
 export const getPartyHonors = () => {
     return axios({
-        url: "/api/partyhonor/list/",
+        url: "/partyhonor/list/",
         method: "get",
         data: {
         }
@@ -223,7 +223,7 @@ export const getPartyHonors = () => {
  */
 export const getXtgg = () => {
     return axios({
-        url: "/api/systemMessages/page",
+        url: "/systemMessages/page",
         method: "get",
         data: {
         }
