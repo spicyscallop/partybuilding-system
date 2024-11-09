@@ -29,225 +29,10 @@
   "resolved" "https://registry.npmmirror.com/@element-plus/icons-vue/-/icons-vue-2.3.1.tgz"
   "version" "2.3.1"
 
-"@esbuild/android-arm@0.18.20":
-  "integrity" "sha512-fyi7TDI/ijKKNZTUJAQqiG5T7YjJXgnzkURqmGj13C6dCqckZBLdl4h7bkhHt/t0WP+zO9/zwroDvANaOqO5Sw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-arm/-/android-arm-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/android-arm@0.19.5":
-  "integrity" "sha512-bhvbzWFF3CwMs5tbjf3ObfGqbl/17ict2/uwOSfr3wmxDE6VdS2GqY/FuzIPe0q0bdhj65zQsvqfArI9MY6+AA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-arm/-/android-arm-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/android-arm64@0.18.20":
-  "integrity" "sha512-Nz4rJcchGDtENV0eMKUNa6L12zz2zBDXuhj/Vjh18zGqB44Bi7MBMSXjgunJgjRhCmKOjnPuZp4Mb6OKqtMHLQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-arm64/-/android-arm64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/android-arm64@0.19.5":
-  "integrity" "sha512-5d1OkoJxnYQfmC+Zd8NBFjkhyCNYwM4n9ODrycTFY6Jk1IGiZ+tjVJDDSwDt77nK+tfpGP4T50iMtVi4dEGzhQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-arm64/-/android-arm64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/android-x64@0.18.20":
-  "integrity" "sha512-8GDdlePJA8D6zlZYJV/jnrRAi6rOiNaCC/JclcXpB+KIuvfBN4owLtgzY2bsxnx666XjJx2kDPUmnTtR8qKQUg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-x64/-/android-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/android-x64@0.19.5":
-  "integrity" "sha512-9t+28jHGL7uBdkBjL90QFxe7DVA+KGqWlHCF8ChTKyaKO//VLuoBricQCgwhOjA1/qOczsw843Fy4cbs4H3DVA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/android-x64/-/android-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/darwin-arm64@0.18.20":
-  "integrity" "sha512-bxRHW5kHU38zS2lPTPOyuyTm+S+eobPUnTNkdJEfAddYgEcll4xkT8DB9d2008DtTbl7uJag2HuE5NZAZgnNEA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/darwin-arm64/-/darwin-arm64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/darwin-arm64@0.19.5":
-  "integrity" "sha512-mvXGcKqqIqyKoxq26qEDPHJuBYUA5KizJncKOAf9eJQez+L9O+KfvNFu6nl7SCZ/gFb2QPaRqqmG0doSWlgkqw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/darwin-arm64/-/darwin-arm64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/darwin-x64@0.18.20":
-  "integrity" "sha512-pc5gxlMDxzm513qPGbCbDukOdsGtKhfxD1zJKXjCCcU7ju50O7MeAZ8c4krSJcOIJGFR+qx21yMMVYwiQvyTyQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/darwin-x64/-/darwin-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/darwin-x64@0.19.5":
-  "integrity" "sha512-Ly8cn6fGLNet19s0X4unjcniX24I0RqjPv+kurpXabZYSXGM4Pwpmf85WHJN3lAgB8GSth7s5A0r856S+4DyiA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/darwin-x64/-/darwin-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/freebsd-arm64@0.18.20":
-  "integrity" "sha512-yqDQHy4QHevpMAaxhhIwYPMv1NECwOvIpGCZkECn8w2WFHXjEwrBn3CeNIYsibZ/iZEUemj++M26W3cNR5h+Tw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/freebsd-arm64/-/freebsd-arm64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/freebsd-arm64@0.19.5":
-  "integrity" "sha512-GGDNnPWTmWE+DMchq1W8Sd0mUkL+APvJg3b11klSGUDvRXh70JqLAO56tubmq1s2cgpVCSKYywEiKBfju8JztQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/freebsd-arm64/-/freebsd-arm64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/freebsd-x64@0.18.20":
-  "integrity" "sha512-tgWRPPuQsd3RmBZwarGVHZQvtzfEBOreNuxEMKFcd5DaDn2PbBxfwLcj4+aenoh7ctXcbXmOQIn8HI6mCSw5MQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/freebsd-x64/-/freebsd-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/freebsd-x64@0.19.5":
-  "integrity" "sha512-1CCwDHnSSoA0HNwdfoNY0jLfJpd7ygaLAp5EHFos3VWJCRX9DMwWODf96s9TSse39Br7oOTLryRVmBoFwXbuuQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/freebsd-x64/-/freebsd-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-arm@0.18.20":
-  "integrity" "sha512-/5bHkMWnq1EgKr1V+Ybz3s1hWXok7mDFUMQ4cG10AfW3wL02PSZi5kFpYKrptDsgb2WAJIvRcDm+qIvXf/apvg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-arm/-/linux-arm-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-arm@0.19.5":
-  "integrity" "sha512-lrWXLY/vJBzCPC51QN0HM71uWgIEpGSjSZZADQhq7DKhPcI6NH1IdzjfHkDQws2oNpJKpR13kv7/pFHBbDQDwQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-arm/-/linux-arm-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-arm64@0.18.20":
-  "integrity" "sha512-2YbscF+UL7SQAVIpnWvYwM+3LskyDmPhe31pE7/aoTMFKKzIc9lLbyGUpmmb8a8AixOL61sQ/mFh3jEjHYFvdA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-arm64/-/linux-arm64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-arm64@0.19.5":
-  "integrity" "sha512-o3vYippBmSrjjQUCEEiTZ2l+4yC0pVJD/Dl57WfPwwlvFkrxoSO7rmBZFii6kQB3Wrn/6GwJUPLU5t52eq2meA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-arm64/-/linux-arm64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-ia32@0.18.20":
-  "integrity" "sha512-P4etWwq6IsReT0E1KHU40bOnzMHoH73aXp96Fs8TIT6z9Hu8G6+0SHSw9i2isWrD2nbx2qo5yUqACgdfVGx7TA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-ia32/-/linux-ia32-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-ia32@0.19.5":
-  "integrity" "sha512-MkjHXS03AXAkNp1KKkhSKPOCYztRtK+KXDNkBa6P78F8Bw0ynknCSClO/ztGszILZtyO/lVKpa7MolbBZ6oJtQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-ia32/-/linux-ia32-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-loong64@0.18.20":
-  "integrity" "sha512-nXW8nqBTrOpDLPgPY9uV+/1DjxoQ7DoB2N8eocyq8I9XuqJ7BiAMDMf9n1xZM9TgW0J8zrquIb/A7s3BJv7rjg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-loong64/-/linux-loong64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-loong64@0.19.5":
-  "integrity" "sha512-42GwZMm5oYOD/JHqHska3Jg0r+XFb/fdZRX+WjADm3nLWLcIsN27YKtqxzQmGNJgu0AyXg4HtcSK9HuOk3v1Dw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-loong64/-/linux-loong64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-mips64el@0.18.20":
-  "integrity" "sha512-d5NeaXZcHp8PzYy5VnXV3VSd2D328Zb+9dEq5HE6bw6+N86JVPExrA6O68OPwobntbNJ0pzCpUFZTo3w0GyetQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-mips64el/-/linux-mips64el-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-mips64el@0.19.5":
-  "integrity" "sha512-kcjndCSMitUuPJobWCnwQ9lLjiLZUR3QLQmlgaBfMX23UEa7ZOrtufnRds+6WZtIS9HdTXqND4yH8NLoVVIkcg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-mips64el/-/linux-mips64el-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-ppc64@0.18.20":
-  "integrity" "sha512-WHPyeScRNcmANnLQkq6AfyXRFr5D6N2sKgkFo2FqguP44Nw2eyDlbTdZwd9GYk98DZG9QItIiTlFLHJHjxP3FA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-ppc64/-/linux-ppc64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-ppc64@0.19.5":
-  "integrity" "sha512-yJAxJfHVm0ZbsiljbtFFP1BQKLc8kUF6+17tjQ78QjqjAQDnhULWiTA6u0FCDmYT1oOKS9PzZ2z0aBI+Mcyj7Q=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-ppc64/-/linux-ppc64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-riscv64@0.18.20":
-  "integrity" "sha512-WSxo6h5ecI5XH34KC7w5veNnKkju3zBRLEQNY7mv5mtBmrP/MjNBCAlsM2u5hDBlS3NGcTQpoBvRzqBcRtpq1A=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-riscv64/-/linux-riscv64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-riscv64@0.19.5":
-  "integrity" "sha512-5u8cIR/t3gaD6ad3wNt1MNRstAZO+aNyBxu2We8X31bA8XUNyamTVQwLDA1SLoPCUehNCymhBhK3Qim1433Zag=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-riscv64/-/linux-riscv64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-s390x@0.18.20":
-  "integrity" "sha512-+8231GMs3mAEth6Ja1iK0a1sQ3ohfcpzpRLH8uuc5/KVDFneH6jtAJLFGafpzpMRO6DzJ6AvXKze9LfFMrIHVQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-s390x/-/linux-s390x-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-s390x@0.19.5":
-  "integrity" "sha512-Z6JrMyEw/EmZBD/OFEFpb+gao9xJ59ATsoTNlj39jVBbXqoZm4Xntu6wVmGPB/OATi1uk/DB+yeDPv2E8PqZGw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-s390x/-/linux-s390x-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/linux-x64@0.18.20":
-  "integrity" "sha512-UYqiqemphJcNsFEskc73jQ7B9jgwjWrSayxawS6UVFZGWrAAtkzjxSqnoclCXxWtfwLdzU+vTpcNYhpn43uP1w=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-x64/-/linux-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/linux-x64@0.19.5":
-  "integrity" "sha512-psagl+2RlK1z8zWZOmVdImisMtrUxvwereIdyJTmtmHahJTKb64pAcqoPlx6CewPdvGvUKe2Jw+0Z/0qhSbG1A=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/linux-x64/-/linux-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/netbsd-x64@0.18.20":
-  "integrity" "sha512-iO1c++VP6xUBUmltHZoMtCUdPlnPGdBom6IrO4gyKPFFVBKioIImVooR5I83nTew5UOYrk3gIJhbZh8X44y06A=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/netbsd-x64/-/netbsd-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/netbsd-x64@0.19.5":
-  "integrity" "sha512-kL2l+xScnAy/E/3119OggX8SrWyBEcqAh8aOY1gr4gPvw76la2GlD4Ymf832UCVbmuWeTf2adkZDK+h0Z/fB4g=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/netbsd-x64/-/netbsd-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/openbsd-x64@0.18.20":
-  "integrity" "sha512-e5e4YSsuQfX4cxcygw/UCPIEP6wbIL+se3sxPdCiMbFLBWu0eiZOJ7WoD+ptCLrmjZBK1Wk7I6D/I3NglUGOxg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/openbsd-x64/-/openbsd-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/openbsd-x64@0.19.5":
-  "integrity" "sha512-sPOfhtzFufQfTBgRnE1DIJjzsXukKSvZxloZbkJDG383q0awVAq600pc1nfqBcl0ice/WN9p4qLc39WhBShRTA=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/openbsd-x64/-/openbsd-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/sunos-x64@0.18.20":
-  "integrity" "sha512-kDbFRFp0YpTQVVrqUd5FTYmWo45zGaXe0X8E1G/LKFC0v8x0vWrhOWSLITcCn63lmZIxfOMXtCfti/RxN/0wnQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/sunos-x64/-/sunos-x64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/sunos-x64@0.19.5":
-  "integrity" "sha512-dGZkBXaafuKLpDSjKcB0ax0FL36YXCvJNnztjKV+6CO82tTYVDSH2lifitJ29jxRMoUhgkg9a+VA/B03WK5lcg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/sunos-x64/-/sunos-x64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/win32-arm64@0.18.20":
-  "integrity" "sha512-ddYFR6ItYgoaq4v4JmQQaAI5s7npztfV4Ag6NrhiaW0RrnOXqBkgwZLofVTlq1daVTQNhtI5oieTvkRPfZrePg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-arm64/-/win32-arm64-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/win32-arm64@0.19.5":
-  "integrity" "sha512-dWVjD9y03ilhdRQ6Xig1NWNgfLtf2o/STKTS+eZuF90fI2BhbwD6WlaiCGKptlqXlURVB5AUOxUj09LuwKGDTg=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-arm64/-/win32-arm64-0.19.5.tgz"
-  "version" "0.19.5"
-
-"@esbuild/win32-ia32@0.18.20":
-  "integrity" "sha512-Wv7QBi3ID/rROT08SABTS7eV4hX26sVduqDOTe1MvGMjNd3EjOz4b7zeexIR62GTIEKrfJXKL9LFxTYgkyeu7g=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-ia32/-/win32-ia32-0.18.20.tgz"
-  "version" "0.18.20"
-
-"@esbuild/win32-ia32@0.19.5":
-  "integrity" "sha512-4liggWIA4oDgUxqpZwrDhmEfAH4d0iljanDOK7AnVU89T6CzHon/ony8C5LeOdfgx60x5cnQJFZwEydVlYx4iw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-ia32/-/win32-ia32-0.19.5.tgz"
-  "version" "0.19.5"
-
 "@esbuild/win32-x64@0.18.20":
   "integrity" "sha512-kTdfRcSiDfQca/y9QIkng02avJ+NCaQvrMejlsB3RRv5sE9rRoeBPISaZpKxHELzRxZyLvNts1P27W3wV+8geQ=="
   "resolved" "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz"
   "version" "0.18.20"
-
-"@esbuild/win32-x64@0.19.5":
-  "integrity" "sha512-czTrygUsB/jlM8qEW5MD8bgYU2Xg14lo6kBDXW6HdxKjh8M5PzETGiSHaz9MtbXBYDloHNUAUW2tMiKW4KM9Mw=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.19.5.tgz"
-  "version" "0.19.5"
 
 "@eslint/eslintrc@^1.3.3":
   "integrity" "sha512-uj3pT6Mg+3t39fvLrj8iuCIJ38zKO9FpGtJ4BBJebJhEwjoT+KLVNCcHT5QC9NGRIEi7fZ0ZR8YRb884auB4Lg=="
@@ -559,7 +344,7 @@
 
 "@vueup/vue-quill@^1.2.0":
   "integrity" "sha512-kd5QPSHMDpycklojPXno2Kw2JSiKMYduKYQckTm1RJoVDA557MnyUXgcuuDpry4HY/Rny9nGNcK+m3AHk94wag=="
-  "resolved" "https://registry.npmjs.org/@vueup/vue-quill/-/vue-quill-1.2.0.tgz"
+  "resolved" "https://registry.npmmirror.com/@vueup/vue-quill/-/vue-quill-1.2.0.tgz"
   "version" "1.2.0"
   dependencies:
     "quill" "^1.3.7"
@@ -702,7 +487,7 @@
 
 "call-bind@^1.0.0", "call-bind@^1.0.2":
   "integrity" "sha512-C3nQxfFZxFRVoJoGKKI8y3MOEo129NQ+FgQ08iye+Mk4zNZZGdjfs06bVTr+DBSlA66Q2VEcMki/cUCP4SercQ=="
-  "resolved" "https://registry.npmjs.org/call-bind/-/call-bind-1.0.5.tgz"
+  "resolved" "https://registry.npmmirror.com/call-bind/-/call-bind-1.0.5.tgz"
   "version" "1.0.5"
   dependencies:
     "function-bind" "^1.1.2"
@@ -761,7 +546,7 @@
 
 "clone@^2.1.1":
   "integrity" "sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w=="
-  "resolved" "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
+  "resolved" "https://registry.npmmirror.com/clone/-/clone-2.1.2.tgz"
   "version" "2.1.2"
 
 "color-convert@^2.0.1":
@@ -895,7 +680,7 @@
 
 "deep-equal@^1.0.1":
   "integrity" "sha512-yd9c5AdiqVcR+JjcwUQb9DkhJc8ngNr0MahEBGvDiJw8puWab2yZlh+nkasOnZP+EGTAP6rRp2JzJhJZzvNF8g=="
-  "resolved" "https://registry.npmjs.org/deep-equal/-/deep-equal-1.1.1.tgz"
+  "resolved" "https://registry.npmmirror.com/deep-equal/-/deep-equal-1.1.1.tgz"
   "version" "1.1.1"
   dependencies:
     "is-arguments" "^1.0.4"
@@ -912,12 +697,12 @@
 
 "deepmerge@^2.0.0":
   "integrity" "sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA=="
-  "resolved" "https://registry.npmjs.org/deepmerge/-/deepmerge-2.2.1.tgz"
+  "resolved" "https://registry.npmmirror.com/deepmerge/-/deepmerge-2.2.1.tgz"
   "version" "2.2.1"
 
 "define-data-property@^1.0.1", "define-data-property@^1.1.1":
   "integrity" "sha512-E7uGkTzkk1d0ByLeSc6ZsFS79Axg+m1P/VsgYsxHgiuc3tFSj+MjMIwe90FC4lOAZzNBdY7kkO2P2wKdsQ1vgQ=="
-  "resolved" "https://registry.npmjs.org/define-data-property/-/define-data-property-1.1.1.tgz"
+  "resolved" "https://registry.npmmirror.com/define-data-property/-/define-data-property-1.1.1.tgz"
   "version" "1.1.1"
   dependencies:
     "get-intrinsic" "^1.2.1"
@@ -926,7 +711,7 @@
 
 "define-properties@^1.1.3", "define-properties@^1.2.0":
   "integrity" "sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg=="
-  "resolved" "https://registry.npmjs.org/define-properties/-/define-properties-1.2.1.tgz"
+  "resolved" "https://registry.npmmirror.com/define-properties/-/define-properties-1.2.1.tgz"
   "version" "1.2.1"
   dependencies:
     "define-data-property" "^1.0.1"
@@ -1042,7 +827,7 @@
   dependencies:
     "prr" "~1.0.1"
 
-"esbuild@^0.18.10":
+"esbuild@^0.18.10", "esbuild@>=0.17":
   "integrity" "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA=="
   "resolved" "https://registry.npmmirror.com/esbuild/-/esbuild-0.18.20.tgz"
   "version" "0.18.20"
@@ -1069,34 +854,6 @@
     "@esbuild/win32-arm64" "0.18.20"
     "@esbuild/win32-ia32" "0.18.20"
     "@esbuild/win32-x64" "0.18.20"
-
-"esbuild@>=0.17":
-  "integrity" "sha512-bUxalY7b1g8vNhQKdB24QDmHeY4V4tw/s6Ak5z+jJX9laP5MoQseTOMemAr0gxssjNcH0MCViG8ONI2kksvfFQ=="
-  "resolved" "https://registry.npmmirror.com/esbuild/-/esbuild-0.19.5.tgz"
-  "version" "0.19.5"
-  optionalDependencies:
-    "@esbuild/android-arm" "0.19.5"
-    "@esbuild/android-arm64" "0.19.5"
-    "@esbuild/android-x64" "0.19.5"
-    "@esbuild/darwin-arm64" "0.19.5"
-    "@esbuild/darwin-x64" "0.19.5"
-    "@esbuild/freebsd-arm64" "0.19.5"
-    "@esbuild/freebsd-x64" "0.19.5"
-    "@esbuild/linux-arm" "0.19.5"
-    "@esbuild/linux-arm64" "0.19.5"
-    "@esbuild/linux-ia32" "0.19.5"
-    "@esbuild/linux-loong64" "0.19.5"
-    "@esbuild/linux-mips64el" "0.19.5"
-    "@esbuild/linux-ppc64" "0.19.5"
-    "@esbuild/linux-riscv64" "0.19.5"
-    "@esbuild/linux-s390x" "0.19.5"
-    "@esbuild/linux-x64" "0.19.5"
-    "@esbuild/netbsd-x64" "0.19.5"
-    "@esbuild/openbsd-x64" "0.19.5"
-    "@esbuild/sunos-x64" "0.19.5"
-    "@esbuild/win32-arm64" "0.19.5"
-    "@esbuild/win32-ia32" "0.19.5"
-    "@esbuild/win32-x64" "0.19.5"
 
 "escape-html@^1.0.3", "escape-html@~1.0.3":
   "integrity" "sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow=="
@@ -1255,12 +1012,12 @@
 
 "eventemitter3@^2.0.3":
   "integrity" "sha512-jLN68Dx5kyFHaePoXWPsCGW5qdyZQtLYHkxkg02/Mz6g0kYpDx4FyP6XfArhQdlOC4b8Mv+EMxPo/8La7Tzghg=="
-  "resolved" "https://registry.npmjs.org/eventemitter3/-/eventemitter3-2.0.3.tgz"
+  "resolved" "https://registry.npmmirror.com/eventemitter3/-/eventemitter3-2.0.3.tgz"
   "version" "2.0.3"
 
 "extend@^3.0.2":
   "integrity" "sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g=="
-  "resolved" "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz"
+  "resolved" "https://registry.npmmirror.com/extend/-/extend-3.0.2.tgz"
   "version" "3.0.2"
 
 "fast-deep-equal@^3.1.1", "fast-deep-equal@^3.1.3":
@@ -1275,7 +1032,7 @@
 
 "fast-diff@1.1.2":
   "integrity" "sha512-KaJUt+M9t1qaIteSvjc6P3RbMdXsNhK61GRftR6SNxqmhthcd9MGIi4T+o0jD8LUSpSnSKXE20nLtJ3fOHxQig=="
-  "resolved" "https://registry.npmjs.org/fast-diff/-/fast-diff-1.1.2.tgz"
+  "resolved" "https://registry.npmmirror.com/fast-diff/-/fast-diff-1.1.2.tgz"
   "version" "1.1.2"
 
 "fast-glob@^3.2.12", "fast-glob@^3.3.1", "fast-glob@^3.3.2":
@@ -1390,24 +1147,19 @@
   "resolved" "https://registry.npmmirror.com/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@~2.3.2":
-  "integrity" "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="
-  "resolved" "https://registry.npmmirror.com/fsevents/-/fsevents-2.3.3.tgz"
-  "version" "2.3.3"
-
 "function-bind@^1.1.2":
   "integrity" "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="
-  "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
+  "resolved" "https://registry.npmmirror.com/function-bind/-/function-bind-1.1.2.tgz"
   "version" "1.1.2"
 
 "functions-have-names@^1.2.3":
   "integrity" "sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ=="
-  "resolved" "https://registry.npmjs.org/functions-have-names/-/functions-have-names-1.2.3.tgz"
+  "resolved" "https://registry.npmmirror.com/functions-have-names/-/functions-have-names-1.2.3.tgz"
   "version" "1.2.3"
 
 "get-intrinsic@^1.0.2", "get-intrinsic@^1.1.3", "get-intrinsic@^1.2.1", "get-intrinsic@^1.2.2":
   "integrity" "sha512-0gSo4ml/0j98Y3lngkFEot/zhiCeWsbYIlZ+uZOVgzLyLaUw7wxUL+nCTP0XJvJg1AXulJRI3UJi8GsbDuxdGA=="
-  "resolved" "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.2.2.tgz"
+  "resolved" "https://registry.npmmirror.com/get-intrinsic/-/get-intrinsic-1.2.2.tgz"
   "version" "1.2.2"
   dependencies:
     "function-bind" "^1.1.2"
@@ -1457,7 +1209,7 @@
 
 "gopd@^1.0.1":
   "integrity" "sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA=="
-  "resolved" "https://registry.npmjs.org/gopd/-/gopd-1.0.1.tgz"
+  "resolved" "https://registry.npmmirror.com/gopd/-/gopd-1.0.1.tgz"
   "version" "1.0.1"
   dependencies:
     "get-intrinsic" "^1.1.3"
@@ -1479,31 +1231,31 @@
 
 "has-property-descriptors@^1.0.0":
   "integrity" "sha512-VsX8eaIewvas0xnvinAe9bw4WfIeODpGYikiWYLH+dma0Jw6KHYqWiWfhQlgOVK8D6PvjubK5Uc4P0iIhIcNVg=="
-  "resolved" "https://registry.npmjs.org/has-property-descriptors/-/has-property-descriptors-1.0.1.tgz"
+  "resolved" "https://registry.npmmirror.com/has-property-descriptors/-/has-property-descriptors-1.0.1.tgz"
   "version" "1.0.1"
   dependencies:
     "get-intrinsic" "^1.2.2"
 
 "has-proto@^1.0.1":
   "integrity" "sha512-7qE+iP+O+bgF9clE5+UoBFzE65mlBiVj3tKCrlNQ0Ogwm0BjpT/gK4SlLYDMybDh5I3TCTKnPPa0oMG7JDYrhg=="
-  "resolved" "https://registry.npmjs.org/has-proto/-/has-proto-1.0.1.tgz"
+  "resolved" "https://registry.npmmirror.com/has-proto/-/has-proto-1.0.1.tgz"
   "version" "1.0.1"
 
 "has-symbols@^1.0.2", "has-symbols@^1.0.3":
   "integrity" "sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A=="
-  "resolved" "https://registry.npmjs.org/has-symbols/-/has-symbols-1.0.3.tgz"
+  "resolved" "https://registry.npmmirror.com/has-symbols/-/has-symbols-1.0.3.tgz"
   "version" "1.0.3"
 
 "has-tostringtag@^1.0.0":
   "integrity" "sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ=="
-  "resolved" "https://registry.npmjs.org/has-tostringtag/-/has-tostringtag-1.0.0.tgz"
+  "resolved" "https://registry.npmmirror.com/has-tostringtag/-/has-tostringtag-1.0.0.tgz"
   "version" "1.0.0"
   dependencies:
     "has-symbols" "^1.0.2"
 
 "hasown@^2.0.0":
   "integrity" "sha512-vUptKVTpIJhcczKBbgnS+RtcuYMB8+oNzPK2/Hp3hanz8JmpATdmmgLgSaadVREkDm+e2giHwY3ZRkyjSIDDFA=="
-  "resolved" "https://registry.npmjs.org/hasown/-/hasown-2.0.0.tgz"
+  "resolved" "https://registry.npmmirror.com/hasown/-/hasown-2.0.0.tgz"
   "version" "2.0.0"
   dependencies:
     "function-bind" "^1.1.2"
@@ -1574,7 +1326,7 @@
 
 "is-arguments@^1.0.4":
   "integrity" "sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA=="
-  "resolved" "https://registry.npmjs.org/is-arguments/-/is-arguments-1.1.1.tgz"
+  "resolved" "https://registry.npmmirror.com/is-arguments/-/is-arguments-1.1.1.tgz"
   "version" "1.1.1"
   dependencies:
     "call-bind" "^1.0.2"
@@ -1596,7 +1348,7 @@
 
 "is-date-object@^1.0.1":
   "integrity" "sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ=="
-  "resolved" "https://registry.npmjs.org/is-date-object/-/is-date-object-1.0.5.tgz"
+  "resolved" "https://registry.npmmirror.com/is-date-object/-/is-date-object-1.0.5.tgz"
   "version" "1.0.5"
   dependencies:
     "has-tostringtag" "^1.0.0"
@@ -1625,7 +1377,7 @@
 
 "is-regex@^1.0.4":
   "integrity" "sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg=="
-  "resolved" "https://registry.npmjs.org/is-regex/-/is-regex-1.1.4.tgz"
+  "resolved" "https://registry.npmmirror.com/is-regex/-/is-regex-1.1.4.tgz"
   "version" "1.1.4"
   dependencies:
     "call-bind" "^1.0.2"
@@ -1742,12 +1494,12 @@
 
 "lodash.clonedeep@^4.5.0":
   "integrity" "sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ=="
-  "resolved" "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
+  "resolved" "https://registry.npmmirror.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
   "version" "4.5.0"
 
 "lodash.isequal@^4.5.0":
   "integrity" "sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ=="
-  "resolved" "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
+  "resolved" "https://registry.npmmirror.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
   "version" "4.5.0"
 
 "lodash.merge@^4.6.2":
@@ -1903,12 +1655,12 @@
 
 "object-inspect@^1.9.0":
   "integrity" "sha512-5qoj1RUiKOMsCCNLV1CBiPYE10sziTsnmNxkAI/rZhiD63CF7IqdFGC/XzjWjpSgLf0LxXX3bDFIh0E18f6UhQ=="
-  "resolved" "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.1.tgz"
+  "resolved" "https://registry.npmmirror.com/object-inspect/-/object-inspect-1.13.1.tgz"
   "version" "1.13.1"
 
 "object-is@^1.0.1":
   "integrity" "sha512-3cyDsyHgtmi7I7DfSSI2LDp6SK2lwvtbg0p0R1e0RvTqF5ceGx+K2dfSjm1bKDMVCFEDAQvy+o8c6a7VujOddw=="
-  "resolved" "https://registry.npmjs.org/object-is/-/object-is-1.1.5.tgz"
+  "resolved" "https://registry.npmmirror.com/object-is/-/object-is-1.1.5.tgz"
   "version" "1.1.5"
   dependencies:
     "call-bind" "^1.0.2"
@@ -1916,7 +1668,7 @@
 
 "object-keys@^1.1.1":
   "integrity" "sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA=="
-  "resolved" "https://registry.npmjs.org/object-keys/-/object-keys-1.1.1.tgz"
+  "resolved" "https://registry.npmmirror.com/object-keys/-/object-keys-1.1.1.tgz"
   "version" "1.1.1"
 
 "on-finished@~2.3.0":
@@ -1980,7 +1732,7 @@
 
 "parchment@^1.1.4":
   "integrity" "sha512-J5FBQt/pM2inLzg4hEWmzQx/8h8D0CiDxaG3vyp9rKrQRSDgBlhjdP5jQGgosEajXPSQouXGHOmVdgo7QmJuOg=="
-  "resolved" "https://registry.npmjs.org/parchment/-/parchment-1.1.4.tgz"
+  "resolved" "https://registry.npmmirror.com/parchment/-/parchment-1.1.4.tgz"
   "version" "1.1.4"
 
 "parent-module@^1.0.0":
@@ -2125,7 +1877,7 @@
 
 "qs@^6.11.2":
   "integrity" "sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA=="
-  "resolved" "https://registry.npmjs.org/qs/-/qs-6.11.2.tgz"
+  "resolved" "https://registry.npmmirror.com/qs/-/qs-6.11.2.tgz"
   "version" "6.11.2"
   dependencies:
     "side-channel" "^1.0.4"
@@ -2137,14 +1889,14 @@
 
 "quill-blot-formatter@^1.0.5":
   "integrity" "sha512-iVmuEdmMIpvERBnnDfosWul6VAVN6tqQRruUzAEwA9ZbQ/Ef7DTHGZDUR4KklXpxM+z50opFp6m1NhNdN6HJhw=="
-  "resolved" "https://registry.npmjs.org/quill-blot-formatter/-/quill-blot-formatter-1.0.5.tgz"
+  "resolved" "https://registry.npmmirror.com/quill-blot-formatter/-/quill-blot-formatter-1.0.5.tgz"
   "version" "1.0.5"
   dependencies:
     "deepmerge" "^2.0.0"
 
 "quill-delta@^3.6.2":
   "integrity" "sha512-wdIGBlcX13tCHOXGMVnnTVFtGRLoP0imqxM696fIPwIf5ODIYUHIvHbZcyvGlZFiFhK5XzDC2lpjbxRhnM05Tg=="
-  "resolved" "https://registry.npmjs.org/quill-delta/-/quill-delta-3.6.3.tgz"
+  "resolved" "https://registry.npmmirror.com/quill-delta/-/quill-delta-3.6.3.tgz"
   "version" "3.6.3"
   dependencies:
     "deep-equal" "^1.0.1"
@@ -2153,7 +1905,7 @@
 
 "quill-delta@^4.2.2":
   "integrity" "sha512-qjbn82b/yJzOjstBgkhtBjN2TNK+ZHP/BgUQO+j6bRhWQQdmj2lH6hXG7+nwwLF41Xgn//7/83lxs9n2BkTtTg=="
-  "resolved" "https://registry.npmjs.org/quill-delta/-/quill-delta-4.2.2.tgz"
+  "resolved" "https://registry.npmmirror.com/quill-delta/-/quill-delta-4.2.2.tgz"
   "version" "4.2.2"
   dependencies:
     "fast-diff" "1.2.0"
@@ -2162,7 +1914,7 @@
 
 "quill@^1.3.4", "quill@^1.3.7":
   "integrity" "sha512-hG/DVzh/TiknWtE6QmWAF/pxoZKYxfe3J/d/+ShUWkDvvkZQVTPeVmUJVu1uE6DDooC4fWTiCLh84ul89oNz5g=="
-  "resolved" "https://registry.npmjs.org/quill/-/quill-1.3.7.tgz"
+  "resolved" "https://registry.npmmirror.com/quill/-/quill-1.3.7.tgz"
   "version" "1.3.7"
   dependencies:
     "clone" "^2.1.1"
@@ -2186,7 +1938,7 @@
 
 "regexp.prototype.flags@^1.2.0":
   "integrity" "sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg=="
-  "resolved" "https://registry.npmjs.org/regexp.prototype.flags/-/regexp.prototype.flags-1.5.1.tgz"
+  "resolved" "https://registry.npmmirror.com/regexp.prototype.flags/-/regexp.prototype.flags-1.5.1.tgz"
   "version" "1.5.1"
   dependencies:
     "call-bind" "^1.0.2"
@@ -2281,7 +2033,7 @@
 
 "set-function-length@^1.1.1":
   "integrity" "sha512-VoaqjbBJKiWtg4yRcKBQ7g7wnGnLV3M8oLvVWwOk2PdYY6PEFegR1vezXR0tw6fZGF9csVakIRjrJiy2veSBFQ=="
-  "resolved" "https://registry.npmjs.org/set-function-length/-/set-function-length-1.1.1.tgz"
+  "resolved" "https://registry.npmmirror.com/set-function-length/-/set-function-length-1.1.1.tgz"
   "version" "1.1.1"
   dependencies:
     "define-data-property" "^1.1.1"
@@ -2291,7 +2043,7 @@
 
 "set-function-name@^2.0.0":
   "integrity" "sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA=="
-  "resolved" "https://registry.npmjs.org/set-function-name/-/set-function-name-2.0.1.tgz"
+  "resolved" "https://registry.npmmirror.com/set-function-name/-/set-function-name-2.0.1.tgz"
   "version" "2.0.1"
   dependencies:
     "define-data-property" "^1.0.1"
@@ -2312,7 +2064,7 @@
 
 "side-channel@^1.0.4":
   "integrity" "sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw=="
-  "resolved" "https://registry.npmjs.org/side-channel/-/side-channel-1.0.4.tgz"
+  "resolved" "https://registry.npmmirror.com/side-channel/-/side-channel-1.0.4.tgz"
   "version" "1.0.4"
   dependencies:
     "call-bind" "^1.0.0"

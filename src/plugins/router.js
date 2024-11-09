@@ -78,7 +78,18 @@ const router = createRouter({
           path: '/teacher/test',
           name: 'TeacherTest',
           component: () => import('@/views/test.vue')
-        }
+        },
+        // 党委中心
+        {
+          path: '/teacher/dwzx',
+          name: 'DWZX',
+          component: () => import('@/views/teacher/DWZXViews/DWZXView.vue')
+        },
+        {
+          path: '/teacher/dwzx/branchlist',
+          name: 'BranchList',
+          component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
+        },
       ]
     },
     {
