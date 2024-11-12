@@ -33,8 +33,9 @@
             <v-list-item prepend-icon="mdi-home" title="党委概况" to="/teacher/home"></v-list-item>
             <v-list-group value="2">
                 <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="发展管理"></v-list-item>
+                    <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="发展管理" @click="$router.push('/teacher/fzgl/fzgl')"></v-list-item>
                 </template>
+                <!-- <v-list-item title="发展管理" to="/teacher/fzgl/fzgl"></v-list-item> -->
                 <v-list-item title="入党申请人阶段" to="/teacher/fzgl/rdsq"></v-list-item>
                 <v-list-item title="积极分子阶段" to="/teacher/fzgl/jjfz"></v-list-item>
                 <v-list-item title="发展对象阶段" to="/teacher/fzgl/fzdx"></v-list-item>
