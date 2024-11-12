@@ -28,6 +28,11 @@ const router = createRouter({
         },
         // 发展阶段
         {
+          path: '/teacher/fzgl/fzgl',
+          name: 'T_FZGL',
+          component: () => import('@/views/teacher/FZGLViews/indexView.vue'),
+        },
+        {
           path: '/teacher/fzgl/rdsq',
           name: 'T_RDSQ',
           component: () => import('@/views/teacher/FZGLViews/RDSQ/RDSQView.vue'),
@@ -135,6 +140,11 @@ const router = createRouter({
           component: () => import('@/views/partyBranchManager/HomeView.vue')
         },
         // 发展阶段
+        {
+          path: '/partyManager/fzgl/fzgl',
+          name: 'P_FZGL',
+          component: () => import('@/views/partyBranchManager/FZGLViews/indexView.vue')
+        },
         {
           path: '/partyManager/fzgl/rdsq',
           name: 'P_RDSQ',
