@@ -32,9 +32,6 @@
 							:value="item.value">
 							</el-option>
 						</el-select>
-
-						<!-- <span style="margin-left: 30px;">学工号</span><input placeholder="    请输入"  v-model="queryItems.userId"
-							style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;"> -->
 						<span style="margin-left: 30px;">学工号</span>
 						<el-input style="width: 20%; margin-left: 20px;" v-model="queryItems.userId" placeholder="请输入内容"></el-input>
 					</v-col>
@@ -76,7 +73,7 @@
 						  <template #default="scope">
 							  <el-button
 							  size="mini"
-							  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							  @click="handleEdit(scope.$index, scope.row)">管理</el-button>
 							  <el-button
 							  size="mini"
 							  class="redBtn"
@@ -103,6 +100,81 @@
 				</v-col>
 			</v-row>
 		</v-col>
+
+		<el-dialog
+			title="管理权限信息"
+			v-model="dialogVisible"
+			width="50%"
+			:before-close="handleClose">
+			<el-form :model="accessForm" :rules="accessManageRules" ref="accessForm" label-width="100px" class="demo-ruleForm">
+				<el-row :gutter="10">
+					<el-col :span="10">
+						<el-form-item label="学工号" prop="userId">
+							<el-input v-model="accessForm.userId"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="姓名" prop="name">
+							<el-input v-model="accessForm.name"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="10">
+						<el-form-item label="当前权限" prop="currentAccess" required>
+							<el-select v-model="accessForm.currentAccess" placeholder="请选择">
+								<el-option
+								v-for="item in accessOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="更改权限" prop="updatedAccess">
+							<el-select v-model="accessForm.updatedAccess" placeholder="请选择">
+								<el-option
+									v-for="item in accessOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+				</el-row>
+
+				<el-row :gutter="10">
+					<el-col :span="10">
+						<el-form-item label="注册时间" prop="registerTime" required>
+							<el-select v-model="accessForm.registerTime" placeholder="请选择">
+								<el-option
+								v-for="item in registerTimeOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="手机号" prop="phone" required>
+							<el-input v-model="accessForm.phone"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+
+				<el-form-item label="备注" prop="remark">
+					<el-input :rows="10" type="textarea" v-model="accessForm.remark"></el-input>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<el-button type="primary" @click="dialogVisible = false" class="redBtn">确 定</el-button>
+				<el-button @click="dialogVisible = false">取 消</el-button>
+			</template>
+		</el-dialog>
 	</v-container>
   </template>
   
@@ -129,11 +201,11 @@
    * 注册时间
    */
   const RegisterTimeDict = {
-  "withinAWeek": "一周内",
-  "withinAMonth": "一月内",
-  "withinSixMonths": "半年内",
-  "withinAYear": "一年内",
-  "allTime": "全部"
+	"withinAWeek": "一周内",
+	"withinAMonth": "一月内",
+	"withinSixMonths": "半年内",
+	"withinAYear": "一年内",
+	"allTime": "全部"
 };
   
   export default {
@@ -199,12 +271,35 @@
 				{ label: '全部', value: '全部'},
 			],
 			selectedOption: '请选择党支部',
+			accessForm: {
+				userId: "",
+				name: "",
+				currentAccess: "",
+				updatedAccess: "",
+				registerTime: "",
+				phone: "",
+				remark: "",
+			},
+			accessManageRules: {
+				userId: [
+					{ required: true, message: '请输入学工号', trigger: 'blur' },
+				],
+				name: [
+					{ required: true, message: '请输入姓名', trigger: 'blur' },
+				],
+				currentAccess: [
+					{ required: true, message: '请选择当前权限', trigger: 'change' },
+				],
+				registerTime: [
+					{ required: true, message: '请选择注册时间', trigger: 'change' },
+				],
+				phone: [
+					{ required: true, message: '请输入手机号', trigger: 'blur' },
+				],
+			}
 		}
 	},
 	methods: {
-		formatter(row, col, cellVal) {
-		  return cellVal ? '是' : '否'; 
-		},
 		clearInputMessage() {
 			this.queryItems.userId = "";
 			this.queryItems.name = "";
@@ -277,6 +372,9 @@
 		  console.log('选项变化：', newOption);
 		  this.selectedOption = newOption;
 		},
+		handleEdit(i, val) {
+			this.dialogVisible = true
+		}
 	},
   }
   </script>
