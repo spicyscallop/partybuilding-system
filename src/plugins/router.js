@@ -95,6 +95,12 @@ const router = createRouter({
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
+        // 权限管理
+        {
+          path: '/teacher/permission',
+          name: 'Permission',
+          component: () => import('@/views/teacher/Permission.vue')
+        }
       ]
     },
     {
