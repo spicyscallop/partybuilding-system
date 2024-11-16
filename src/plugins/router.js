@@ -90,6 +90,11 @@ const router = createRouter({
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
+        {
+          path: '/teacher/dwzx/personlist',
+          name: 'PersonList',
+          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
+        },
       ]
     },
     {

@@ -84,7 +84,7 @@ export default {
                     title: "党员数量",
                     subtitle: "浙江大学软件学院党支部",
                     buttonText: "人员列表",
-                    viewLink: "",
+                    viewLink: "/teacher/dwzx/personlist",
                 },
                 {
                     count: 132,
