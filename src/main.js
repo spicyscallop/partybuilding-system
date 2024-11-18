@@ -11,7 +11,7 @@ import router from './plugins/router'
 
 import App from './App.vue'
 
-import axios from "axios"
+import axios from "./http";
 
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
@@ -37,3 +37,5 @@ app.use(notifyMessage)
 // 全局使用 Element Plus
 app.use(ElementPlus);
 app.mount('#app')
+
+app.config.globalProperties.$axios = axios;
