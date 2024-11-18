@@ -1,48 +1,4 @@
-import axios from "./request"
-//请求示例
-//get
-export const mokeGet = (data) => {
-    return axios({
-        url: "/xxxx",
-        method: "get",
-        data,
-        config: {
-            headers: {
-                'Request-Type': 'wechat'
-            },
-            timeout: 10000
-        }
-    })
-}
-
-//post
-export const mokePost = (data) => {
-    return axios({
-        url: "/getCaptchaCode",
-        method: "post",
-        data,
-        config: {
-            headers: {
-                'Request-Type': 'wechat'
-            },
-            timeout: 10000
-        }
-    })
-}
-
-/**
- * 跨域测试
- * @author 郭宗豪
- * @argument 
- * @returns
- */
-export const getTest = () => {
-    return axios({
-        url: "/getHello",
-        method: "get",
-    })
-}
-
+import axios from "./index"
 
 /**
  * 登录接口
@@ -51,11 +7,7 @@ export const getTest = () => {
  * @returns
  */
 export const userLogin = (data) => {
-    return axios({
-        url: "/user/login",
-        method: "post",
-        data: data
-    })
+    return axios.post( "/api/user/login", data);
 }
 
 /**
@@ -65,10 +17,7 @@ export const userLogin = (data) => {
  * @returns
  */
 export const getCaptcha = () => {
-    return axios({
-        url: "/captcha",
-        method: "get",
-    })
+    return axios.get("/api/captcha")
 }
 
 /**
@@ -78,14 +27,7 @@ export const getCaptcha = () => {
  * @returns
  */
 export const getCaptchaVerify = (verCode,verKey) => {
-    return axios({
-        url: "/captcha/verify",
-        method: "get",
-        data: {
-            verCode: verCode,
-            verKey: verKey
-        }
-    })
+    return axios.get("/api/captcha/verify")
 }
 
 /**
@@ -95,13 +37,7 @@ export const getCaptchaVerify = (verCode,verKey) => {
  * @returns
  */
 export const getPersonDetail = (userId) => {
-    return axios({
-        url: "/users/findUser",
-        method: "get",
-        data: {
-            id: userId
-        }
-    })
+    return axios.get("/api/users/findUser")
 }
 
 /**
@@ -111,11 +47,7 @@ export const getPersonDetail = (userId) => {
  * @returns
  */
 export const motifyPersonSetting = (dataFrame) => {
-    return axios({
-        url: "/users/updateUser",
-        method: "post",
-        data: dataFrame // 传递要修改的个人信息数据对象
-    })
+    return axios.get("/api/users/updateUser")
 }
 
 /**
@@ -125,13 +57,7 @@ export const motifyPersonSetting = (dataFrame) => {
  * @returns
  */
 export const getUserInfo = (userNumber) => {
-    return axios({
-        url: "/users/info",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/api/users/info")
 }
 
 /**
@@ -141,13 +67,7 @@ export const getUserInfo = (userNumber) => {
  * @returns
  */
 export const getCenterNumber1 = (userNumber) => {
-    return axios({
-        url: "/selfstudy/allstudyhour",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/api/selfstudy/allstudyhour")
 }
 
 /**
@@ -157,13 +77,7 @@ export const getCenterNumber1 = (userNumber) => {
  * @returns
  */
 export const getCenterNumber2 = (userNumber) => {
-    return axios({
-        url: "/selfstudy/getallstudyhour/nowdevelopmentPhase",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/api/selfstudy/getallstudyhour/nowdevelopmentPhase")
 }
 
 /**
@@ -173,14 +87,7 @@ export const getCenterNumber2 = (userNumber) => {
  * @returns
  */
 export const getUnreadMessages = (userId) => {
-    return axios({
-        url: "/userMessages/allmessagetext",
-        method: "get",
-        data: {
-            isRead: 0,
-            recvUserId: userId
-        }
-    })
+    return axios.get("/api/userMessages/allmessagetext")
 }
 
 
@@ -192,12 +99,7 @@ export const getUnreadMessages = (userId) => {
  * @returns
  */
 export const getBranchActivities = () => {
-    return axios({
-        url: "/branchactivity/list/",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/api/branchactivity/list/")
 }
 
 /**
@@ -207,12 +109,7 @@ export const getBranchActivities = () => {
  * @returns
  */
 export const getPartyHonors = () => {
-    return axios({
-        url: "/partyhonor/list/",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/api/partyhonor/list/")
 }
 
 /**
@@ -222,10 +119,5 @@ export const getPartyHonors = () => {
  * @returns
  */
 export const getXtgg = () => {
-    return axios({
-        url: "/systemMessages/page",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/api/systemMessages/page")
 }

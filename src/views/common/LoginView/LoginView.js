@@ -4,7 +4,6 @@ import ImageCode from '@/components/ImageCode.vue';
 import { authentication } from '@/stores/authentication';
 import { userLogin,getCaptcha,getCaptchaVerify,getXtgg } from '@/http/api';
 import md5 from 'js-md5';
-import axios from 'axios';
 
 
 const auth = authentication();

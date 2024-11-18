@@ -4,7 +4,7 @@ import {
     ElLoading,
     ElMessage
 } from 'element-plus';
-//创建axios的一个实例 
+//创建axios的一个实例
 var instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL, //接口统一域名
     timeout: 6000, //设置超时

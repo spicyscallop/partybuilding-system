@@ -158,7 +158,6 @@ export default {
 
       this.$axios.post('/api/stage/page', data)
           .then(response => {
-            console.log(response)
             this.tableData = response.data.records;
             this.tableBottom.totalNum = response.data.total;
           })
