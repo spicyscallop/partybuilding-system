@@ -16,37 +16,45 @@
                             start-placeholder="开始日期" end-placeholder="结束日期"
                             style="width: 25%;margin-left: 20px;" />
           </v-col>
-          <v-col cols="4">
-            <el-button class="redBtn" style="margin-left: 30px;" @click="goToAddPersonView">新增</el-button>
+          <v-col cols="2">
             <el-button class="redBtn" @click="queryList">查询</el-button>
             <el-button class="whiteBtn" @click="clearInputMessage">清除</el-button>
           </v-col>
         </div>
       </v-row>
-
+      <v-row style="height: 100px;">
+        <div style="padding-top: 10px;display: flex; width: 100%;">
+          <v-col cols="10">
+            <el-button class="redBtn" style="margin-left: -10px;" @click="batchDialogVisible = true">批量更改发展阶段</el-button>
+            <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
+          </v-col>
+          <v-col cols="2">
+            <AttributeSelection :optionList="colNames" style="display: inline-block;float: right;"
+                                @optionChange=""></AttributeSelection>
+          </v-col>
+        </div>
+      </v-row>
       <v-row v-if="!goTo.visiblePersonView" class="d-flex flex-column h-100">
         <div class="flex-grow-1 overflow-auto">
           <el-table ref="multipleTable" :data="tableData" max-height="80vh"
-                    style="border-radius: 15px;background-color: #F7F7F7;">
+                    style="border-radius: 15px;background-color: #F7F7F7;"
+                    @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection">
+            </el-table-column>
             <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
               <template v-slot="scope" v-if="item.type === 'date'">
                 {{ formatTime(scope.row[item.prop]) }}
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="200" align="center">
-              <template v-slot="scope">
-                <el-button type="primary" class="redBtn" size="mini" @click="editRow(scope.row)">编辑</el-button>
-                <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow(scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-
           </el-table>
         </div>
       </v-row>
 
       <v-row v-if="!goTo.visiblePersonView" style="background-color: #E9E9E9;">
         <v-col cols="5">
-
+          <el-button type="primary" class="redBtn" size="mini" @click="editRow()">编辑</el-button>
+          <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow()">删除</el-button>
         </v-col>
         <v-col cols="7">
           <div style="display: inline-block;float: right;">
@@ -59,6 +67,12 @@
         </v-col>
       </v-row>
     </v-col>
+    <BatchManagePhaseDialog
+        v-model="batchDialogVisible"
+        :value="batchDialogVisible"
+        developmentPhase="积极分子"
+        @refreshList="queryList">
+    </BatchManagePhaseDialog>
   </v-container>
 </template>
 
@@ -66,12 +80,14 @@
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+import BatchManagePhaseDialog from '@/components/dialog/BatchManagePhaseDialog.vue';
 
 export default {
   components: {
     SubpageTitle,
     DropDownBox,
     AttributeSelection,
+    BatchManagePhaseDialog
   },
   data() {
     return {
@@ -93,6 +109,7 @@ export default {
         pageType: '',
         data: {},
       },
+      colNames: ['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份'],
       columns: [
         {
           label: '学工号',
@@ -118,7 +135,7 @@ export default {
         },
         {
           label: '《入党积极分子-考察登记表》提交时间',
-          prop: 'talkRegistrationTime',
+          prop: 'talkActivistTime',
           type: 'date',
           width: '300'
         },
@@ -127,32 +144,47 @@ export default {
           prop: 'activistPartyTraining',
           type: 'date'
         },
-      ]
+      ],
+      batchDialogVisible: false,
+      selectedRows: [],
     };
   },
   methods: {
+    handleSelectionChange(val) {
+      this.selectedRows = val;
+    },
     goToAddPersonView() {
       this.$router.push({ name: 'EditPersonView' });
     },
-    editRow(row) {
-      this.$router.push({ name: 'EditPersonView', params: { id: row.id } });
+    editRow() {
+      if (this.selectedRows.length !== 1) {
+        this.$message.warning('请选中一条记录进行编辑');
+        return;
+      }
+      if (this.selectedRows.length === 0) {
+        this.$message.warning('请选中要编辑的记录');
+        return;
+      }
+      this.$router.push({ name: 'EditPersonView', params: { id: this.selectedRows[0].id } });
     },
-    deleteRow(row) {
+    deleteRow() {
+      if (this.selectedRows.length === 0) {
+        this.$message.warning('请选中要删除的记录');
+        return;
+      }
+      const ids = this.selectedRows.map(row => row.id);
       this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/api/stage/delete', null, { params: { id: row.id } })
+        this.$axios.post('/api/stage/deleteByBatch', ids )
             .then(response => {
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               });
-              // 从表格数据中移除已删除的项
-              this.tableData = this.tableData.filter(item => item.id !== row.id);
-              // 或者重新获取列表
-              // this.queryList();
+              this.queryList();
             })
             .catch(error => {
               this.$message({

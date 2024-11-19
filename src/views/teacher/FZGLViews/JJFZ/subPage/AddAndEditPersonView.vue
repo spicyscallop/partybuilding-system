@@ -100,7 +100,7 @@
           <v-col cols="6">
             <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.talkRegistrationTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;"/>
             </div>
           </v-col>
@@ -182,6 +182,7 @@ export default {
         cultivateContacts: '',
         thoughtReport: null,
         nextReportTime: null,
+        talkActivistTime: null,
       },
       defaultForm: {
         id: '',
@@ -194,6 +195,7 @@ export default {
         cultivateContacts: '',
         thoughtReport: null,
         nextReportTime: null,
+        talkActivistTime: null,
       },
       // 团员身份选项
       leagueOptions: [
