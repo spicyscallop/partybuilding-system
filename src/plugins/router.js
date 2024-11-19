@@ -98,7 +98,7 @@ const router = createRouter({
         {
           path: '/edit-person/:id?',
           name: 'EditPersonView',
-          component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/EditPersonView.vue')
+          component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
         }
       ]
     },

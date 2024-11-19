@@ -66,16 +66,12 @@
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
-import EditPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/EditPersonView.vue';
-import AddPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/AddPersonView.vue';
 
 export default {
   components: {
     SubpageTitle,
     DropDownBox,
     AttributeSelection,
-    EditPersonView,
-    AddPersonView,
   },
   data() {
     return {
