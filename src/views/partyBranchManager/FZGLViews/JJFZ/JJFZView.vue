@@ -30,7 +30,7 @@
             </el-dialog>
             <v-row style="height: 60px;">
                 <v-col cols="8">
-                    <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
+                    <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
                     </SubpageTitle>
                 </v-col>
                 <v-col cols="4">
@@ -96,7 +96,7 @@
                         </el-table-column>
                         <el-table-column v-if="visList[2]" prop="sxhbTime" label="思想汇报提交时间" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[3]" prop="jjfzdjbTime" label="《积极分子登记表》提交时间" align='center'>
+                        <el-table-column v-if="visList[3]" prop="tableSubmissionTime" label="《积极分子登记表》提交时间" align='center'>
                         </el-table-column>
                         <el-table-column v-if="visList[4]" prop="dxpxTime" label="党校培训参与时间" align='center'>
                         </el-table-column>
@@ -127,16 +127,20 @@
             <v-row v-if="goTo.visiblePersonView" class="fill-height">
                 <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </AddPersonView>
+                <EditPersonView v-if="goTo.subPage==1" @savePerson="savePerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                </EditPersonView>
             </v-row>
         </v-col>
     </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
+import { getActivists } from '@/http/api';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
 import AddPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddPersonView.vue'
+import EditPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
 import { authentication } from '@/stores/authentication.js'
 const authenticationStore = authentication()
@@ -174,26 +178,47 @@ const options = ref([
     { label: '第三党支部', value: '第三党支部' },
     { label: '第四党支部', value: '第四党支部' }
 ]);
+
+onMounted(() => {
+    const page = {
+        pageNumber: queryItems.value.pageIndex,
+        pageSize: queryItems.value.pageSize
+    }
+    const partyBranch = queryItems.value.branchSelect
+    const developmentPhase = '积极分子'
+    const params= {
+        page: page,
+        partyBranch: partyBranch,
+        developmentPhase: developmentPhase
+    }
+    console.log(params)
+    getActivists(params).then(res=>{
+        console.log(res)
+    })
+  console.log("页面已挂载，执行初始化操作");
+  // 在此进行页面初始化操作，如数据请求等
+});
+
 const tableData = ref([
     {
         userId: '22351006',
         name: '郭宗豪',
         sxhbTime: '2021-09-10',
-        jjfzdjbTime: '2021-09-10',
+        tableSubmissionTime: '2021-09-10',
         dxpxTime: '2021-09-10',
         qzyjdcTime: '2021-09-10',
         bzrdsTime: '2021-09-10',
-        isCommunistYouthLeagueMember: '是'
+        isSatify: '是'
     },
     {
         userId: '22351007',
         name: '鲁兴',
         sxhbTime: '2021-11-10',
-        jjfzdjbTime: '2021-11-10',
+        tableSubmissionTime: '2021-11-10',
         dxpxTime: '2021-11-10',
         qzyjdcTime: '2021-11-10',
         bzrdsTime: '2021-11-10',
-        isCommunistYouthLeagueMember: '是'
+        isSatify: '是'
     },
     // 更多数据...
 ]);
@@ -330,6 +355,19 @@ const goToEditPage = () => {
         goTo.value.visiblePersonView = true;
         goTo.value.subPage = 1
     }
+}
+
+const savePerson = (data) => {
+    const index = tableData.value.findIndex(item => item.userId === data.value.userId);
+    console.log(index)
+    if (index !== -1) {
+        tableData.value.splice(index, 1, data.value);
+    } else {
+        console.log("未找到匹配的对象，未进行修改");
+    }
+    console.log(tableData)
+    goTo.value.visiblePersonView = false;
+    selectStus.value = []
 }
 
 const backMainPage = () => {

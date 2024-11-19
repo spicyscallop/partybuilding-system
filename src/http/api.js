@@ -214,3 +214,17 @@ export const getPartyHonors = () => {
         }
     })
 }
+
+/**
+ * 获取积极分子信息接口
+ * @author 秦宇阳
+ * @argument 
+ * @returns
+ */
+export const getActivists = (params) => {
+    return axios({
+        url: "/api/stages/getUserList/",
+        method: "post",
+        data: params
+    })
+}

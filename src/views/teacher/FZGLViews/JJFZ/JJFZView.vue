@@ -78,6 +78,7 @@
                 <div class="flex-grow-1 overflow-auto">
                     <el-table ref="multipleTable" :data="tableData" max-height="80vh"
                         style="border-radius: 15px;background-color: #F7F7F7;"
+                        @selection-change="handleSelectionChange"
                         :key="tableKey"
                         :header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle">
                         <!-- 表格列定义 -->
@@ -119,7 +120,7 @@
             <v-row v-if="goTo.visiblePersonView" class="fill-height">
                 <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </AddPersonView>
-                <EditPersonView v-if="goTo.subPage==1" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                <EditPersonView v-if="goTo.subPage==1" @savePerson="savePerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </EditPersonView>
             </v-row>
         </v-col>
@@ -134,6 +135,7 @@ import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import EditPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/EditPersonView.vue'
 import AddPersonView from '@/views/teacher/FZGLViews/JJFZ/subPage/AddPersonView.vue'
+import { ElMessage } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue';
 
 //页面显示变量
@@ -176,6 +178,15 @@ const tableData = ref([
         confirmationTime: '2023-01-30',
         tableSubmissionTime: '2023-01-30',
         participationTime: '2023-01-30'
+    },
+    {
+        userId: '22351007',
+        name: '刘超',
+        contactTrainer: '顶顶顶',
+        reportSubmissionTime: '2023-01-20',
+        confirmationTime: '2023-01-20',
+        tableSubmissionTime: '2023-01-20',
+        participationTime: '2023-01-20'
     },
 ]);
 const satifyStus = ref([
@@ -258,7 +269,13 @@ const satifyStus = ref([
     },
     // 更多数据...
 ])
-
+const selectStus = ref([])
+const selectStu = ref({})
+const backMainPage = () => {
+    console.log("change");
+    goTo.value.visiblePersonView = false;
+    selectStus.value = []
+};
 const goToAddPersonView = () => {
     goTo.value.pageType = "Add"
     goTo.value.data = {
@@ -272,19 +289,26 @@ const goToAddPersonView = () => {
     goTo.value.subPage = 0
     goTo.value.visiblePersonView = true;
 };
+const changeStuPhase = () => {
+    console.log("批准一下同学修改发展阶段", selectStus.value)
+}
 
 const goToEditPersonView = () => {
-    goTo.value.pageType = "Edit"
-    goTo.value.data = {
-        userId: '',
-        name: '',
-        isParty: '',
-        talkerName: '',
-        applyTime: '',
-        submitTime: ''
+    if (selectStus.value.length != 1) {
+        console.log(selectStus.value.length)
+        ElMessage({
+            message: '请选择一名要修改的用户',
+            type: 'warning',
+        })
+    } else {
+        goTo.value.data = selectStu.value
+        // TODO 需要执行一个查询，查询该角色是否满足推优条件（或者查询列表的时候自带）
+        console.log(selectStu.value)
+        goTo.value.data.isSatisfy = "是"
+        console.log(goTo.value.data)
+        goTo.value.visiblePersonView = true;
+        goTo.value.subPage = 1
     }
-    goTo.value.subPage = 1
-    goTo.value.visiblePersonView = true;
 };
 
 // 批量更改发展阶段方法
@@ -312,6 +336,19 @@ const changeCheckCols = (indexList) => {
 const addPerson = (data) => {
     tableData.value.push(data.value)
     goTo.value.visiblePersonView = false;
+}
+
+const savePerson = (data) => {
+    const index = tableData.value.findIndex(item => item.userId === data.value.userId);
+    console.log(index)
+    if (index !== -1) {
+        tableData.value.splice(index, 1, data.value);
+    } else {
+        console.log("未找到匹配的对象，未进行修改");
+    }
+    console.log(tableData)
+    goTo.value.visiblePersonView = false;
+    selectStus.value = []
 }
 const handleOptionChange = (newOption) => {
     console.log('选项变化：', newOption);
@@ -350,8 +387,9 @@ const toggleSelection = (rows) => {
         $refs.multipleTable.clearSelection();
     }
 };
-const handleSelectionChange = (val) => {
-    multipleSelection = val;
+const handleSelectionChange = (selection) => {
+    selectStus.value = selection
+    selectStu.value = selection[0]
 };
 const handleSizeChange = (val) => {
     console.log(`每页 ${val} 条`);

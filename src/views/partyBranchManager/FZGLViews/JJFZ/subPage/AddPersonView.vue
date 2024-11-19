@@ -96,7 +96,7 @@
                     <div style="display: inline-block;">
                         <div><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
                         <div>
-                            <el-date-picker v-model="localFormData.jjfzdjbTime" type="date" placeholder="yyyy-mm-dd"
+                            <el-date-picker v-model="localFormData.tableSubmissionTime" type="date" placeholder="yyyy-mm-dd"
                                 size="large" style="width: 400px;" value-format="YYYY-MM-DD" />
                         </div>
                     </div>
@@ -174,7 +174,7 @@ const props = defineProps({
             name: '',
             isCommunistYouthLeagueMember: '',
             jjfztyTime: '',
-            jjfzdjbTime: '',
+            tableSubmissionTime: '',
             jjfzqdTime:'',
             sxhbTime:'',
             pylxPerson:'',
@@ -295,14 +295,7 @@ const tableData = ref([
     // 更多数据...
 ]);
 const checkedPersons = ref([
-    {
-        name: '郭宗豪',
-        phone: '17357191229'
-    },
-    {
-        name: '鲁兴',
-        phone: '12324352234'
-    }
+
 ]);
 const choosePersons = () =>{
     var names = ""

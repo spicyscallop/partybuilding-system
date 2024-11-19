@@ -219,14 +219,6 @@ const pageFormData = ref({
 })
 
 const checkedPersons = ref([
-    {
-        name: '郭宗豪',
-        phone: '17357191229'
-    },
-    {
-        name: '鲁兴',
-        phone: '12324352234'
-    }
 ]);
 
 const choosePersons = () =>{
