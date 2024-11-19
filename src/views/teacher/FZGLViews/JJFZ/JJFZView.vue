@@ -16,7 +16,8 @@
                             start-placeholder="开始日期" end-placeholder="结束日期"
                             style="width: 25%;margin-left: 20px;" />
           </v-col>
-          <v-col cols="2">
+          <v-col cols="4">
+            <el-button class="redBtn" style="margin-left: 30px;" @click="goToAddPersonView">新增</el-button>
             <el-button class="redBtn" @click="queryList">查询</el-button>
             <el-button class="whiteBtn" @click="clearInputMessage">清除</el-button>
           </v-col>
@@ -32,14 +33,20 @@
                 {{ formatTime(scope.row[item.prop]) }}
               </template>
             </el-table-column>
+            <el-table-column label="操作" width="200" align="center">
+              <template v-slot="scope">
+                <el-button type="primary" class="redBtn" size="mini" @click="editRow(scope.row)">编辑</el-button>
+                <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+
           </el-table>
         </div>
       </v-row>
 
       <v-row v-if="!goTo.visiblePersonView" style="background-color: #E9E9E9;">
         <v-col cols="5">
-          <el-button class="redBtn" style="margin-left: 30px;" @click="goToEditPersonView">编辑</el-button>
-          <el-button class="whiteBtn" style="border-color: #A5A5A5;">删除</el-button>
+
         </v-col>
         <v-col cols="7">
           <div style="display: inline-block;float: right;">
@@ -128,7 +135,44 @@ export default {
     };
   },
   methods: {
+    goToAddPersonView() {
+      this.$router.push({ name: 'EditPersonView' });
+    },
+    editRow(row) {
+      this.$router.push({ name: 'EditPersonView', params: { id: row.id } });
+    },
+    deleteRow(row) {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/api/stage/delete', null, { params: { id: row.id } })
+            .then(response => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              // 从表格数据中移除已删除的项
+              this.tableData = this.tableData.filter(item => item.id !== row.id);
+              // 或者重新获取列表
+              // this.queryList();
+            })
+            .catch(error => {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+              console.error('删除失败:', error);
+            });
+      }).catch(() => {
+        // 用户取消删除操作
+      });
+    },
     formatTime(timestamp) {
+      if (!timestamp) {
+        return '';
+      }
       let date = new Date(timestamp);
       let year = date.getFullYear();
       let month = date.getMonth() + 1; // 月份从 0 开始，所以需要加 1
