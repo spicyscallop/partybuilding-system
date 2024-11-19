@@ -403,7 +403,7 @@ export default {
 
             queryParam["pageNumber"] = this.page;
             queryParam["pageSize"] = this.pageSize.substring(0, 2);
-
+            
             axios.get("/stages/applicant", {
                 params: queryParam
             }).then(response => {
