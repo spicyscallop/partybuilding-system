@@ -1,1 +1,0 @@
-import{_ as s,o as a,g as e,a as l,F as n,r as t,t as o}from"./index-2c4a18b7.js";const r={class:"table"};const u=s({},[["render",function(s,u,i,c,d,p){return a(),e("div",r,[l("ul",null,[(a(!0),e(n,null,t(s.peoples,((s,l)=>(a(),e("li",{key:l},o(s.name)+" - "+o(l),1)))),128))])])}]]);export{u as default};

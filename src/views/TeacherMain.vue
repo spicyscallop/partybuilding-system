@@ -30,20 +30,12 @@
         </template>
 
         <v-list theme="navBarTheme">
-            <v-list-item prepend-icon="mdi-home" title="首页" to="/teacher/home"></v-list-item>
-            <v-list-group value="1">
-                <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-book-open-variant" title="自主学习"></v-list-item>
-                </template>
-                <v-list-item title="理论学习录入" to="/teacher/zzxx/llxx"></v-list-item>
-                <v-list-item title="实践成长录入" to="/teacher/zzxx/sjcz"></v-list-item>
-                <v-list-item title="结对帮扶录入" to="/teacher/zzxx/jdbf"></v-list-item>
-                <v-list-item title="志愿服务录入" to="/teacher/zzxx/zyfw"></v-list-item>
-            </v-list-group>
+            <v-list-item prepend-icon="mdi-home" title="党委概况" to="/teacher/home"></v-list-item>
             <v-list-group value="2">
                 <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="发展管理"></v-list-item>
+                    <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="发展管理" @click="$router.push('/teacher/fzgl/fzgl')"></v-list-item>
                 </template>
+                <!-- <v-list-item title="发展管理" to="/teacher/fzgl/fzgl"></v-list-item> -->
                 <v-list-item title="入党申请人阶段" to="/teacher/fzgl/rdsq"></v-list-item>
                 <v-list-item title="积极分子阶段" to="/teacher/fzgl/jjfz"></v-list-item>
                 <v-list-item title="发展对象阶段" to="/teacher/fzgl/fzdx"></v-list-item>
@@ -51,11 +43,10 @@
                 <v-list-item title="正式党员阶段" to="/teacher/fzgl/zsdy"></v-list-item>
             </v-list-group>
             <!-- <v-list-item title="活动信息管理" to="/teacher/fzgl/hdxx"></v-list-item> -->
-            <v-list-item prepend-icon="mdi-account-multiple-outline" title="支部结对" to="/teacher/multiple"></v-list-item>
+            <v-list-item prepend-icon="mdi-calendar-range" title="组织生活" to="/teacher/calendar"></v-list-item>
             <v-list-item prepend-icon="mdi-calendar-range" title="活动安排" to="/teacher/calendar"></v-list-item>
-            <v-list-item prepend-icon="mdi-notebook-edit" title="三会一课" to="/teacher/notebook"></v-list-item>
-            <v-list-item prepend-icon="mdi-image-album" title="风采记录" to="/teacher/album"></v-list-item>
-            <v-list-item prepend-icon="mdi-image-album" title="测试界面" to="/teacher/test"></v-list-item>
+            <v-list-item prepend-icon="mdi-notebook-edit" title="更多内容" to="/teacher/notebook"></v-list-item>
+            <v-list-item prepend-icon="mdi-home" title="党委中心" to="/teacher/dwzx"></v-list-item>
         </v-list>
     </v-navigation-drawer>
 

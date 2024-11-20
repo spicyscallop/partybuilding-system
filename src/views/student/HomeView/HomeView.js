@@ -35,8 +35,8 @@ export default {
             },
             sexMap: ["未知", "男", "女"],
             centerNumber:{
-                unReadNumber:toPre0String(1,2),
-                todoNum:toPre0String(2,2)
+                nowStudyHour:toPre0String(0,2),
+                allStudyHour:toPre0String(0,2)
             },
             xxyb: [
                 {
@@ -172,33 +172,23 @@ export default {
         },
         getCenterNumberV(userNumber){ // 根据学号获取培训总时长、当前阶段培训时长 接口待完善，请勿删
             getCenterNumber1(userNumber).then(res=>{
-                // console.log(res)
                 this.code = res.code
                 if(res.success){
-                    console.log('getCenterNumber1 success')
-                    this.centerNumber.unReadNumber = toPre0String(res.data, 2)
-                    // this.centerNumber.todoNum = toPre0String(res.data.todoNum, 2)
+                    this.centerNumber.nowStudyHour = toPre0String(res.data, 2)
                     this.messages = res.messages
                 }
                 else{
-                    console.log('getCenterNumber1 fail')
-                    this.centerNumber.unReadNumber = toPre0String(1, 2)
-                    // this.centerNumber.todoNum = toPre0String(2, 2)
+                    this.centerNumber.nowStudyHour = toPre0String(1, 2)
                 }
             })
             getCenterNumber2(userNumber).then(res=>{
-                // console.log(res)
                 this.code = res.code
                 if(res.success){
-                    console.log('getCenterNumber1 success')
-                    // this.centerNumber.unReadNumber = toPre0String(res.data.unReadNumber, 2)
-                    this.centerNumber.todoNum = toPre0String(res.data, 2)
+                    this.centerNumber.allStudyHour = toPre0String(res.data, 2)
                     this.messages = res.messages
                 }
                 else{
-                    console.log('getCenterNumber1 fail')
-                    // this.centerNumber.unReadNumber = toPre0String(1, 2)
-                    this.centerNumber.todoNum = toPre0String(2, 2)
+                    this.centerNumber.allStudyHour = toPre0String(2, 2)
                 }
             })
         },

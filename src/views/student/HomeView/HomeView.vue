@@ -75,7 +75,7 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ centerNumber.unReadNumber }}
+                                            {{ centerNumber.allStudyHour }}
                                         </div>
                                     </div>
                                     <label style="font-size:18px">培训总时长</label>
@@ -85,7 +85,7 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ centerNumber.todoNum }}
+                                            {{ centerNumber.nowStudyHour }}
                                         </div>
                                     </div>
                                     <label style="font-size:18px">当前阶段培训时长</label>

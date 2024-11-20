@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/login',
@@ -27,6 +27,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/SJCZView.vue')
         },
         // 发展阶段
+        {
+          path: '/teacher/fzgl/fzgl',
+          name: 'T_FZGL',
+          component: () => import('@/views/teacher/FZGLViews/indexView.vue'),
+        },
         {
           path: '/teacher/fzgl/rdsq',
           name: 'T_RDSQ',
@@ -78,7 +83,18 @@ const router = createRouter({
           path: '/teacher/test',
           name: 'TeacherTest',
           component: () => import('@/views/test.vue')
-        }
+        },
+        // 党委中心
+        {
+          path: '/teacher/dwzx',
+          name: 'DWZX',
+          component: () => import('@/views/teacher/DWZXViews/DWZXView.vue')
+        },
+        {
+          path: '/teacher/dwzx/branchlist',
+          name: 'BranchList',
+          component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
+        },
       ]
     },
     {
@@ -124,6 +140,11 @@ const router = createRouter({
           component: () => import('@/views/partyBranchManager/HomeView.vue')
         },
         // 发展阶段
+        {
+          path: '/partyManager/fzgl/fzgl',
+          name: 'P_FZGL',
+          component: () => import('@/views/partyBranchManager/FZGLViews/indexView.vue')
+        },
         {
           path: '/partyManager/fzgl/rdsq',
           name: 'P_RDSQ',

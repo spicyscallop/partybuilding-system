@@ -1,6 +1,6 @@
 <template>
     <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
-        <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;谈话人选择" width="850" height="600"
+        <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
             draggable align-center>
             <div style="margin: 0px 20px;">
                 <v-row>
@@ -9,16 +9,16 @@
                             <div
                                 style="background-color: #F35339; border-radius: 10px; height: 50px; display: flex; align-items: center; margin-bottom: 10px;">
                                 <span style="color: #ffffff;margin: 0 20px;font-size: 16px;">权限</span>
-                                <el-select v-model="queryItems.userType" placeholder="用户类型" size="normal"
+                                <el-select v-model="queryItems.userType" placeholder="用户类型" size="default"
                                     style="width: 200px;margin: 0 10px;">
                                     <el-option v-for="item in userTypes" :key="item.value" :label="item.label"
                                         :value="item.value" />
                                 </el-select>
-                                <el-button class="redBtn" size="normal" type="primary" style="margin-left: 30px"
+                                <el-button class="redBtn" size="default" type="primary" style="margin-left: 30px"
                                     @click="">查询</el-button>
-                                <el-button class="whiteBtn" size="normal" @click="">清除</el-button>
+                                <el-button class="whiteBtn" size="default" @click="">清除</el-button>
                             </div>
-                            <el-table ref="multipleTable" :data="tableData" max-height="400" :key="tableKey"
+                            <el-table ref="multipleTable" :data="tableData" max-height="400"
                                 style="border-radius: 15px;background-color: #F7F7F7;"
                                 @selection-change="handleSelectionChange"
                                 >
@@ -43,7 +43,7 @@
                     <v-col cols="3" style="background-color: white;">
                         <v-row style="margin-top: 20px;margin-left: 3px;">
                             <span>已选人员(</span>
-                            <span style="color: #2B99FF;">{{ checkNum }}/{{ totalNum }}</span>
+                            <span style="color: #2B99FF;">{{ checkNum }}</span>
                             <span>)</span>
                         </v-row>
                         <v-row>
@@ -62,98 +62,97 @@
                 </div>
             </template>
         </el-dialog>
-
         <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>学工号</span><input required
-                    class="customInput" placeholder=""
-                    v-model="localFormData.userId">
+                    class="customInput"
+                    v-model="localFormData.userNumber">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>姓名</span><input required
-                    class="customInput"  placeholder=""
-                    v-model="localFormData.name">
+                    class="customInput"
+                    v-model="localFormData.userName">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-                <el-select v-model="localFormData.isCommunistYouthLeagueMember" :placeholder="placeholder" size="large" style="width: 200px">
+                <el-select v-model="localFormData.isLeague" size="large" style="width: 200px">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
             </v-col>
         </v-row>
-        <v-row style="background-color: #f7f7f7; height: 60%;padding: 20px;border-radius: 20px;">
-            <v-row style="width: 100%;">
-                <v-col cols="6">
-                    <div style="display: inline-block;">
-                        <div><span style="margin-left: 10px;">积极分子推优时间</span></div>
-                        <div>
-                            <el-date-picker v-model="localFormData.jjfztyTime" type="date" placeholder="yyyy-mm-dd"
-                                size="large" style="width: 400px;padding-left: 10px;" value-format="YYYY-MM-DD" />
-                        </div>
-                    </div>
-                </v-col> 
-                <v-col cols="6">
-                    <div style="display: inline-block;">
-                        <div><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
-                        <div>
-                            <el-date-picker v-model="localFormData.tableSubmissionTime" type="date" placeholder="yyyy-mm-dd"
-                                size="large" style="width: 400px;" value-format="YYYY-MM-DD" />
-                        </div>
-                    </div>
-                </v-col>
-                <v-col cols="6">
-                    <div style="display: inline-block;">
-                        <div><span>积极分子确定时间</span></div>
-                        <div>
-                            <el-date-picker v-model="localFormData.jjfzqdTime" type="date" placeholder="yyyy-mm-dd"
-                                size="large" style="width: 400px;padding-left: 10px;" value-format="YYYY-MM-DD"/>
-                        </div>
+        <v-row>
+            <v-col style="background-color: #f7f7f7; height: 60%;padding: 20px;border-radius: 20px;">
+            <v-row>
+                <v-col spans="6">
+                    <div style="margin-bottom: 5px;"><span>积极分子确定时间</span></div>
+                    <div>
+                        <el-date-picker v-model="pageFormData.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
                 <v-col spans="6">
-                    <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
+                    <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
                     <div>
-                        <el-date-picker v-model="localFormData.dxpxTime" type="date" placeholder="系统自动接入" size="large" disabled
-                        style="width: 400px;" value-format="YYYY-MM-DD"/>
+                        <el-date-picker v-model="pageFormData.talkRegistrationTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
             </v-row>
-            <v-row style="width: 100%;">
-                <v-col cols="6">
-                    <div style="margin-left: 10px;"><span>培养联系人</span></div>
+
+            <v-row>
+                <v-col spans="6">
+                    <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
                     <div>
-                        <input class="customInput" placeholder="四个字名；四个字名" v-model="localFormData.pylxPerson"
-                        @click="clickTalkersInput" style="width: 400px;padding-left: 10px;" >
+                        <el-date-picker v-model="pageFormData.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
-                <v-col cols="3" >
+                <v-col spans="6">
+                    <div style="margin-bottom: 5px;"><span>党校参与时间</span></div>
+                    <div>
+                        <el-date-picker v-model="pageFormData.activistPartyTraining" type="date" placeholder="系统自动接入" size="large" disabled
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
+                    </div>
+                </v-col>
+            </v-row>
+
+            <v-row style="width: 100%;margin-top: 30px;">
+                <v-col cols="6">
+                    <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
+                    <div>
+                        <input class="customInput" placeholder="" v-model="pageFormData.cultivateContacts"
+                        @click="clickTalkersInput" style="width: 92%;margin-left: -0px;">
+                    </div>
+                </v-col>
+                <v-col cols="3" style="padding-left: 30px">
                     <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
                     <div>
-                        <el-date-picker v-model="localFormData.sxhbTime" type="date" placeholder="yyyy-mm-dd" size="large" 
-                        style="width: 90%;" value-format="YYYY-MM-DD"/>
+                        <el-date-picker v-model="pageFormData.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large" 
+                        style="width: 90%;"  />
                     </div>
                 </v-col>
                 <v-col cols="3">
                     <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
                     <div>
-                        <el-date-picker v-model="localFormData.xcytjTime" type="date" placeholder="系统自动接入" size="large" disabled
-                        style="width: 90%;" value-format="YYYY-MM-DD"/>
+                        <el-date-picker v-model="pageFormData.xcytjTime" type="date" placeholder="系统自动接入" size="large" disabled
+                        style="width: 90%;" value-format="YYYY-MM-DD" />
                     </div>
                 </v-col>
             </v-row>
             <v-row class="fill-height" style="width: 100%;">
 
             </v-row>
+        </v-col>
         </v-row>
+        
         <v-row style="height: 20%;width: 100%;">
             <v-col cols="7">
             </v-col>
             <v-col cols="5">
-                <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;" @click="$emit('backMainPage')">取消</el-button>
-                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;" @click="addPerson">保存</el-button>
-                <el-select v-model="localFormData.changeToPhase" placeholder="更改发展阶段" size="large" style="width: 150px;float: right;">
-                    <el-option v-for="item in phaseOptions" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
+                <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;"
+                    @click="$emit('backMainPage')">取消</el-button>
+                <el-button class="redBtn" type="primary"
+                    style="margin-left: 20px; height: 36px;float: right;" @click="savePerson">保存</el-button>
             </v-col>
         </v-row>
     </v-container>
@@ -161,7 +160,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-
+import { ElMessage } from 'element-plus'
+import {addStageMember} from '@/http/api'
 const props = defineProps({
     pageType: {
         type: String,
@@ -169,43 +169,52 @@ const props = defineProps({
     },
     formData: {
         type: Object,
-        default: () => ({
-            userId: '',
-            name: '',
-            isCommunistYouthLeagueMember: '',
-            jjfztyTime: '',
-            tableSubmissionTime: '',
-            jjfzqdTime:'',
-            sxhbTime:'',
-            pylxPerson:'',
-            dxpxTime:'',
-            changeToPhase: '',
-        })
+        default: () => ({})
     }
 })
-const checkNum = ref(0)
+
 // Creating a mutable local state from props.formData
 const localFormData = ref({...props.formData})
-const emit = defineEmits(['addPerson']);
 
-const satify = ref(false)
-const options = ref([
-    { value: '是', label: '是' },
-    { value: '否', label: '否' }
-])
+const checkNum = ref(0)
+const totalNum = ref(2)
+const emit = defineEmits(['savePerson']);
 
-const phaseOptions = ref([
-    { label: '共青团员', value: '共青团员' },
-    { label: '入党申请人', value: '入党申请人' },
-    { label: '积极分子', value: '积极分子' },
-    { label: '发展对象', value: '发展对象' },
-    { label: '预备党员', value: '预备党员' },
-    { label: '正式党员', value: '正式党员' },
-])
+// 转换时间
+const pageFormData = localFormData
+if(pageFormData.value.thoughtReport){
+    pageFormData.value.thoughtReport = new Date(pageFormData.value.thoughtReport).toISOString().split('T')[0];
+}
+if(pageFormData.value.activistPartyTraining){
+    pageFormData.value.activistPartyTraining = new Date(pageFormData.value.activistPartyTraining).toISOString().split('T')[0];
+}
+if(pageFormData.value.talkRegistrationTime ){
+    pageFormData.value.talkRegistrationTime = new Date(pageFormData.value.talkRegistrationTime).toISOString().split('T')[0];
+}
+if(pageFormData.value.activistTime ){
+    pageFormData.value.activistTime = new Date(pageFormData.value.activistTime).toISOString().split('T')[0];
+}
+
+const checkedPersons = ref([
+
+]);
+
+const choosePersons = () =>{
+    var names = ""
+    for(var i=0;i<checkedPersons.value.length-1;i++){
+        names = names+checkedPersons.value[i].name+"，"
+    }
+    if (checkedPersons.value.length>0){
+        names = names+checkedPersons.value[i].name
+    }
+    pageFormData.value.cultivateContacts = names
+    dialogVisible.value = false
+    checkedPersons.value = []
+}
 
 const queryItems = ref({
     userType: '',
-    pageSize: ''
+    pageSize: 10
 });
 
 const tableBottom = ref({
@@ -231,6 +240,13 @@ const userTypes = ref([
 
 const dialogVisible = ref(false)
 
+
+const options = ref([
+    { value: 1, label: '是' },
+    { value: 0, label: '否' }
+])
+
+// TODO：从后端获取培养联系人
 const tableData = ref([
     {
         userId: '22351006',
@@ -242,73 +258,18 @@ const tableData = ref([
         name: '鲁兴',
         phoneNumber: "12345678905"
     },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    // 更多数据...
 ]);
-const checkedPersons = ref([
 
-]);
-const choosePersons = () =>{
-    var names = ""
-    for(var i=0;i<checkedPersons.value.length-1;i++){
-        names = names+checkedPersons.value[i].name+"，"
-    }
-    if (checkedPersons.value.length>0){
-        names = names+checkedPersons.value[i].name
-    }
-    localFormData.value.pylxPerson = names
-    dialogVisible.value = false
-    checkedPersons.value = []
-}
+
+const phaseOptions = ref([
+    { label: '共青团员', value: '共青团员' },
+    { label: '入党申请人', value: '入党申请人' },
+    { label: '积极分子', value: '积极分子' },
+    { label: '发展对象', value: '发展对象' },
+    { label: '预备党员', value: '预备党员' },
+    { label: '正式党员', value: '正式党员' },
+])
+
 const clickTalkersInput = () => {
     console.log("点击了谈话人")
     dialogVisible.value = true
@@ -325,23 +286,18 @@ const handleCurrentChange = (val) => {
     queryItems.value.pageIndex = val;
     queryList();
 };
-
-const addPerson = ()=>{
+const savePerson = ()=>{
     // TODO:向后端请求接口
-
-    // 由于没有党校培训时间，加上的默认值
-    if(!localFormData.value.dxpxTime){
-        localFormData.value.dxpxTime = '2021-09-10'
-    }
-    // 由于没有《群众意见调查表》提交时间，加上的默认值
-    if(!localFormData.value.qzyjdcTime){
-        localFormData.value.qzyjdcTime = '2021-09-10'
-    }
-    // 由于没有《班主任导师意见表》提交时间，加上的默认值
-    if(!localFormData.value.bzrdsTime){
-        localFormData.value.bzrdsTime = '2021-09-10'
-    }
-    emit('addPerson',localFormData)
+    const data = pageFormData.value
+    addStageMember(data)
+          .then(response => {
+            console.log(response,"success")
+            // TODO: 添加成功提示
+        })
+          .catch(error => {
+            console.error('请求失败:', error);
+        });
+    emit('savePerson')
 }
 
 </script>
@@ -368,31 +324,38 @@ const addPerson = ()=>{
     height: 40px;
     border: 1px solid #ccc;
     /* 外边框样式 */
-    border-radius: 5px;
+    border-radius: 2px;
     /* 可选的，添加圆角 */
 }
 
-.el-select{
+.el-select {
     --el-select-input-focus-border-color: #red !important;
 }
 
-.el-select__placeholder.is-transparent{
+.el-select__placeholder.is-transparent {
     color: #3E3E3E;
 }
 
-.el-select-dropdown__item{
+.el-select-dropdown__item {
     align-self: center;
 }
-.el-select-dropdown__item.is-hovering{
-    background-color: #C83C23 ;
+
+.el-select-dropdown__item.is-hovering {
+    background-color: #C83C23;
     color: #fff;
 }
-.checkFileBtn{
+
+.checkFileBtn {
     background-color: #37A0FF;
     border: none;
 }
-.el-select__wrapper.is-focused.el-tooltip__trigger.el-tooltip__trigger{
+
+.el-select__wrapper.is-focused.el-tooltip__trigger.el-tooltip__trigger {
     background-color: #F7F7F7;
+}
+
+input {
+    text-indent: 5px;
 }
 </style>
 

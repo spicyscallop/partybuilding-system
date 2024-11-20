@@ -24,13 +24,13 @@
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button class="redBtn" type="primary" @click="changeStuPhase">提交</el-button>
-                        <el-button class="whiteBtn" @click="cancel">取消</el-button>
+                        <el-button class="whiteBtn" @click="dialogVisible = false">取消</el-button>
                     </div>
                 </template>
             </el-dialog>
             <v-row style="height: 60px;">
                 <v-col cols="8">
-                    <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+                    <SubpageTitle text="发展阶段管理" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
                     </SubpageTitle>
                 </v-col>
                 <v-col cols="4">
@@ -55,10 +55,10 @@
                         <span style="margin-left: 30px;">姓名</span><input placeholder="    请输入姓名"
                             v-model="queryItems.name"
                             style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px;width: 10%;">
-                        <span style="margin-left: 30px;">积极分子确认时间</span>
+                        <span style="margin-left: 30px;">申请书递交时间</span>
                         <!-- <el-button></el-button> -->
                         <el-date-picker v-model="queryItems.applyTime" type="daterange" range-separator="——"
-                            start-placeholder="开始日期" end-placeholder="结束日期"
+                            start-placeholder="Start date" end-placeholder="End date"
                             style="width: 25%;margin-left: 20px;" />
                     </v-col>
                     <v-col cols="2">
@@ -70,9 +70,9 @@
             <v-row v-if="!goTo.visiblePersonView" style="height: 100px;">
                 <div style="padding-top: 10px;display: flex; width: 100%;">
                     <v-col cols="10">
-                        <el-button class="redBtn" @click="showDialog" style="margin-left: -10px;">批量更改发展阶段</el-button>
+                        <el-button class="redBtn" @click="goToAddPersonView" style="margin-left: -10px;">添加人员信息</el-button>
                         <el-button class="whiteBtn" style="border-color: #A5A5A5;"
-                            @click="goToAddPersonView">添加人员信息</el-button>
+                            @click="showAllPersonView">历史人员信息</el-button>
                     </v-col>
                     <v-col cols="2">
                         <!-- 属性筛选 -->
@@ -90,10 +90,18 @@
                         :header-cell-style="headerRowStyle">
                         <el-table-column type="selection">
                         </el-table-column>
-                        <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
-                            <template v-slot="scope" v-if="item.type === 'date'">
-                                {{ formatTime(scope.row[item.prop]) }}
-                            </template>
+                        <el-table-column v-if="visList[0]" prop="userId" label="学工号" align='center'>
+                        </el-table-column>
+                        <el-table-column v-if="visList[1]" prop="name" label="姓名" align='center'>
+                        </el-table-column>
+                        <el-table-column v-if="visList[2]" prop="applyTime" label="入党申请书递交时间" align='center'>
+                        </el-table-column>
+                        <el-table-column v-if="visList[3]" prop="talkerName" label="谈话人" align='center'>
+                        </el-table-column>
+                        <el-table-column v-if="visList[4]" prop="talkerTime" label="《入党申请人谈话登记表》提交时间" align='center'>
+                        </el-table-column>
+                        <el-table-column v-if="visList[5]" prop="isCommunistYouthLeagueMember" label="团员身份"
+                            align='center'>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -116,9 +124,9 @@
                 </v-col>
             </v-row>
             <v-row v-if="goTo.visiblePersonView" class="fill-height">
-                <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                <AddPersonView v-if="goTo.subPage==0" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </AddPersonView>
-                <EditPersonView v-if="goTo.subPage==1" @savePerson="savePerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
+                <EditPersonView v-if="goTo.subPage==1" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </EditPersonView>
             </v-row>
         </v-col>
@@ -126,18 +134,15 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
-import AddPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddPersonView.vue'
-import EditPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/EditPersonView.vue'
+import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddPersonView.vue'
+import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
 import { authentication } from '@/stores/authentication.js'
-import {getStageMember} from '@/http/api'
 const authenticationStore = authentication()
-
-// 下面是数据
-// 页面显示变量
+//页面显示变量
 const goTo = ref({
     visiblePersonView: false,
     subPage : 0,
@@ -148,9 +153,11 @@ const goTo = ref({
 const dialogVisible = ref(false)
 
 const queryItems = ref({
-    userId: '',
-    name: '',
-    applyTime: [],
+    userId: "",
+    name: "",
+    applyTime: "",
+    branchSelect: "",
+    pageIndex: 1,
     pageSize: 10,
 });
 
@@ -159,9 +166,9 @@ const tableBottom = ref({
     pageSizeList: [10, 20, 30, 40]
 });
 
-const checkedCols = ref(['学工号', '姓名', '思想汇报提交时间', '《积极分子登记表》提交时间', '党校培训参与时间', '《群众意见调查表》提交时间','《班主任导师意见表》提交时间']);
-const colNames = ref(['学工号', '姓名', '思想汇报提交时间', '《积极分子登记表》提交时间', '党校培训参与时间', '《群众意见调查表》提交时间','《班主任导师意见表》提交时间']);
-const visList = ref([true, true, true, true, true, true, true]);
+const checkedCols = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
+const colNames = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
+const visList = ref([true, true, true, true, true, true]);
 const selectedOption = ref('请选择党支部');
 const options = ref([
     { label: '第一党支部', value: '第一党支部' },
@@ -169,46 +176,25 @@ const options = ref([
     { label: '第三党支部', value: '第三党支部' },
     { label: '第四党支部', value: '第四党支部' }
 ]);
-
-
-
-const columns = ref([
+const tableData = ref([
     {
-        label: '学工号',
-        prop: 'userNumber',
+        userId: '22351006',
+        name: '郭宗豪',
+        applyTime: '2021-09-10',
+        talkerName: 'hgfhf',
+        talkerTime: '2021-10-10',
+        isCommunistYouthLeagueMember: '是'
     },
     {
-        label: '姓名',
-        prop: 'userName',
-    },
-    {
-        label: '联系培养人',
-        prop: 'cultivateContacts',
-    },
-    {
-        label: '思想汇报提交时间',
-        prop: 'thoughtReport',
-        type: 'date'
-    },
-    {
-        label: '积极分子确定时间',
-        prop: 'activistTime',
-        type: 'date'
-    },
-    {
-        label: '《入党积极分子-考察登记表》提交时间',
-        prop: 'talkRegistrationTime',
-        type: 'date',
-        width: '300'
-    },
-    {
-        label: '党校参与时间',
-        prop: 'activistPartyTraining',
-        type: 'date'
-    },
-])
-
-const tableData = ref([]);
+        userId: '22351007',
+        name: '鲁兴',
+        applyTime: '2021-09-10',
+        talkerName: 'hgfhf',
+        talkerTime: '2021-10-10',
+        isCommunistYouthLeagueMember: '是'
+    }
+    // 更多数据...
+]);
 const selectStus = ref([])
 
 const satifyStus = ref([
@@ -294,32 +280,6 @@ const satifyStus = ref([
 
 const selectStu = ref({})
 
-
-// 下面是方法
-
-onMounted(() => {
-    queryList();
-});
-
-const formatTime = (timestamp) => {
-      let date = new Date(timestamp);
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1; // 月份从 0 开始，所以需要加 1
-      let day = date.getDate();
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let seconds = date.getSeconds();
-      let formattedDate = `${year}-${month}-${day}`;
-      // 如果时、分、秒不全为 00，则添加时间部分
-      if (hours !== 0 || minutes !== 0 || seconds !== 0) {
-        formattedDate += ` ${hours}:${minutes}:${seconds}`;
-      }
-      return formattedDate;
-}
-
-const cancel = ()=>{
-    dialogVisible.value = false
-}
 // 批量更改发展阶段方法
 const showDialog = () => {
     // TODO 向服务器查询可以转正的人员赋值给satifyStus
@@ -339,9 +299,20 @@ const handleSelectionChange = (selection) => {
     selectStu.value = selection[0]
 };
 
+const showAllPersonView = () => {
+    alert('To be implemented.')
+}
+
 const goToAddPersonView = () => {
     goTo.value.pageType = "Add"
-    goTo.value.data = {}
+    goTo.value.data = {
+        userId: '',
+        name: '',
+        isParty: '',
+        talkerName: '',
+        applyTime: '',
+        submitTime: ''
+    }
     goTo.value.subPage = 0
     goTo.value.visiblePersonView = true;
 };
@@ -354,49 +325,24 @@ const goToEditPage = () => {
             type: 'warning',
         })
     } else {
+        goTo.value.pageType = "Edit"
         goTo.value.data = selectStu.value
-        // TODO 需要执行一个查询，查询该角色是否满足推优条件（或者查询列表的时候自带）
-        console.log(selectStu.value)
+        // 需要执行一个查询，查询该角色是否满足推优条件
+        goTo.value.data.isSatisfy = "是"
         goTo.value.visiblePersonView = true;
         goTo.value.subPage = 1
+        console.log(selectStus.value[0].name)
     }
-}
-
-const savePerson = () => {
-    goTo.value.visiblePersonView = false;
-    selectStus.value = []
-    queryList()
 }
 
 const backMainPage = () => {
     console.log("change");
     goTo.value.visiblePersonView = false;
-    selectStus.value = []
 };
 
 const queryList = () => {
-    const data = {
-        page: {
-          pageNumber: tableBottom.value.currentPage,
-          pageSize: queryItems.value.pageSize,
-          searchCount: true,
-        },
-        userNumber: queryItems.value.userId,
-        userName: queryItems.value.name,
-        startActivistsSetTime: queryItems.value.applyTime[0] || null,
-        endActivistsSetTime: queryItems.value.applyTime[1] || null,
-        developmentPhase:'积极分子'
-      };
-
-      getStageMember(data)
-          .then(response => {
-            console.log(response)
-            tableData.value = response.data.records;
-            tableBottom.value.totalNum = response.data.total;
-        })
-          .catch(error => {
-            console.error('请求失败:', error);
-        });
+    // TODO 执行查询列表的请求（需携带相应的参数），并修改tableBottom
+    console.log("执行了查询列表的请求");
 };
 
 const clearInputMessage = () => {
@@ -418,6 +364,7 @@ const changeCheckCols = (indexList) => {
 const tableKey = ref(0)
 
 const handleCheckChange = () => {
+    console.log("处理表格列变动：", checkedCols.value);
     for (let i = 0; i < colNames.value.length; i++) {
         visList.value[i] = true
     }
@@ -461,14 +408,8 @@ const headerRowStyle = () => {
         color: '#3E3E3E',
     };
 };
-
-const addPerson = (data) => {
-    tableData.value.push(data.value)
-    console.log(data.value)
-    goTo.value.visiblePersonView = false;
-}
 </script>
 
 
-<style src="../Common.css"></style>
+<style src="./Common.css"></style>
 <style src="@/style/button.css"></style>
