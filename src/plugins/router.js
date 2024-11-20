@@ -95,6 +95,11 @@ const router = createRouter({
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
+        {
+          path: '/edit-person/:id?',
+          name: 'EditPersonView',
+          component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
+        }
       ]
     },
     {
