@@ -55,13 +55,9 @@
 
 <script>
 import { RouterView } from 'vue-router'
-import { authentication } from '@/stores/authentication'
 import IconParty from '@/components/icons/IconParty.vue';
 import IconZJU from '@/components/icons/IconZJU.vue';
-
 import activate from '@/img/FZJD/activate.png'
-
-const auth = authentication();
 
 export default {
     components: {

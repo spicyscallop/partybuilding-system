@@ -16,18 +16,8 @@ export const userLogin = (data) => {
  * @argument 
  * @returns
  */
-export const getCaptcha = () => {
-    return axios.get("/api/captcha")
-}
-
-/**
- * 校验验证码图片接口
- * @author 郭宗豪
- * @argument 
- * @returns
- */
-export const getCaptchaVerify = (verCode,verKey) => {
-    return axios.get("/api/captcha/verify")
+export const getCaptcha = (data) => {
+    return axios.post("/api/user/refreshCode", data)
 }
 
 /**

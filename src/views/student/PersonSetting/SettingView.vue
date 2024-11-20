@@ -74,7 +74,6 @@
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import SettingInput from '@/views/student/PersonSetting/component/SettingInput.vue'
 import { getPersonDetail, motifyPersonSetting } from '../../../http/api';
-import { authentication } from '../../../stores/authentication';
 import { int2sex, sex2int } from '@/utils/StringUtils.js'
 
 export default {
@@ -178,7 +177,6 @@ export default {
             this.dataForm.phoneNumber = data
         },
         getPersonDetailV() {
-            const auth = authentication()
             getPersonDetail(auth.userId).then(res => {
                 // console.log(res.userId)
                 if (res.success) {
@@ -213,7 +211,6 @@ export default {
             })
         },
         motifyPersonSettingV() {
-            const auth = authentication()
             let dataFrame = {
                 "developmentPhase": this.dataForm.developmentStage,
                 "email": this.dataForm.email,

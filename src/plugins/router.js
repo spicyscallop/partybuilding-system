@@ -9,9 +9,6 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
-      name: 'LOGIN_PLACEHOLDER',
-    },
-    {
       path: '/teacher',
       name: 'TeacherMain',
       component: () => import('@/views/TeacherMain.vue'),
@@ -213,53 +210,6 @@ const router = createRouter({
       ]
     },
   ]
-})
-
-import { authentication } from '@/stores/authentication'
-
-router.beforeEach((to, from) => {
-  const auth = authentication();
-  // console.log("-------------------------------")
-  // console.log("类型为：",auth.type,"前往界面为",to)
-  // console.log("前往界面为",to.name)
-  // type 是否合法
-  if (auth.isAuthenticated && (auth.type !== 'student' && auth.type !== 'teacher' && auth.type !== 'associateTeacher')) {
-    auth.logout()
-  }
-
-  // 跳转鉴权
-  if (!auth.isAuthenticated && to.name !== 'Login')
-    return { name: 'Login' };
-  if (to.matched.length > 0) {
-    if (to.matched[0].name == 'StudentHome' && auth.type == 'student') {
-      return { name: 'StudentMain', replace: true };
-    }
-    else if (to.matched[0].name == 'TeacherHome' && auth.type == 'teacher') {
-      return { name: 'TeacherMain', replace: true };
-    }
-    else if (to.matched[0].name == 'PartyManagerHome' && auth.type == 'associateTeacher') {
-      return { name: 'PartyManagerMain', replace: true };
-    }
-  }
-
-  if (
-    (to.name === 'LOGIN_PLACEHOLDER') || // 登陆跳转
-    (to.name === 'Login' && auth.isAuthenticated) ||
-    (to.matched.length == 0) || // 空路由返回主页
-    (to.name === 'TeacherMain' || to.name === 'StudentMain' || to.name === 'PartyManagerMain'))// Main 返回主页
-  { 
-    if (auth.type == 'student')
-      return { name: 'StudentHome', replace: true };
-    else if (auth.type == 'teacher') {
-      console.log("+++++",to.name)
-      return { name: 'TeacherHome', replace: true };
-    }
-    else if (auth.type == 'associateTeacher') {
-      console.log("=====",to.name)
-      return { name: 'PartyManagerHome', replace: true };
-    }
-  }
-
 })
 
 export default router

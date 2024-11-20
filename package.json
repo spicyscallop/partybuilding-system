@@ -21,7 +21,7 @@
     "identify": "^0.1.5",
     "js-md5": "^0.8.3",
     "less": "^4.2.0",
-    "pinia": "^2.0.28",
+    "pinia": "^2.2.6",
     "pinia-plugin-persistedstate": "^3.0.1",
     "qs": "^6.11.2",
     "quill-blot-formatter": "^1.0.5",

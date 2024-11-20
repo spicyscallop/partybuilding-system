@@ -2,9 +2,6 @@ import ShowCase from '../../../components/homepage/ShowCase.vue';
 
 <template>
 	<v-main>
-		<v-btn style="height:60px;background-color: paleturquoise;" elevation="0" @click="goToStudent()">前往学生端</v-btn>
-		<v-btn style="height:60px;background-color: cadetblue;" elevation="0" @click="goToTeacher()">前往党委端</v-btn>
-		<v-btn style="height:60px;background-color: yellowgreen;" elevation="0" @click="goToPartyBranchManager()">前往支委端</v-btn>
 		<div class="d-flex flex-column justify-center align-center fill-height overflow-hidden bg-grey-lighten-5">
 			<h1 class="text-h4">CST智慧党建系统</h1>
 			<v-sheet class="bg-grey-lighten-5" style="width: 100%;height: 700px;">
@@ -43,9 +40,9 @@ import ShowCase from '../../../components/homepage/ShowCase.vue';
 													type="password"></v-text-field>
 												<div ref="verifyForm" style="display: flex; align-items: center;">
 													<v-text-field color="party-2" label="验证码" variant="underlined"
-														v-model="loginForm.verifyCode" :rules="rules.vertifyCodeRules"
+														v-model="loginForm.verifyCode" v-if="needCode"
 														type="text" style="width: 60%;"></v-text-field>
-													<img class="mb-6" v-bind:src="image" @click="getCaptchaV()">
+													<img class="mb-6" v-bind:src="image" @click="refreshCode()">
 												</div>
 											</v-form>
 										</v-col>
@@ -65,10 +62,130 @@ import ShowCase from '../../../components/homepage/ShowCase.vue';
 	</v-main>
 </template>
 
+<script>
+import ListCard from '@/components/homepage/ListCard.vue';
+import ShowCase from '@/components/homepage/ShowCase.vue';
+import ImageCode from '@/components/ImageCode.vue';
+import { userLogin,getCaptcha,getXtgg } from '@/http/api';
+import { login} from '@/utils/auth';
+export default {
+  components: {
+    ListCard,
+    ImageCode,
+    ShowCase
+  },
+  data() {
+    return {
+      loginFail:false,
+      image: "",
+      loginForm: {
+        userNumber: "",
+        pwd: "",
+        verifyCode: "",
+      },
+      vertifyForm: true,
+      rules: {
+        idRules: [value => !!value || "请输入学号"],
+        passwordRules: [value => !!value || "请输入密码"],
+      },
+      xtgg: [],
+      needCode: false
+    };
+  },
+  methods: {
+    refreshCode() {
+      if (this.loginForm.userNumber == "") {
+        this.$message({
+          message: "请输入学号",
+          type: 'warn',
+          duration: 3000
+        });
+        return
+      }
+      getCaptcha(this.loginForm).then(response => {
+        if (response.success) {
+          console.log('请求成功:', response);
+          this.image = "data:image/png;base64," + response.data;
+        } else {
+          console.error('请求失败:', response);
+        }
+      })
+          .catch(error => {
+            console.error('请求错误:', error);
+          });
+    },
+    async loginBtnClick() {
+      //输入框检验
+      const isValid = await this.$refs.form.validate()
+      if(!isValid.valid){
+        return
+      }
+      if (this.needCode && (!this.loginForm.verifyCode || !this.loginForm.verifyCode.length)) {
+        this.$message({
+          message: "验证码不能为空",
+          type: 'warn',
+          duration: 3000
+        });
+        return
+      }
+      //登录请求发送
+      userLogin(this.loginForm).then(response => {
+        console.log(response)
+        //处理异常信息
+        if (!response.success) {//登录失败
+          this.$message({
+            message: response.msg,
+            type: 'error',
+            duration: 3000
+          });
+          if (response.data !== null) {
+            this.needCode = true;
+            this.image = "data:image/png;base64," + response.data;
+          }
+          return
+        }
+        let userInfo = response.data;
+        login(userInfo);
+        if (userInfo.role === '学生') {
+          this.$router.push({ name: 'StudentMain', replace: true });
+        } else if(userInfo.role === '支部书记'){
+          this.$router.push({ name: 'TeacherMain', replace: true });
+        } else if(userInfo.role === '学校党委' || userInfo.role === '系统管理员'){
+          this.$router.push({ name: 'PartyManagerHome', replace: true });
+        }
+        this.$message.success('登录成功');
+      })
+    },
+    getXtggV(){
+      getXtgg().then(response => {
+        if (response.success) {
+          console.log('请求成功:', response);
+          // 提取数据并格式化后存入 xtgg
+          this.xtgg = response.data.records.map(record => ({
+            title: record.title,
+            subtitle: record.content,
+            date: record.createTime,
+            url: record.url
+          }));
+          console.log(this.xtgg)
+
+        } else {
+          console.error('请求失败:', response);
+        }
+      })
+          .catch(error => {
+            console.error('请求错误:', error);
+          });
+    }
+  },
+  mounted(){
+    this.getXtggV()
+  }
+
+}
+</script>
+
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.cn/css?family=Noto+Sans+SC&display=swap');
 </style>
 
-<script src="./LoginView.js">
-
-</script>
