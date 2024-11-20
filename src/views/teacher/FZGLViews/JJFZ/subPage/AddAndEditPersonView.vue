@@ -1,5 +1,12 @@
 <template>
   <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
+    <v-col class="d-flex fill-height flex-column">
+    <v-row style="height: 60px;">
+      <v-col cols="8">
+        <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+        </SubpageTitle>
+      </v-col>
+    </v-row>
     <!-- 入党介绍人选择对话框 -->
     <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
                draggable align-center>
@@ -71,23 +78,23 @@
     <!-- 表单内容 -->
     <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
       <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span>学工号</span>
-        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 80%;"></el-input>
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">学工号</span>
+        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
       </v-col>
       <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span>姓名</span>
-        <el-input v-model="form.userName" :disabled="isEdit" style="width: 80%;"></el-input>
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">姓名</span>
+        <el-input v-model="form.userName" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
       </v-col>
       <v-col cols="4">
         <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;" :disabled="isEdit">
+        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;height: 40px;" :disabled="isEdit">
           <el-option v-for="item in leagueOptions" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col style="background-color: #f7f7f7; height: 60%;padding: 20px;border-radius: 20px;">
+      <v-col style="background-color: #f7f7f7; height: 90%;padding: 20px;border-radius: 20px;">
         <!-- 第一行 -->
         <v-row>
           <v-col cols="6">
@@ -163,11 +170,16 @@
         </el-button>
       </v-col>
     </v-row>
+    </v-col>
   </v-container>
 </template>
 
 <script>
+import SubpageTitle from '@/components/SubpageTitle.vue';
 export default {
+  components: {
+    SubpageTitle,
+  },
   data() {
     return {
       // 表单数据

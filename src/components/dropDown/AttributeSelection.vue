@@ -66,6 +66,9 @@
       handleCommand() {
         console.log('选中的选项：', this.selectedOptions);
         // 这里可以处理选中选项的逻辑
+      },
+      click(){
+        
       }
     },
     mounted(){

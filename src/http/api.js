@@ -111,3 +111,33 @@ export const getPartyHonors = () => {
 export const getXtgg = () => {
     return axios.get("/api/systemMessages/page")
 }
+
+/**
+ * 获取某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const getStageMember = (data) => {
+    return axios.post("/api/stage/page",data)
+}
+
+/**
+ * 更改某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const updateStageMember = (data) => {
+    return axios.post("/api/stage/update",data)
+}
+
+/**
+ * 添加某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const addStageMember = (data) => {
+    return axios.post("/api/stage/add",data)
+}

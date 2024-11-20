@@ -1,6 +1,12 @@
 <template>
   <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
     <v-col class="d-flex fill-height flex-column">
+      <v-row style="height: 60px;">
+        <v-col cols="8">
+          <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+          </SubpageTitle>
+        </v-col>
+      </v-row>
       <v-row v-if="!goTo.visiblePersonView" style="height: 80px;">
         <div
             style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
@@ -38,7 +44,8 @@
         <div class="flex-grow-1 overflow-auto">
           <el-table ref="multipleTable" :data="tableData" max-height="80vh"
                     style="border-radius: 15px;background-color: #F7F7F7;"
-                    @selection-change="handleSelectionChange"
+                    @selection-change="handleSelectionChange" :row-style="rowStyle"
+                    :header-cell-style="headerRowStyle"
           >
             <el-table-column type="selection">
             </el-table-column>
@@ -108,6 +115,15 @@ export default {
         subPage: 0,
         pageType: '',
         data: {},
+      },
+      headerRowStyle:{
+        backgroundColor: '#F7F7F7',
+        color: '#3E3E3E',
+      },
+      rowStyle:{
+        color: '#3E3E3E',
+        backgroundColor: '#F7F7F7',
+        border: '#2E2E2E'
       },
       colNames: ['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份'],
       columns: [

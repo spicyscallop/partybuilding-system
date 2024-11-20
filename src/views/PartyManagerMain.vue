@@ -41,11 +41,12 @@
                 <v-list-item title="预备党员阶段" to="/partyManager/fzgl/ybdy"></v-list-item>
                 <v-list-item title="正式党员阶段" to="/partyManager/fzgl/zsdy"></v-list-item>
             </v-list-group>
-            <v-list-item v-bind="props" prepend-icon="mdi-notebook-edit" title="组织生活" to="/partyManager/zzsh"></v-list-item>
-            <v-list-item v-bind="props" prepend-icon="mdi-calendar-range" title="活动安排" to="/partyManager/arrange"></v-list-item>
-            <v-list-item v-bind="props" prepend-icon="mdi-folder-multiple-image" title="风采记录" to="/partyManager/album"></v-list-item>
-            <v-list-item v-bind="props" prepend-icon="mdi-medal" title="荣誉奖项" to="/partyManager/award"></v-list-item>
-            <v-list-item v-bind="props" prepend-icon="mdi-file-cog" title="档案管理" to="/partyManager/file"></v-list-item>
+            <!-- 下面的5行去掉了 v-bind="props"-->
+            <v-list-item  prepend-icon="mdi-notebook-edit" title="组织生活" to="/partyManager/zzsh"></v-list-item> 
+            <v-list-item  prepend-icon="mdi-calendar-range" title="活动安排" to="/partyManager/arrange"></v-list-item>
+            <v-list-item  prepend-icon="mdi-folder-multiple-image" title="风采记录" to="/partyManager/album"></v-list-item>
+            <v-list-item  prepend-icon="mdi-medal" title="荣誉奖项" to="/partyManager/award"></v-list-item>
+            <v-list-item  prepend-icon="mdi-file-cog" title="档案管理" to="/partyManager/file"></v-list-item>
         </v-list>
     </v-navigation-drawer>
 
