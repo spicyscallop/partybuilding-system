@@ -225,7 +225,23 @@ export const getXtgg = () => {
     return axios({
         url: "/systemMessages/page",
         method: "get",
-        data: {
+        params: {
         }
     })
 }
+
+/**
+ * 获取自主学习接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const getSelfActivity = (id = "") => {
+    return axios({
+        url: "/self-activity/getMySelfActivity",
+        method: "get",
+        params: {
+            userNumber: id
+        }
+    });
+};

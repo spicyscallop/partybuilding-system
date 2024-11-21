@@ -103,81 +103,42 @@
                             <v-row id="data-table" class="flex-grow-1 flex-shrink-1 fill-height"
                                 style="flex-basis: 0; min-height: 200px;">
                                 <v-col class="pa-0 fill-height">
-                                    <v-table class="fill-height" fixed-header>
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    <v-checkbox-btn value="Jacob"></v-checkbox-btn>
-                                                </th>
-                                                <th>
-                                                    学工号
-                                                </th>
-                                                <th>
-                                                    姓名
-                                                </th>
-                                                <th>
-                                                    发展阶段
-                                                </th>
-                                                <th>
-                                                    活动名称
-                                                </th>
-                                                <th>
-                                                    主办单位
-                                                </th>
-                                                <th>
-                                                    活动时间
-                                                </th>
-                                                <th>
-                                                    活动类型
-                                                </th>
-                                                <th>
-                                                    提交文件/申请学时
-                                                </th>
-                                                <th>
-                                                    状态
-                                                </th>
-                                                <th>
-                                                    操作
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in desserts" :key="item.name">
-                                                <td>
-                                                    <v-checkbox-btn value="Jacob"></v-checkbox-btn>
-                                                </td>
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>
-                                                    <v-btn density="comfortable" icon="mdi-pencil-outline" variant="text">
-                                                    </v-btn>
-                                                    <v-btn density="comfortable" icon="mdi-trash-can-outline"
-                                                        variant="text">
-                                                    </v-btn>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </v-table>
+                                    <v-data-table
+                                        :items="activities"
+                                        :headers="headers"
+                                        item-key="name"
+                                        :items-per-page="10"
+                                        show-select
+                                    >
+                                    <template v-slot:item.actions="{ item }">
+                                    <v-icon
+                                        class="me-2"
+                                        size="small"
+                                        @click="editItem(item)"
+                                    >
+                                        mdi-pencil
+                                    </v-icon>
+                                    <v-icon
+                                        size="small"
+                                        @click="deleteItem(item)"
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                    </template>
+                                    </v-data-table>
                                 </v-col>
                             </v-row>
-                            <v-row id="data-table-footer" class="flex-shrink-1 flex-grow-0 flex-row-reverse">
+                            <!--v-row id="data-table-footer" class="flex-shrink-1 flex-grow-0 flex-row-reverse">
                                 <v-row class="align-center ma-0">
                                     <v-col class="flex-shrink-0 flex-grow-1">
                                         <v-checkbox-btn style="padding-left: 4px;" label="全选"></v-checkbox-btn>
                                     </v-col>
                                     <v-col cols="2" class="pa-0" style="min-width: 135px;">
                                         <v-select class="ml-3" :items="['10条/页', '20条/页', '50条/页']" variant="outlined"
-                                            model-value="10条/页" hide-details="auto" density="compact"></v-select>
+                                        v-model="itemsPerPage" hide-details="auto" density="compact"></v-select>
                                     </v-col>
                                     <v-col cols="2" class="pa-0" style="min-width: 155px;">
-                                        <v-pagination v-model="page" :length="6" total-visible="1"></v-pagination>
+                                        <v-pagination v-model="page" :length="6" :total-visible="1"></v-pagination>
                                     </v-col>
                                     <v-col class="d-flex flex-row flex-grow-0 flex-shrink-1 align-center"
                                         style="white-space: nowrap;">
@@ -189,7 +150,7 @@
                                         <div>页</div>
                                     </v-col>
                                 </v-row>
-                            </v-row>
+                            </v-row-->
                         </v-col>
                     </v-sheet>
                 </v-col>
@@ -200,6 +161,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
+import { getSelfActivity } from '@/http/api';
 
 export default {
     components: {
@@ -208,61 +170,66 @@ export default {
     emits: ["drawerToggle"],
     data() {
         return {
-            desserts: [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 150,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                },
+            dialog: false,
+            dialogDelete: false,
+            headers: [
+                { title: '活动编号', value: 'id' },
+                { title: '活动名称', value: 'activityName' },
+                { title: '活动级别', value: 'activityLevel' },
+                { title: '主办单位', value: 'activitySponsor' },
+                { title: '活动时间', value: 'activityDate' },
+                { title: '申请学时', value: '还没有' },
+                { title: '提交时间', value: 'createTime' },
+                { title: '审核状态', value: 'auditStatus' },
+                { title: '审核时间', value: 'auditTime' },
+                { title: '操作', key: 'actions', sortable: false }
             ],
-            page: 1
-        }
+            activities: [],
+            editedIndex: -1,
+            editedItem: {
+                activityDate: '',
+                activityLevel: 0,
+                activityName: '',
+                activitySponsor: '',
+                auditStatus: 0,
+                auditTime: '',
+                createTime: '',
+                id: 0,
+                userNumber: ''
+            },
+        };
     },
-}
+    created() {
+        this.fetchActivities();
+    },
+    methods: {
+        async fetchActivities() {
+            try {
+                const response = await getSelfActivity();
+                if (response.data) {
+                    this.activities = response.data;
+                } else {
+                    console.error('未收到有效的数据');
+                }
+            } catch (error) {
+                console.error('获取活动数据失败:', error);
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.activities.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.activities.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+    }
+};
 </script>
 
 <style lang="scss">
