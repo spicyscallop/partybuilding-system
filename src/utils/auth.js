@@ -1,4 +1,4 @@
-import { useUserStore } from '@/stores/index';
+import { useUserStore } from '@/stores/index.js';
 
 // 封装登录逻辑
 export const login = (user) => {
