@@ -7,7 +7,7 @@
           </SubpageTitle>
         </v-col>
       </v-row>
-      <v-row v-if="!goTo.visiblePersonView" style="height: 80px;">
+      <v-row style="height: 80px;">
         <div
             style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
           <v-col cols="10">
@@ -40,7 +40,7 @@
           </v-col>
         </div>
       </v-row>
-      <v-row v-if="!goTo.visiblePersonView" class="d-flex flex-column h-100">
+      <v-row class="d-flex flex-column h-100">
         <div class="flex-grow-1 overflow-auto">
           <el-table ref="multipleTable" :data="tableData" max-height="80vh"
                     style="border-radius: 15px;background-color: #F7F7F7;"
@@ -58,7 +58,7 @@
         </div>
       </v-row>
 
-      <v-row v-if="!goTo.visiblePersonView" style="background-color: #E9E9E9;">
+      <v-row style="background-color: #E9E9E9;">
         <v-col cols="5">
           <el-button type="primary" class="redBtn" size="mini" @click="editRow()">编辑</el-button>
           <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow()">删除</el-button>
@@ -109,12 +109,6 @@ export default {
         currentPage: 1,
         pageSizeList: [10, 20, 30, 50],
         totalNum: 0,
-      },
-      goTo: {
-        visiblePersonView: false,
-        subPage: 0,
-        pageType: '',
-        data: {},
       },
       headerRowStyle:{
         backgroundColor: '#F7F7F7',
@@ -242,6 +236,7 @@ export default {
         userName: this.queryItems.name,
         startActivistsSetTime: this.queryItems.applyTime[0] || null,
         endActivistsSetTime: this.queryItems.applyTime[1] || null,
+        developmentPhase:'积极分子'
       };
 
       this.$axios.post('/api/stage/page', data)
@@ -267,10 +262,6 @@ export default {
       this.tableBottom.currentPage = page;
       this.queryList();
     },
-    goToEditPersonView() {
-      // 实现编辑功能的逻辑
-    },
-    // 如果有其他方法，请在此处添加
   },
   mounted() {
     this.queryList();
