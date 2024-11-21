@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { getCurrentUser } from '@/utils/auth';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -211,5 +212,26 @@ const router = createRouter({
     },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/') {
+    // 根据用户身份动态跳转
+    const user = getCurrentUser();
+    if (!user) {
+      next('/login');
+    } else if (user.role === '学生') {
+      next('/student/home');
+    } else if (user.role === '支部书记') {
+      next('/teacher/home');
+    } else if(user.role === '学校党委' || user.role === '系统管理员'){
+      next('/partyManager/home'); // 默认跳转登录页
+    } else {
+      next('/login');
+    }
+  } else {
+    next();
+  }
+});
+
 
 export default router

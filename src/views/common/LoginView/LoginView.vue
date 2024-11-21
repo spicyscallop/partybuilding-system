@@ -67,7 +67,7 @@ import ListCard from '@/components/homepage/ListCard.vue';
 import ShowCase from '@/components/homepage/ShowCase.vue';
 import ImageCode from '@/components/ImageCode.vue';
 import { userLogin,getCaptcha,getXtgg } from '@/http/api';
-import { login} from '@/utils/auth';
+import { login } from '@/utils/auth';
 export default {
   components: {
     ListCard,
