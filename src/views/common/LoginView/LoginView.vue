@@ -1,5 +1,3 @@
-import ShowCase from '../../../components/homepage/ShowCase.vue';
-
 <template>
 	<v-main>
 		<div class="d-flex flex-column justify-center align-center fill-height overflow-hidden bg-grey-lighten-5">
@@ -147,11 +145,11 @@ export default {
         let userInfo = response.data;
         login(userInfo);
         if (userInfo.role === '学生') {
-          this.$router.push({ name: 'StudentMain', replace: true });
+          this.$router.push({ name: 'StudentHome', replace: true });
         } else if(userInfo.role === '支部书记'){
-          this.$router.push({ name: 'TeacherMain', replace: true });
-        } else if(userInfo.role === '学校党委' || userInfo.role === '系统管理员'){
           this.$router.push({ name: 'PartyManagerHome', replace: true });
+        } else if(userInfo.role === '学校党委' || userInfo.role === '系统管理员'){
+          this.$router.push({ name: 'TeacherHome', replace: true });
         }
         this.$message.success('登录成功');
       })

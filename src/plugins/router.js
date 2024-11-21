@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/teacher',
       name: 'TeacherMain',
-      component: () => import('@/views/TeacherMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/teacher/home',
@@ -76,12 +76,6 @@ const router = createRouter({
           name: 'T_FCJL',
           component: () => import('@/views/teacher/FCJL/FCJLView.vue')
         },
-        //测试
-        {
-          path: '/teacher/test',
-          name: 'TeacherTest',
-          component: () => import('@/views/test.vue')
-        },
         // 党委中心
         {
           path: '/teacher/dwzx',
@@ -103,7 +97,7 @@ const router = createRouter({
     {
       path: '/student',
       name: 'StudentMain',
-      component: () => import('@/views/StudentMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/student/home',
@@ -135,7 +129,7 @@ const router = createRouter({
     {
       path: '/partyManager',
       name: 'PartyManagerMain',
-      component: () => import('@/views/PartyManagerMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/partyManager/home',
@@ -222,9 +216,9 @@ router.beforeEach((to, from, next) => {
     } else if (user.role === '学生') {
       next('/student/home');
     } else if (user.role === '支部书记') {
-      next('/teacher/home');
-    } else if(user.role === '学校党委' || user.role === '系统管理员'){
       next('/partyManager/home'); // 默认跳转登录页
+    } else if(user.role === '学校党委' || user.role === '系统管理员'){
+      next('/teacher/home');
     } else {
       next('/login');
     }
