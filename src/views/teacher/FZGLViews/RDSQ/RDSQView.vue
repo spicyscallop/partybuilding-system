@@ -94,7 +94,7 @@
                         </el-table-column>
                         <el-table-column v-if="visList[1]" prop="userName" label="姓名" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[2]" prop="deliveryTime" label="入党申请书递交时间" align='center'>
+                        <el-table-column v-if="visList[2]" prop="partyApplicationTime" label="入党申请书递交时间" align='center' :formatter="formatTime">
                         </el-table-column>
                         <el-table-column v-if="visList[3]" prop="talker" label="谈话人" align='center'>
                         </el-table-column>
@@ -139,8 +139,8 @@ import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
 import AddPersonView from '@/views/teacher/FZGLViews/RDSQ/subPage/AddPersonView.vue'
 import EditPersonView from '@/views/teacher/FZGLViews/RDSQ/subPage/EditPersonView.vue'
-import { ElMessage } from 'element-plus'
-import axios from 'axios';
+import { ElMessage } from 'element-plus';
+import axios from '@/http';
 
 //页面显示变量
 const goTo = ref({
@@ -171,31 +171,19 @@ const checkedCols = ref(['学工号', '姓名', '入党申请书递交时间', '
 const colNames = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const visList = ref([true, true, true, true, true, true]);
 const selectedOption = ref('请选择党支部');
+// const options = ref([
+//     { label: '第一党支部', value: '第一党支部' },
+//     { label: '第二党支部', value: '第二党支部' },
+//     { label: '第三党支部', value: '第三党支部' },
+//     { label: '第四党支部', value: '第四党支部' }
+// ]);
 const options = ref([
-    { label: '第一党支部', value: '第一党支部' },
-    { label: '第二党支部', value: '第二党支部' },
-    { label: '第三党支部', value: '第三党支部' },
-    { label: '第四党支部', value: '第四党支部' }
+    { label: '第一党支部', value: '1' },
+    { label: '第二党支部', value: '2' },
+    { label: '第三党支部', value: '3' },
+    { label: '第四党支部', value: '4' }
 ]);
-const tableData = ref([
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        applyTime: '2021-09-10',
-        talkerName: 'hgfhf',
-        talkerTime: '2021-10-10',
-        isCommunistYouthLeagueMember: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        applyTime: '2021-09-10',
-        talkerName: 'hgfhf',
-        talkerTime: '2021-10-10',
-        isCommunistYouthLeagueMember: '是'
-    }
-    // 更多数据...
-]);
+const tableData = ref([]);
 const selectStus = ref([])
 
 const satifyStus = ref([
@@ -349,15 +337,16 @@ const queryList = () => {
         userName: queryItems.value.name,
         startActivistsSetTime: queryItems.value.applyTime[0] || null,
         endActivistsSetTime: queryItems.value.applyTime[1] || null,
-        developmentPhase: "入党申请人"
+        partyBranchId: selectedOption.value,
+        developmentPhase: "申请人"
         // developmentPhase: '积极分子'
     };
     console.log('查询数据', data)
     axios.post('/stage/page', data)
         .then(response => {
-        console.log('查询到的数据: ', response.data.data.records)
-        tableData.value = response.data.data.records;
-        tableBottom.value.totalNum = response.data.data.total;
+        console.log('查询到的数据: ', response.data.records)
+        tableData.value = response.data.records;
+        tableBottom.value.totalNum = response.data.total;
         console.log('tableData', tableData)
         console.log('tableBottom', tableBottom)
         })
@@ -429,6 +418,15 @@ const headerRowStyle = () => {
         color: '#3E3E3E',
     };
 };
+
+function formatTime(row, column, cellValue) {
+  if (!cellValue) return '';
+  const date = new Date(cellValue);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 月份从 0 开始，需要加 1
+  const day = date.getDate();
+  return `${year}-${month}-${day}`;
+}
 
 onMounted(() => {
     console.log('初始化页面,查询数据')
