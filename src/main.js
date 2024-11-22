@@ -10,18 +10,8 @@ import vuetify from "./plugins/vuetify"
 import router from './plugins/router'
 
 import App from './App.vue'
-
-import axios from "./http";
-
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
-
-// import mockModule from "@/mock/index.js";
-// 全局提示框组件,这个提示太垃圾了，用el自带的
-// import notifyMessage from '@/components/notifyMessage/notifyMessageJs.js'
-
-axios.defaults.baseURL = import.meta.env.VITE_API_BASEURI
-axios.defaults.withCredentials = true
 
 export const app = createApp(App)
 const pinia = createPinia()
@@ -32,9 +22,10 @@ app.use(pinia)
 app.use(router)
 app.use(vuetify)
 app.use(VCalendar, {})
-
 // 全局使用 Element Plus
 app.use(ElementPlus);
+
+import axios from "./http";
+app.config.globalProperties.$axios = axios;
 app.mount('#app')
 
-app.config.globalProperties.$axios = axios;

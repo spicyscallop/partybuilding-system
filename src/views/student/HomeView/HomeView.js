@@ -4,7 +4,6 @@ import ListCard from '@/components/ListCard.vue';
 import UnReadListCard from '@/components/homepage/UnReadListCard.vue';
 import IconParty from '@/components/icons/IconParty.vue';
 import IconPhases from '@/views/student/FZJDView/components/IconPhases.vue'
-import { authentication } from '@/stores/authentication';
 import { getUserInfo, getCenterNumber1, getCenterNumber2, getUnreadMessages } from '@/http/api';
 import axios from "axios";
 import dayjs from "dayjs";
@@ -217,7 +216,6 @@ export default {
         }
     },
     mounted: function () {
-        const auth = authentication();
         this.getUserInfoV(auth.userNumber)
         this.getCenterNumberV(auth.userNumber)
         this.getUnreadMessagesV(auth.userId)

@@ -9,16 +9,16 @@
                             <div
                                 style="background-color: #F35339; border-radius: 10px; height: 50px; display: flex; align-items: center; margin-bottom: 10px;">
                                 <span style="color: #ffffff;margin: 0 20px;font-size: 16px;">权限</span>
-                                <el-select v-model="queryItems.userType" placeholder="用户类型" size="normal"
+                                <el-select v-model="queryItems.userType" placeholder="用户类型" size="default"
                                     style="width: 200px;margin: 0 10px;">
                                     <el-option v-for="item in userTypes" :key="item.value" :label="item.label"
                                         :value="item.value" />
                                 </el-select>
-                                <el-button class="redBtn" size="normal" type="primary" style="margin-left: 30px"
+                                <el-button class="redBtn" size="default" type="primary" style="margin-left: 30px"
                                     @click="">查询</el-button>
-                                <el-button class="whiteBtn" size="normal" @click="">清除</el-button>
+                                <el-button class="whiteBtn" size="default" @click="">清除</el-button>
                             </div>
-                            <el-table ref="multipleTable" :data="tableData" max-height="400" :key="tableKey"
+                            <el-table ref="multipleTable" :data="tableData" max-height="400"
                                 style="border-radius: 15px;background-color: #F7F7F7;"
                                 @selection-change="handleSelectionChange"
                                 >
@@ -66,16 +66,16 @@
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>学工号</span><input required disabled
                     class="disableInput"
-                    v-model="localFormData.userId">
+                    v-model="localFormData.userNumber">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>姓名</span><input required disabled
                     class="disableInput"
-                    v-model="localFormData.name">
+                    v-model="localFormData.userName">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-                <el-select v-model="localFormData.isCommunistYouthLeagueMember" :placeholder="placeholder" size="large" style="width: 200px" disabled>
+                <el-select v-model="localFormData.isLeague" size="large" style="width: 200px" disabled>
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
             </v-col>
@@ -84,34 +84,34 @@
             <v-col style="background-color: #f7f7f7; height: 60%;padding: 20px;border-radius: 20px;">
             <v-row>
                 <v-col spans="6">
-                    <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
+                    <div style="margin-bottom: 5px;"><span>积极分子确定时间</span></div>
                     <div>
-                        <el-date-picker v-model="pageFormData.jjfztyTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                        style="width: 90%;" />
+                        <el-date-picker v-model="pageFormData.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
                 <v-col spans="6">
                     <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
                     <div>
-                        <el-date-picker v-model="pageFormData.rdjjfzpyjykcdjbTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                        style="width: 90%;" />
+                        <el-date-picker v-model="pageFormData.talkRegistrationTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
             </v-row>
 
             <v-row>
                 <v-col spans="6">
-                    <div style="margin-bottom: 5px;"><span>积极分子确认时间</span></div>
+                    <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
                     <div>
-                        <el-date-picker v-model="pageFormData.jjfzqrTime" type="date" placeholder="yyyy-mm-dd" size="large" disabled
-                        style="width: 90%;" />
+                        <el-date-picker v-model="pageFormData.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large" disabled
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
                 <v-col spans="6">
-                    <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
+                    <div style="margin-bottom: 5px;"><span>党校参与时间</span></div>
                     <div>
-                        <el-date-picker v-model="pageFormData.jjfzpxbcyTime" type="date" placeholder="系统自动接入" size="large" disabled
-                        style="width: 90%;" />
+                        <el-date-picker v-model="pageFormData.activistPartyTraining" type="date" placeholder="系统自动接入" size="large" disabled
+                        style="width: 90%;" value-format="YYYY-MM-DD"/>
                     </div>
                 </v-col>
             </v-row>
@@ -120,22 +120,22 @@
                 <v-col cols="6">
                     <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
                     <div>
-                        <input class="customInput" placeholder="" v-model="pageFormData.pylxPerson"
+                        <input class="customInput" placeholder="" v-model="pageFormData.cultivateContacts"
                         @click="clickTalkersInput" style="width: 92%;margin-left: -0px;">
                     </div>
                 </v-col>
                 <v-col cols="3" style="padding-left: 30px">
                     <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
                     <div>
-                        <el-date-picker v-model="pageFormData.sxhbtjTime" type="date" placeholder="yyyy-mm-dd" size="large" 
-                        style="width: 90%;" />
+                        <el-date-picker v-model="pageFormData.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large" 
+                        style="width: 90%;"  />
                     </div>
                 </v-col>
                 <v-col cols="3">
                     <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
                     <div>
                         <el-date-picker v-model="pageFormData.xcytjTime" type="date" placeholder="系统自动接入" size="large" disabled
-                        style="width: 90%;" />
+                        style="width: 90%;" value-format="YYYY-MM-DD" />
                     </div>
                 </v-col>
             </v-row>
@@ -152,7 +152,7 @@
                 <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;"
                     @click="$emit('backMainPage')">取消</el-button>
                 <el-button class="redBtn" type="primary"
-                    style="margin-left: 20px; height: 36px;float: right;">保存</el-button>
+                    style="margin-left: 20px; height: 36px;float: right;" @click="savePerson">保存</el-button>
             </v-col>
         </v-row>
     </v-container>
@@ -161,6 +161,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus'
+import {updateStageMember} from '@/http/api'
 const props = defineProps({
     pageType: {
         type: String,
@@ -168,17 +169,7 @@ const props = defineProps({
     },
     formData: {
         type: Object,
-        default: () => ({
-        userId: '',
-        name: '',
-        sxhbTime: '',
-        jjfzdjbTime: '',
-        dxpxTime: '',
-        qzyjdcTime: '',
-        bzrdsTime: '',
-        isCommunistYouthLeagueMember: '',
-        peiyanglianxiren:''
-        })
+        default: () => ({})
     }
 })
 
@@ -187,27 +178,25 @@ const localFormData = ref({...props.formData})
 
 const checkNum = ref(0)
 const totalNum = ref(2)
+const emit = defineEmits(['savePerson']);
 
-//我的建议是根据学号发送一个请求来获得这些时间
-const pageFormData = ref({
-    jjfztyTime:'2020-12-29',
-    rdjjfzpyjykcdjbTime:'2020-12-29',
-    jjfzqrTime:'2020-12-29',
-    jjfzpxbcyTime:'2020-12-29',
-    sxhbtjTime:'2020-12-29',
-    xcytjTime:'2020-12-29',
-    pylxPerson:''
-})
+// 转换时间
+const pageFormData = localFormData
+if(pageFormData.value.thoughtReport){
+    pageFormData.value.thoughtReport = new Date(pageFormData.value.thoughtReport).toISOString().split('T')[0];
+}
+if(pageFormData.value.activistPartyTraining){
+    pageFormData.value.activistPartyTraining = new Date(pageFormData.value.activistPartyTraining).toISOString().split('T')[0];
+}
+if(pageFormData.value.talkRegistrationTime ){
+    pageFormData.value.talkRegistrationTime = new Date(pageFormData.value.talkRegistrationTime).toISOString().split('T')[0];
+}
+if(pageFormData.value.activistTime ){
+    pageFormData.value.activistTime = new Date(pageFormData.value.activistTime).toISOString().split('T')[0];
+}
 
 const checkedPersons = ref([
-    {
-        name: '郭宗豪',
-        phone: '17357191229'
-    },
-    {
-        name: '鲁兴',
-        phone: '12324352234'
-    }
+
 ]);
 
 const choosePersons = () =>{
@@ -218,14 +207,14 @@ const choosePersons = () =>{
     if (checkedPersons.value.length>0){
         names = names+checkedPersons.value[i].name
     }
-    pageFormData.value.pylxPerson = names
+    pageFormData.value.cultivateContacts = names
     dialogVisible.value = false
     checkedPersons.value = []
 }
 
 const queryItems = ref({
     userType: '',
-    pageSize: ''
+    pageSize: 10
 });
 
 const tableBottom = ref({
@@ -253,10 +242,11 @@ const dialogVisible = ref(false)
 
 
 const options = ref([
-    { value: '是', label: '是' },
-    { value: '否', label: '否' }
+    { value: 1, label: '是' },
+    { value: 0, label: '否' }
 ])
 
+// TODO：从后端获取培养联系人
 const tableData = ref([
     {
         userId: '22351006',
@@ -268,57 +258,6 @@ const tableData = ref([
         name: '鲁兴',
         phoneNumber: "12345678905"
     },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        phoneNumber: "17342627342"
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        phoneNumber: "12345678905"
-    },
-    // 更多数据...
 ]);
 
 
@@ -347,6 +286,20 @@ const handleCurrentChange = (val) => {
     queryItems.value.pageIndex = val;
     queryList();
 };
+const savePerson = ()=>{
+    // TODO:向后端请求接口
+    const data = pageFormData.value
+    updateStageMember(data)
+          .then(response => {
+            console.log(response)
+            tableData.value = response.data.records;
+            tableBottom.value.totalNum = response.data.total;
+        })
+          .catch(error => {
+            console.error('请求失败:', error);
+        });
+    emit('savePerson')
+}
 
 </script>
 

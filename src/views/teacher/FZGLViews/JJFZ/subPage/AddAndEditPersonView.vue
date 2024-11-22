@@ -1,5 +1,12 @@
 <template>
   <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
+    <v-col class="d-flex fill-height flex-column">
+    <v-row style="height: 60px;">
+      <v-col cols="8">
+        <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+        </SubpageTitle>
+      </v-col>
+    </v-row>
     <!-- 入党介绍人选择对话框 -->
     <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
                draggable align-center>
@@ -71,23 +78,23 @@
     <!-- 表单内容 -->
     <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
       <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span>学工号</span>
-        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 80%;"></el-input>
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">学工号</span>
+        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
       </v-col>
       <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span>姓名</span>
-        <el-input v-model="form.userName" :disabled="isEdit" style="width: 80%;"></el-input>
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">姓名</span>
+        <el-input v-model="form.userName" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
       </v-col>
       <v-col cols="4">
         <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;" :disabled="isEdit">
+        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;height: 40px;" :disabled="isEdit">
           <el-option v-for="item in leagueOptions" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col style="background-color: #f7f7f7; height: 60%;padding: 20px;border-radius: 20px;">
+      <v-col style="background-color: #f7f7f7; height: 90%;padding: 20px;border-radius: 20px;">
         <!-- 第一行 -->
         <v-row>
           <v-col cols="6">
@@ -100,7 +107,7 @@
           <v-col cols="6">
             <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.talkRegistrationTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;"/>
             </div>
           </v-col>
@@ -163,11 +170,16 @@
         </el-button>
       </v-col>
     </v-row>
+    </v-col>
   </v-container>
 </template>
 
 <script>
+import SubpageTitle from '@/components/SubpageTitle.vue';
 export default {
+  components: {
+    SubpageTitle,
+  },
   data() {
     return {
       // 表单数据
@@ -182,6 +194,7 @@ export default {
         cultivateContacts: '',
         thoughtReport: null,
         nextReportTime: null,
+        talkActivistTime: null,
       },
       defaultForm: {
         id: '',
@@ -194,6 +207,7 @@ export default {
         cultivateContacts: '',
         thoughtReport: null,
         nextReportTime: null,
+        talkActivistTime: null,
       },
       // 团员身份选项
       leagueOptions: [
@@ -230,7 +244,7 @@ export default {
     fetchData() {
       const id = this.$route.params.id;
       if (!id) return;
-      this.$axios.get('/api/stage/get', {params: {id}})
+      this.$axios.get('/stage/get', {params: {id}})
           .then(response => {
             this.form = response.data;
           })
@@ -254,7 +268,7 @@ export default {
         userName: this.queryItems.userName,
       };
       // 发送请求获取阶段信息列表
-      this.$axios.post('/api/stage/page', data)
+      this.$axios.post('/stage/page', data)
           .then(response => {
             this.userTableData = response.data.records;
             this.userTableBottom.totalNum = response.data.total;
@@ -300,7 +314,7 @@ export default {
       const submitData = {...this.form};
 
       if (this.isEdit) {
-        this.$axios.post('/api/stage/update', submitData)
+        this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
               this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
@@ -310,7 +324,7 @@ export default {
               console.error('更新失败:', error);
             });
       } else {
-        this.$axios.post('/api/stage/add', {
+        this.$axios.post('/stage/add', {
           ...submitData,
           developmentPhase: '积极分子'
         })

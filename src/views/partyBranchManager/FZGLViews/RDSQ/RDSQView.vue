@@ -34,7 +34,7 @@
                     </SubpageTitle>
                 </v-col>
                 <v-col cols="4">
-                    <el-select v-model="authenticationStore.partyBranch" placeholder="支部选择" size="large" disabled
+                    <el-select placeholder="支部选择" size="large" disabled
                         style="width: 200px;float: right;">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
@@ -144,6 +144,7 @@ import axios from '@/http';
 
 import { authentication } from '@/stores/authentication.js'
 const authenticationStore = authentication()
+
 //页面显示变量
 const goTo = ref({
     visiblePersonView: false,

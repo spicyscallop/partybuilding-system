@@ -1,13 +1,10 @@
 import IconParty from '@/components/icons/IconParty.vue';
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { authentication } from '@/stores/authentication';
 import axios from "axios";
 
 import { ref, onMounted, nextTick } from 'vue'
 
 // defineEmits(['drawerToggle']);
-const auth = authentication();
-
 const el = ref()
 const fzjdMap = ["入党申请人", "积极分子", "发展对象", "预备党员"];
 const stateOnMap = {

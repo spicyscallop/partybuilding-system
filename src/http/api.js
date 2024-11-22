@@ -7,7 +7,7 @@ import axios from "./index"
  * @returns
  */
 export const userLogin = (data) => {
-    return axios.post( "/api/user/login", data);
+    return axios.post( "/user/login", data);
 }
 
 /**
@@ -16,18 +16,8 @@ export const userLogin = (data) => {
  * @argument 
  * @returns
  */
-export const getCaptcha = () => {
-    return axios.get("/api/captcha")
-}
-
-/**
- * 校验验证码图片接口
- * @author 郭宗豪
- * @argument 
- * @returns
- */
-export const getCaptchaVerify = (verCode,verKey) => {
-    return axios.get("/api/captcha/verify")
+export const getCaptcha = (data) => {
+    return axios.post("/user/refreshCode", data)
 }
 
 /**
@@ -37,7 +27,7 @@ export const getCaptchaVerify = (verCode,verKey) => {
  * @returns
  */
 export const getPersonDetail = (userId) => {
-    return axios.get("/api/users/findUser")
+    return axios.get("/users/findUser")
 }
 
 /**
@@ -47,7 +37,7 @@ export const getPersonDetail = (userId) => {
  * @returns
  */
 export const motifyPersonSetting = (dataFrame) => {
-    return axios.get("/api/users/updateUser")
+    return axios.get("/users/updateUser")
 }
 
 /**
@@ -57,7 +47,7 @@ export const motifyPersonSetting = (dataFrame) => {
  * @returns
  */
 export const getUserInfo = (userNumber) => {
-    return axios.get("/api/users/info")
+    return axios.get("/users/info")
 }
 
 /**
@@ -67,7 +57,7 @@ export const getUserInfo = (userNumber) => {
  * @returns
  */
 export const getCenterNumber1 = (userNumber) => {
-    return axios.get("/api/selfstudy/allstudyhour")
+    return axios.get("/selfstudy/allstudyhour")
 }
 
 /**
@@ -77,7 +67,7 @@ export const getCenterNumber1 = (userNumber) => {
  * @returns
  */
 export const getCenterNumber2 = (userNumber) => {
-    return axios.get("/api/selfstudy/getallstudyhour/nowdevelopmentPhase")
+    return axios.get("/selfstudy/getallstudyhour/nowdevelopmentPhase")
 }
 
 /**
@@ -87,7 +77,7 @@ export const getCenterNumber2 = (userNumber) => {
  * @returns
  */
 export const getUnreadMessages = (userId) => {
-    return axios.get("/api/userMessages/allmessagetext")
+    return axios.get("/userMessages/allmessagetext")
 }
 
 
@@ -99,7 +89,7 @@ export const getUnreadMessages = (userId) => {
  * @returns
  */
 export const getBranchActivities = () => {
-    return axios.get("/api/branchactivity/list/")
+    return axios.get("/branchactivity/list/")
 }
 
 /**
@@ -109,7 +99,7 @@ export const getBranchActivities = () => {
  * @returns
  */
 export const getPartyHonors = () => {
-    return axios.get("/api/partyhonor/list/")
+    return axios.get("/partyhonor/list/")
 }
 
 /**
@@ -119,5 +109,35 @@ export const getPartyHonors = () => {
  * @returns
  */
 export const getXtgg = () => {
-    return axios.get("/api/systemMessages/page")
+    return axios.get("/systemMessages/page")
+}
+
+/**
+ * 获取某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const getStageMember = (data) => {
+    return axios.post("/stage/page",data)
+}
+
+/**
+ * 更改某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const updateStageMember = (data) => {
+    return axios.post("/stage/update",data)
+}
+
+/**
+ * 添加某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const addStageMember = (data) => {
+    return axios.post("/stage/add",data)
 }
