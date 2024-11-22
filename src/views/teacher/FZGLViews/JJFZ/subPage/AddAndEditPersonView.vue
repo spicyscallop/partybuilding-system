@@ -244,7 +244,7 @@ export default {
     fetchData() {
       const id = this.$route.params.id;
       if (!id) return;
-      this.$axios.get('/api/stage/get', {params: {id}})
+      this.$axios.get('/stage/get', {params: {id}})
           .then(response => {
             this.form = response.data;
           })
@@ -268,7 +268,7 @@ export default {
         userName: this.queryItems.userName,
       };
       // 发送请求获取阶段信息列表
-      this.$axios.post('/api/stage/page', data)
+      this.$axios.post('/stage/page', data)
           .then(response => {
             this.userTableData = response.data.records;
             this.userTableBottom.totalNum = response.data.total;
@@ -314,7 +314,7 @@ export default {
       const submitData = {...this.form};
 
       if (this.isEdit) {
-        this.$axios.post('/api/stage/update', submitData)
+        this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
               this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
@@ -324,7 +324,7 @@ export default {
               console.error('更新失败:', error);
             });
       } else {
-        this.$axios.post('/api/stage/add', {
+        this.$axios.post('/stage/add', {
           ...submitData,
           developmentPhase: '积极分子'
         })

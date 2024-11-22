@@ -188,7 +188,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/api/stage/deleteByBatch', ids )
+        this.$axios.post('/stage/deleteByBatch', ids )
             .then(response => {
               this.$message({
                 type: 'success',
@@ -239,7 +239,7 @@ export default {
         developmentPhase:'积极分子'
       };
 
-      this.$axios.post('/api/stage/page', data)
+      this.$axios.post('/stage/page', data)
           .then(response => {
             this.tableData = response.data.records;
             this.tableBottom.totalNum = response.data.total;

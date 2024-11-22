@@ -353,7 +353,7 @@ const queryList = () => {
         // developmentPhase: '积极分子'
     };
     console.log('查询数据', data)
-    axios.post('/api/stage/page', data)
+    axios.post('/stage/page', data)
         .then(response => {
         console.log('查询到的数据: ', response.data.data.records)
         tableData.value = response.data.data.records;

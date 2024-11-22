@@ -76,7 +76,7 @@ export default {
   methods: {
     loadTableData() {
       console.log(this.dialogVisible)
-      this.$axios.post('/api/stage/page', {
+      this.$axios.post('/stage/page', {
         developmentPhase: this.developmentPhase,
         page: {
           searchCount: false,
