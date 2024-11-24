@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {mokePost} from "@/http/api.js"
+
 export default {
 	data: () => ({	}),
 }

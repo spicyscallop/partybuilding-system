@@ -1,48 +1,4 @@
-import axios from "./request"
-//请求示例
-//get
-export const mokeGet = (data) => {
-    return axios({
-        url: "/xxxx",
-        method: "get",
-        data,
-        config: {
-            headers: {
-                'Request-Type': 'wechat'
-            },
-            timeout: 10000
-        }
-    })
-}
-
-//post
-export const mokePost = (data) => {
-    return axios({
-        url: "/getCaptchaCode",
-        method: "post",
-        data,
-        config: {
-            headers: {
-                'Request-Type': 'wechat'
-            },
-            timeout: 10000
-        }
-    })
-}
-
-/**
- * 跨域测试
- * @author 郭宗豪
- * @argument 
- * @returns
- */
-export const getTest = () => {
-    return axios({
-        url: "/getHello",
-        method: "get",
-    })
-}
-
+import axios from "./index"
 
 /**
  * 登录接口
@@ -51,11 +7,7 @@ export const getTest = () => {
  * @returns
  */
 export const userLogin = (data) => {
-    return axios({
-        url: "/user/login",
-        method: "post",
-        data: data
-    })
+    return axios.post( "/user/login", data);
 }
 
 /**
@@ -64,28 +16,8 @@ export const userLogin = (data) => {
  * @argument 
  * @returns
  */
-export const getCaptcha = () => {
-    return axios({
-        url: "/captcha",
-        method: "get",
-    })
-}
-
-/**
- * 校验验证码图片接口
- * @author 郭宗豪
- * @argument 
- * @returns
- */
-export const getCaptchaVerify = (verCode,verKey) => {
-    return axios({
-        url: "/captcha/verify",
-        method: "get",
-        data: {
-            verCode: verCode,
-            verKey: verKey
-        }
-    })
+export const getCaptcha = (data) => {
+    return axios.post("/user/refreshCode", data)
 }
 
 /**
@@ -95,13 +27,7 @@ export const getCaptchaVerify = (verCode,verKey) => {
  * @returns
  */
 export const getPersonDetail = (userId) => {
-    return axios({
-        url: "/users/findUser",
-        method: "get",
-        data: {
-            id: userId
-        }
-    })
+    return axios.get("/users/findUser")
 }
 
 /**
@@ -111,11 +37,7 @@ export const getPersonDetail = (userId) => {
  * @returns
  */
 export const motifyPersonSetting = (dataFrame) => {
-    return axios({
-        url: "/users/updateUser",
-        method: "post",
-        data: dataFrame // 传递要修改的个人信息数据对象
-    })
+    return axios.get("/users/updateUser")
 }
 
 /**
@@ -125,13 +47,7 @@ export const motifyPersonSetting = (dataFrame) => {
  * @returns
  */
 export const getUserInfo = (userNumber) => {
-    return axios({
-        url: "/users/info",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/users/info")
 }
 
 /**
@@ -141,13 +57,7 @@ export const getUserInfo = (userNumber) => {
  * @returns
  */
 export const getCenterNumber1 = (userNumber) => {
-    return axios({
-        url: "/selfstudy/allstudyhour",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/selfstudy/allstudyhour")
 }
 
 /**
@@ -157,13 +67,7 @@ export const getCenterNumber1 = (userNumber) => {
  * @returns
  */
 export const getCenterNumber2 = (userNumber) => {
-    return axios({
-        url: "/selfstudy/getallstudyhour/nowdevelopmentPhase",
-        method: "get",
-        data: {
-            userNumber: userNumber,
-        }
-    })
+    return axios.get("/selfstudy/getallstudyhour/nowdevelopmentPhase")
 }
 
 /**
@@ -173,14 +77,7 @@ export const getCenterNumber2 = (userNumber) => {
  * @returns
  */
 export const getUnreadMessages = (userId) => {
-    return axios({
-        url: "/userMessages/allmessagetext",
-        method: "get",
-        data: {
-            isRead: 0,
-            recvUserId: userId
-        }
-    })
+    return axios.get("/userMessages/allmessagetext")
 }
 
 
@@ -192,12 +89,7 @@ export const getUnreadMessages = (userId) => {
  * @returns
  */
 export const getBranchActivities = () => {
-    return axios({
-        url: "/branchactivity/list/",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/branchactivity/list/")
 }
 
 /**
@@ -207,12 +99,7 @@ export const getBranchActivities = () => {
  * @returns
  */
 export const getPartyHonors = () => {
-    return axios({
-        url: "/partyhonor/list/",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/partyhonor/list/")
 }
 
 /**
@@ -222,10 +109,35 @@ export const getPartyHonors = () => {
  * @returns
  */
 export const getXtgg = () => {
-    return axios({
-        url: "/systemMessages/page",
-        method: "get",
-        data: {
-        }
-    })
+    return axios.get("/systemMessages/page")
+}
+
+/**
+ * 获取某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const getStageMember = (data) => {
+    return axios.post("/stage/page",data)
+}
+
+/**
+ * 更改某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const updateStageMember = (data) => {
+    return axios.post("/stage/update",data)
+}
+
+/**
+ * 添加某个阶段的成员接口
+ * @author tfh,qyy
+ * @argument 
+ * @returns
+ */
+export const addStageMember = (data) => {
+    return axios.post("/stage/add",data)
 }
