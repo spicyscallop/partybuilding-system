@@ -7,7 +7,7 @@ import axios from "./index"
  * @returns
  */
 export const userLogin = (data) => {
-    return axios.post( "/user/login", data);
+    return axios.post( "/user/login", data)
 }
 
 /**
@@ -80,8 +80,6 @@ export const getUnreadMessages = (userId) => {
     return axios.get("/userMessages/allmessagetext")
 }
 
-
-
 /**
  * 获取支部活动信息接口
  * @author zyy
@@ -110,6 +108,26 @@ export const getPartyHonors = () => {
  */
 export const getXtgg = () => {
     return axios.get("/systemMessages/page")
+}
+
+/**
+ * 获取自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const getSelfActivity = () => {
+    return axios.get("/self-activity/getMySelfActivity")
+}
+
+/**
+ * 更新自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const addBranchActivity = (data) => {
+    return axios.get("/self-activity/addBranchActivity", data)
 }
 
 /**
