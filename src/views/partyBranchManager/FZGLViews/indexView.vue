@@ -30,11 +30,11 @@
             </el-dialog>
             <v-row style="height: 60px;">
                 <v-col cols="8">
-                    <SubpageTitle text="入党申请人阶段" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
+                    <SubpageTitle text="发展阶段管理" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
                     </SubpageTitle>
                 </v-col>
                 <v-col cols="4">
-                    <el-select placeholder="支部选择" size="large" disabled
+                    <el-select  placeholder="支部选择" size="large" disabled
                         style="width: 200px;float: right;">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
@@ -70,9 +70,9 @@
             <v-row v-if="!goTo.visiblePersonView" style="height: 100px;">
                 <div style="padding-top: 10px;display: flex; width: 100%;">
                     <v-col cols="10">
-                        <el-button class="redBtn" @click="showDialog" style="margin-left: -10px;">批量更改发展阶段</el-button>
+                        <el-button class="redBtn" @click="goToAddPersonView" style="margin-left: -10px;">添加人员信息</el-button>
                         <el-button class="whiteBtn" style="border-color: #A5A5A5;"
-                            @click="goToAddPersonView">添加人员信息</el-button>
+                            @click="showAllPersonView">历史人员信息</el-button>
                     </v-col>
                     <v-col cols="2">
                         <!-- 属性筛选 -->
@@ -298,6 +298,10 @@ const handleSelectionChange = (selection) => {
     selectStu.value = selection[0]
 };
 
+const showAllPersonView = () => {
+    alert('To be implemented.')
+}
+
 const goToAddPersonView = () => {
     goTo.value.pageType = "Add"
     goTo.value.data = {
@@ -406,5 +410,5 @@ const headerRowStyle = () => {
 </script>
 
 
-<style src="../Common.css"></style>
+<style src="./Common.css"></style>
 <style src="@/style/button.css"></style>

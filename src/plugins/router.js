@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { getCurrentUser } from '@/utils/auth';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/login',
@@ -9,12 +10,9 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
-      name: 'LOGIN_PLACEHOLDER',
-    },
-    {
       path: '/teacher',
       name: 'TeacherMain',
-      component: () => import('@/views/TeacherMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/teacher/home',
@@ -27,6 +25,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/SJCZView.vue')
         },
         // 发展阶段
+        {
+          path: '/teacher/fzgl/fzgl',
+          name: 'T_FZGL',
+          component: () => import('@/views/teacher/FZGLViews/indexView.vue'),
+        },
         {
           path: '/teacher/fzgl/rdsq',
           name: 'T_RDSQ',
@@ -73,12 +76,6 @@ const router = createRouter({
           name: 'T_FCJL',
           component: () => import('@/views/teacher/FCJL/FCJLView.vue')
         },
-        //测试
-        {
-          path: '/teacher/test',
-          name: 'TeacherTest',
-          component: () => import('@/views/test.vue')
-        },
         // 党委中心
         {
           path: '/teacher/dwzx',
@@ -91,6 +88,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
         {
+          path: '/edit-person/:id?',
+          name: 'EditPersonView',
+          component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
+        },
+        {
           path: '/teacher/dwzx/personlist',
           name: 'PersonList',
           component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
@@ -100,7 +102,7 @@ const router = createRouter({
     {
       path: '/student',
       name: 'StudentMain',
-      component: () => import('@/views/StudentMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/student/home',
@@ -132,7 +134,7 @@ const router = createRouter({
     {
       path: '/partyManager',
       name: 'PartyManagerMain',
-      component: () => import('@/views/PartyManagerMain.vue'),
+      component: () => import('@/views/layout.vue'),
       children: [
         {
           path: '/partyManager/home',
@@ -140,6 +142,11 @@ const router = createRouter({
           component: () => import('@/views/partyBranchManager/HomeView.vue')
         },
         // 发展阶段
+        {
+          path: '/partyManager/fzgl/fzgl',
+          name: 'P_FZGL',
+          component: () => import('@/views/partyBranchManager/FZGLViews/indexView.vue')
+        },
         {
           path: '/partyManager/fzgl/rdsq',
           name: 'P_RDSQ',
@@ -205,51 +212,25 @@ const router = createRouter({
   ]
 })
 
-import { authentication } from '@/stores/authentication'
-
-router.beforeEach((to, from) => {
-  const auth = authentication();
-  // console.log("-------------------------------")
-  // console.log("类型为：",auth.type,"前往界面为",to)
-  // console.log("前往界面为",to.name)
-  // type 是否合法
-  if (auth.isAuthenticated && (auth.type !== 'student' && auth.type !== 'teacher' && auth.type !== 'associateTeacher')) {
-    auth.logout()
+router.beforeEach((to, from, next) => {
+  if (to.path === '/') {
+    // 根据用户身份动态跳转
+    const user = getCurrentUser();
+    if (!user) {
+      next('/login');
+    } else if (user.role === '学生') {
+      next('/student/home');
+    } else if (user.role === '支部书记') {
+      next('/partyManager/home'); // 默认跳转登录页
+    } else if(user.role === '学校党委' || user.role === '系统管理员'){
+      next('/teacher/home');
+    } else {
+      next('/login');
+    }
+  } else {
+    next();
   }
+});
 
-  // 跳转鉴权
-  if (!auth.isAuthenticated && to.name !== 'Login')
-    return { name: 'Login' };
-  if (to.matched.length > 0) {
-    if (to.matched[0].name == 'StudentHome' && auth.type == 'student') {
-      return { name: 'StudentMain', replace: true };
-    }
-    else if (to.matched[0].name == 'TeacherHome' && auth.type == 'teacher') {
-      return { name: 'TeacherMain', replace: true };
-    }
-    else if (to.matched[0].name == 'PartyManagerHome' && auth.type == 'associateTeacher') {
-      return { name: 'PartyManagerMain', replace: true };
-    }
-  }
-
-  if (
-    (to.name === 'LOGIN_PLACEHOLDER') || // 登陆跳转
-    (to.name === 'Login' && auth.isAuthenticated) ||
-    (to.matched.length == 0) || // 空路由返回主页
-    (to.name === 'TeacherMain' || to.name === 'StudentMain' || to.name === 'PartyManagerMain'))// Main 返回主页
-  { 
-    if (auth.type == 'student')
-      return { name: 'StudentHome', replace: true };
-    else if (auth.type == 'teacher') {
-      console.log("+++++",to.name)
-      return { name: 'TeacherHome', replace: true };
-    }
-    else if (auth.type == 'associateTeacher') {
-      console.log("=====",to.name)
-      return { name: 'PartyManagerHome', replace: true };
-    }
-  }
-
-})
 
 export default router
