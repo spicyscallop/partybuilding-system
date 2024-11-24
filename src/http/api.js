@@ -1,3 +1,4 @@
+import instance from "./index";
 import axios from "./index"
 
 /**
@@ -140,4 +141,14 @@ export const updateStageMember = (data) => {
  */
 export const addStageMember = (data) => {
     return axios.post("/stage/add",data)
+}
+
+/**
+ * 获取党委概况信息接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getPartyOverview = () => {
+    return instance.get("/auth/branch/getBranchOverview")
 }
