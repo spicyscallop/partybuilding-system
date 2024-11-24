@@ -36,7 +36,9 @@ export default {
         }
     },
     data() {
-        selectIndex: 0
+        return{
+            selectIndex: 0
+        }
     },
     watch: {
         value(new_Value){

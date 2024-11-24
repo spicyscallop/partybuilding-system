@@ -30,11 +30,11 @@
             </el-dialog>
             <v-row style="height: 60px;">
                 <v-col cols="8">
-                    <SubpageTitle text="入党申请人阶段" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
+                    <SubpageTitle text="发展阶段管理" svg="/src/img/FZJD/发展党员.svg" width=43 height=43>
                     </SubpageTitle>
                 </v-col>
                 <v-col cols="4">
-                    <el-select placeholder="支部选择" size="large" disabled
+                    <el-select v-model="selectedOption" placeholder="支部选择" size="large"
                         style="width: 200px;float: right;">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
@@ -70,9 +70,9 @@
             <v-row v-if="!goTo.visiblePersonView" style="height: 100px;">
                 <div style="padding-top: 10px;display: flex; width: 100%;">
                     <v-col cols="10">
-                        <el-button class="redBtn" @click="showDialog" style="margin-left: -10px;">批量更改发展阶段</el-button>
+                        <el-button class="redBtn" @click="goToAddPersonView" style="margin-left: -10px;">添加人员信息</el-button>
                         <el-button class="whiteBtn" style="border-color: #A5A5A5;"
-                            @click="goToAddPersonView">添加人员信息</el-button>
+                            @click="goToShowHistoryPersonView">历史人员信息</el-button>
                     </v-col>
                     <v-col cols="2">
                         <!-- 属性筛选 -->
@@ -137,14 +137,14 @@
 import { ref } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
-import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddPersonView.vue'
-import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
+import AddPersonView from '@/views/teacher/FZGLViews/RDSQ/subPage/AddPersonView.vue'
+import EditPersonView from '@/views/teacher/FZGLViews/RDSQ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
 
 //页面显示变量
 const goTo = ref({
     visiblePersonView: false,
-    subPage : 0,
+    subPage : 1,
     pageType: 'Add',
     data: null
 });
@@ -298,6 +298,10 @@ const handleSelectionChange = (selection) => {
     selectStu.value = selection[0]
 };
 
+const goToShowHistoryPersonView = () =>{
+    alert('to be fixed!')
+}
+
 const goToAddPersonView = () => {
     goTo.value.pageType = "Add"
     goTo.value.data = {
@@ -322,10 +326,8 @@ const goToEditPage = () => {
     } else {
         goTo.value.pageType = "Edit"
         goTo.value.data = selectStu.value
-        // 需要执行一个查询，查询该角色是否满足推优条件
-        goTo.value.data.isSatisfy = "是"
+        goTo.value.subPage = 0
         goTo.value.visiblePersonView = true;
-        goTo.value.subPage = 1
         console.log(selectStus.value[0].name)
     }
 }
@@ -406,5 +408,5 @@ const headerRowStyle = () => {
 </script>
 
 
-<style src="../Common.css"></style>
+<style src="./Common.css"></style>
 <style src="@/style/button.css"></style>

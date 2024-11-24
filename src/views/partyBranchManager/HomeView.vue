@@ -104,6 +104,30 @@
   </v-container>
 </template>
 
+<script>
+export default {
+  name: 'HomeView',
+  components: {
+  },
+  props: {
+  },
+  data() {
+    return {
+    }
+  },
+  computed: {
+  },
+  methods: {
+  },
+  mounted() {
+    this.$axios.get("/auth/branch/getBranchOverview").then((res) => {
+      console.log(res.data);
+    });
+
+  }
+}
+</script>
+
 <script setup>
 
 import SubpageTitle from '@/components/SubpageTitle.vue';
