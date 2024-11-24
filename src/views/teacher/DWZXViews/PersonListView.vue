@@ -118,8 +118,6 @@ const DevelopmentStage = {
   LeagueMember: '共青团员'
 };
 
-
-
 export default {
   components: {
       SubpageTitle,
