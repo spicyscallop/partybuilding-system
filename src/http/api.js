@@ -113,6 +113,16 @@ export const getXtgg = () => {
 }
 
 /**
+ * 获取系统消息接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const getSelfActivity = () => {
+    return axios.get("/self-activity/getMySelfActivity")
+}
+
+/**
  * 获取某个阶段的成员接口
  * @author tfh,qyy
  * @argument 

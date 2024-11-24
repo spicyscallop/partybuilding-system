@@ -9,41 +9,40 @@
             </v-row>
             <v-row class="flex-shrink-1 flex-grow-0">
                 <v-col class="d-flex">
-                    <v-dialog width="50%" persistent>
+                    <!--添加和编辑复用对话框-->
+                    <v-dialog v-model="dialog" width="50%">
                         <template v-slot:activator="{ props }">
-                            <v-btn prepend-icon="mdi-plus" color="party-1" v-bind="props">添加活动信息</v-btn>
+                            <v-btn prepend-icon="mdi-plus" color="party-1" v-bind="props"> 添加活动信息 </v-btn>
                         </template>
                         <template v-slot:default="{ isActive }">
                             <v-card>
-                                <v-toolbar class="ml-5" color="white" title="添加活动信息"></v-toolbar>
+                                <v-toolbar class="ml-5" color="white" :title="formTitle"></v-toolbar>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动名称
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
+                                                <v-text-field class="ml-3" v-model="editedItem.activityName" variant="outlined" :rules="[rules.required]" density="compact" hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动级别
-                                                <v-select class="ml-3" :items="['国家级', '省级', '市级', '校级', '院级']"
-                                                    variant="outlined" hide-details="auto" density="compact"></v-select>
+                                                <v-select class="ml-3" v-model="editedItem.activityLevel" :items="['国家级', '省级', '市级', '校级', '院级']" variant="outlined" :rules="[rules.required]" hide-details="auto" density="compact"></v-select>
                                             </v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 主办单位
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.activitySponsor" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动时间
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.activityDate" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 申请学时
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.appliedStudyHour" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
@@ -59,18 +58,18 @@
                                             </v-col>
                                             <v-col cols="6" class="d-flex flex-row align-center">
                                                 活动图谱
-                                                <v-btn class="ml-3">选取文件</v-btn>
+                                                <v-btn class="ml-3" v-model="editedItem.activityGraph" color="party-1">选取文件</v-btn>
                                             </v-col>
                                             <v-col cols="6" class="d-flex flex-row align-center">
                                                 附加文件
-                                                <v-btn class="ml-3">选取文件</v-btn>
+                                                <v-btn class="ml-3" v-model="editedItem.additionFile" color="party-1">选取文件</v-btn>
                                             </v-col>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
                                 <v-card-actions class="justify-start ml-5">
-                                    <v-btn variant="text" @click="isActive.value = false">提交</v-btn>
-                                    <v-btn variant="text" @click="isActive.value = false">取消</v-btn>
+                                    <v-btn @click="save" >提交</v-btn>
+                                    <v-btn @click="close">取消</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </template>
@@ -81,7 +80,7 @@
                 <v-col class="d-flex">
                     <v-sheet class="d-flex flex-grow-1" rounded="lg">
                         <v-col class="d-flex flex-grow-1 flex-column">
-                            <v-row class="flex-shrink-1 flex-grow-0 ma-0">
+                            <v-row class="flex-shrink-1 flex-grow-0 ma-0"> <!--查询条件--><!--TODO-->
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">审核状态</v-label>
                                     <v-select :items="['通过', '未通过', '待审批']" variant="outlined" hide-details="auto"
@@ -89,8 +88,8 @@
                                 </v-col>
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">学年度</v-label>
-                                    <v-select :items="['2019~2020', '2020~2021', '2021~2022']" variant="outlined"
-                                        hide-details="auto" density="compact"></v-select>
+                                    <v-select :items="['2019~2020', '2020~2021', '2021~2022']" variant="outlined" 
+                                        hide-details="auto" density="compact"></v-select> 
                                 </v-col>
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">活动名称</v-label>
@@ -110,21 +109,33 @@
                                         :items-per-page="10"
                                         show-select
                                     >
-                                    <template v-slot:item.actions="{ item }">
-                                    <v-icon
-                                        class="me-2"
-                                        size="small"
-                                        @click="editItem(item)"
-                                    >
-                                        mdi-pencil
-                                    </v-icon>
-                                    <v-icon
-                                        size="small"
-                                        @click="deleteItem(item)"
-                                    >
-                                        mdi-delete
-                                    </v-icon>
-                                    </template>
+                                        <template v-slot:top>
+                                            <!--删除对话框-->
+                                            <v-dialog v-model="dialogDelete" max-width="500px">
+                                                <v-card>
+                                                    <v-card-title class="text-h5"
+                                                    >确定删除这条记录？</v-card-title
+                                                    >
+                                                    <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
+                                                        >取消</v-btn
+                                                    >
+                                                    <v-btn
+                                                        color="blue-darken-1"
+                                                        variant="text"
+                                                        @click="deleteItemConfirm"
+                                                        >确定</v-btn
+                                                    >
+                                                    <v-spacer></v-spacer>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                        </template>
+                                        <template v-slot:item.actions="{ item }">
+                                            <v-icon class="me-2" size="small" @click="editItem(item)"> mdi-pencil </v-icon>
+                                            <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+                                        </template>
                                     </v-data-table>
                                 </v-col>
                             </v-row>
@@ -197,7 +208,36 @@ export default {
                 id: 0,
                 userNumber: ''
             },
+            defaultItem: {
+                activityDate: '',
+                activityLevel: 0,
+                activityName: '',
+                activitySponsor: '',
+                auditStatus: 0,
+                auditTime: '',
+                createTime: '',
+                id: 0,
+                userNumber: ''
+            },
+            rules: {
+                required: value => !!value || '此字段为必填项',
+                date: value => !value || /^\d{4}-\d{2}-\d{2}$/.test(value) || '请输入有效的日期（格式：YYYY-MM-DD）',
+            },
+
         };
+    },
+    computed: {
+      formTitle() {
+        return this.editedIndex === -1 ? '添加活动信息' : '编辑活动信息'
+      },
+    },
+    watch: {
+      dialog(val) {
+        val || this.close()
+      },
+      dialogDelete(val) {
+        val || this.closeDelete()
+      },
     },
     created() {
         this.fetchActivities();
@@ -216,10 +256,43 @@ export default {
             }
         },
 
+        close() {
+            this.dialog = false
+            this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+            })
+        },
+
+        save() {
+            if (this.editedIndex > -1) {
+                //TODO 接口
+                Object.assign(this.activities[this.editedIndex], this.editedItem)
+            } else {
+                //TODO 接口
+                this.activities.push(this.editedItem)
+            }
+            this.close()
+        },
+
         editItem(item) {
             this.editedIndex = this.activities.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            this.editedItem = { ...item };
             this.dialog = true
+        },
+
+        deleteItemConfirm() {
+            //TODO 接口
+            this.activities.splice(this.editedIndex, 1)
+            this.closeDelete()
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+            })
         },
 
         deleteItem(item) {
@@ -227,8 +300,18 @@ export default {
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
-
-    }
+        
+        validateForm() {
+            const requiredFields = ['activityName', 'activityLevel', 'activitySponsor', 'activityDate'];
+            for (let field of requiredFields) {
+                if (!this.editedItem[field]) {
+                    alert(`${field} 是必填项`);
+                    return false;
+                }
+            }
+            return true;
+        }
+    },
 };
 </script>
 
