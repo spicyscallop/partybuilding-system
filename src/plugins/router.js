@@ -96,7 +96,6 @@ const router = createRouter({
           path: '/teacher/fzdx/edit-person/:id?',
           name: 'EditPersonViewFZDXT',
           component: () => import('@/views/teacher/FZGLViews/FZDX/subPage/AddAndEditPersonView.vue')
-        }
         },
         {
           path: '/teacher/dwzx/personlist',
