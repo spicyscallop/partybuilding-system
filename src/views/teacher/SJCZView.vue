@@ -172,7 +172,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { getSelfActivity } from '@/http/api';
+import { getSelfActivity, addBranchActivity, deleteSelfActivity } from '@/http/api';
 
 export default {
     components: {
@@ -249,7 +249,7 @@ export default {
                 if (response.data) {
                     this.activities = response.data;
                 } else {
-                    console.error('未收到有效的数据');
+                    console.error('获取活动数据失败:', response.data);
                 }
             } catch (error) {
                 console.error('获取活动数据失败:', error);
@@ -264,15 +264,26 @@ export default {
             })
         },
 
-        save() {
+        async save() {
             if (this.editedIndex > -1) {
                 //TODO 接口
                 Object.assign(this.activities[this.editedIndex], this.editedItem)
+                this.close()
             } else {
                 //TODO 接口
-                this.activities.push(this.editedItem)
+                try {
+                    const response = await addBranchActivity(this.editedItem);
+                    if (response.data) {
+                        console.log('添加活动数据成功:', response.data);
+                    } else {
+                        console.error('更新活动数据失败:', response.data);
+                        this.activities.push(this.editedItem)
+                        this.close()
+                    }
+                } catch (error) {
+                    console.error('更新活动数据失败:', error);
+                }
             }
-            this.close()
         },
 
         editItem(item) {
@@ -281,10 +292,15 @@ export default {
             this.dialog = true
         },
 
-        deleteItemConfirm() {
-            //TODO 接口
-            this.activities.splice(this.editedIndex, 1)
-            this.closeDelete()
+        async deleteItemConfirm() {
+            try {
+                const response = await deleteSelfActivity(this.editedItem.id);
+                this.activities.splice(this.editedIndex, 1);
+                this.closeDelete();
+            } catch (error) {
+                console.error('接口调用失败:', error.response ? error.response.data : error.message);
+                this.$message.error('删除失败，请重试');
+            }
         },
 
         closeDelete() {
