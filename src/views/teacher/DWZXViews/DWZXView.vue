@@ -15,6 +15,45 @@
             </v-row>
             <v-row no-gutters>
                 <v-col
+                    cols="12"
+                    sm="4"
+                >
+                    <div class="d-flex fill-height align-stretch pt-3 pb-10">
+                        <v-sheet
+                            rounded="lg"
+                            class="flex-grow-1 flex-column ma-3 elevation-8 py-5 pl-5 pr-10"
+                            >
+                            <v-row class="mb-0  ">
+                                <v-col cols="auto">
+                                    <IconParty
+                                        class="mt-n1"
+                                        style="height: 80px"
+                                    ></IconParty>
+                                </v-col>
+                                <v-col>
+                                    <h1 class="text-h3 font-weight-bold">
+                                        18<v-label>个</v-label>
+                                    </h1>
+                                    <h2 class="text-h6">党支部数量</h2>
+                                    <h2 class="text-subtitle-1 text-blue">
+                                        浙江大学软件学院党支部
+                                    </h2>
+                                </v-col>
+                            </v-row>
+                            <v-row class="mb-0">
+                                <v-col cols="3"></v-col>
+                                <v-col cols="6">
+                                    <v-btn block style="background-color: red; color: white"
+                                    to="/teacher/dwzx/branchlist">
+                                        支部列表
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="3"></v-col>
+                            </v-row>
+                        </v-sheet>
+                    </div>
+                </v-col>
+                <v-col
                     v-for="(item, index) in dwzx"
                     :key="index"
                     cols="12"
@@ -64,6 +103,8 @@
 <script>
 import SubpageTitle from "@/components/SubpageTitle.vue";
 import IconParty from "@/components/icons/IconParty.vue";
+import { getPartyOverview } from "@/http/api"
+
 export default {
     components: {
         SubpageTitle,
@@ -73,49 +114,24 @@ export default {
         return {
             dwzx: [
                 {
-                    count: 23,
-                    title: "党支部数量",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText: "支部列表",
-                    viewLink: "/teacher/dwzx/branchlist"
-                },
-                {
-                    count: 123,
-                    title: "党员数量",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText: "人员列表",
-                    viewLink: "/teacher/dwzx/personlist",
-                },
-                {
-                    count: 132,
-                    title: "预备党员数量",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText: "人员列表",
-                    viewLink: ""
-                },
-                {
-                    count: 44,
-                    title: "发展对象数量",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText  : "人员列表",
-                    viewLink: ""
-                },
-                {
-                    count: 31,
-                    title: "积极分子数量",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText  : "人员列表",
-                    viewLink: ""
-                },
-                {
-                    count: 231,
-                    title: "共青团员",
-                    subtitle: "浙江大学软件学院党支部",
-                    buttonText  : "人员列表",
+                    count: 0,
+                    title: "",
+                    subtitle: "",
+                    buttonText: "",
                     viewLink: ""
                 },
             ],
         };
+    },
+    mounted() {
+        getPartyOverview().then(res => {
+            this.dwzx = res.data
+            this.dwzx.forEach(x => {
+                x.subtitle = "浙江大学软件学院党支部"
+                x.buttonText = "人员列表"
+                x.viewLink = "/teacher/dwzx/personlist"
+            })
+        })
     },
     methods: {
         goToRoute(link) {

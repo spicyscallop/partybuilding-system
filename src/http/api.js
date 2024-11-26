@@ -152,3 +152,13 @@ export const addStageMember = (data) => {
 export const getPartyOverview = () => {
     return instance.get("/auth/branch/getBranchOverview")
 }
+
+/**
+ * 获取系統公告信息接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getXtggInfo = () => {
+    return instance.get("/systemMessages/page")
+}

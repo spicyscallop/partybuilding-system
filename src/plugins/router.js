@@ -97,6 +97,11 @@ const router = createRouter({
           name: 'PersonList',
           component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
         },
+        {
+          path: '/teacher/xtgg',
+          name: 'XTGG',
+          component: () => import('@/views/teacher/XTGGView.vue')
+        },
       ]
     },
     {

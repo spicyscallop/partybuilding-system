@@ -32,13 +32,13 @@
             width="100%"
             height="100%"
           >
-            <v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: auto; width: 100%;">
+            <v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: hidden; width: 100%;">
               <v-sheet class="d-flex justify-space-between align-center mt-4 mb-3">
                 <h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
                   <v-icon class="icon-item">mdi-bell-outline</v-icon>
                   系统公告
                 </h1>
-                <v-sheet class="mr-3">更多></v-sheet>
+                <RouterLink to="/teacher/xtgg" class="mr-3">更多></RouterLink>
               </v-sheet>
               <v-list lines="one" class="py-0 pl-1">
                 <v-sheet v-for="(item, index) in xtgg" :key="index">
@@ -128,7 +128,7 @@
                       <v-icon class="icon-item">mdi-home-account</v-icon>
                       党委中心
                     </h1>
-                    <div class="mr-3">更多></div>
+                    <RouterLink class="mr-3" to="/teacher/dwzx">更多></RouterLink>
                   </div>
                   <div style="margin-left: 0;">
                     <el-scrollbar class="flex-fill">
@@ -158,37 +158,21 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import { getPartyOverview } from "@/http/api"
+import { getXtggInfo } from "@/http/api"
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import IconParty from '@/components/icons/IconParty.vue';
+import { RouterLink } from "vue-router";
 
 defineEmits(['drawerToggle']);
 
-let xtgg = [
+let xtgg = ref([
 {
     title: "系统公告",
+    url: "",
+    content: "",
     date: "2024-09"
   },
-  {
-    title: "系统公告",
-    date: "2024-09",
-  },
-  {
-    title: "系统公告",
-    date: "2024-09"
-  },
-  {
-    title: "系统公告",
-    date: "2024-09"
-  },
-  {
-    title: "系统公告",
-    date: "2024-09"
-  },
-  {
-    title: "系统公告",
-    date: "2024-09"
-  },
-]
+]);
 
 let xxyb = [
   {
@@ -223,10 +207,21 @@ let dwry = [
 let dwzx = ref([]);
 
 onMounted(() => {
+  // 获取党委中心人员数量
 	getPartyOverview().then(res => {
 		dwzx.value = res.data
     // console.log(res.data)
 	})
+
+  // 获取系统公告信息
+  getXtggInfo().then(res => {
+      xtgg.value = res.data.records.map(item => ({
+          title: item.title,
+          url: item.url,
+          content: item.content,
+          date: item.createTime.split(' ')[0],
+      }));
+  });
 })
 
 </script>
@@ -253,4 +248,10 @@ onMounted(() => {
 .icon-item {
   color: grey
 }
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
 </style>
