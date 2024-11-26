@@ -88,10 +88,25 @@ const router = createRouter({
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
         {
-          path: '/edit-person/:id?',
-          name: 'EditPersonView',
+          path: '/teacher/jjfz/edit-person/:id?',
+          name: 'EditPersonViewJJFZT',
           component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
-        }
+        },
+        {
+          path: '/teacher/fzdx/edit-person/:id?',
+          name: 'EditPersonViewFZDXT',
+          component: () => import('@/views/teacher/FZGLViews/FZDX/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: '/teacher/dwzx/personlist',
+          name: 'PersonList',
+          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
+        },
+        {
+          path: '/teacher/xtgg',
+          name: 'XTGG',
+          component: () => import('@/views/teacher/XTGGView.vue')
+        },
       ]
     },
     {
@@ -201,7 +216,17 @@ const router = createRouter({
           path: '/teacher/message',
           name: 'P_Message',
           component: () => import('@/views/common/MessageView.vue')
-        }
+        },
+        {
+          path: 'partyManager/jjfz/edit-person/:id?',
+          name: 'EditPersonViewJJFZP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: 'partyManager/fzdx/edit-person/:id?',
+          name: 'EditPersonViewFZDXP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/FZDX/subPage/AddAndEditPersonView.vue')
+        },
       ]
     },
   ]

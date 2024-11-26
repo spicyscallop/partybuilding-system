@@ -1,3 +1,4 @@
+import instance from "./index";
 import axios from "./index"
 
 /**
@@ -7,7 +8,7 @@ import axios from "./index"
  * @returns
  */
 export const userLogin = (data) => {
-    return axios.post( "/user/login", data);
+    return axios.post( "/user/login", data)
 }
 
 /**
@@ -80,8 +81,6 @@ export const getUnreadMessages = (userId) => {
     return axios.get("/userMessages/allmessagetext")
 }
 
-
-
 /**
  * 获取支部活动信息接口
  * @author zyy
@@ -113,6 +112,26 @@ export const getXtgg = () => {
 }
 
 /**
+ * 获取自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const getSelfActivity = () => {
+    return axios.get("/self-activity/getMySelfActivity")
+}
+
+/**
+ * 更新自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const addBranchActivity = (data) => {
+    return axios.get("/self-activity/addBranchActivity", data)
+}
+
+/**
  * 获取某个阶段的成员接口
  * @author tfh,qyy
  * @argument 
@@ -140,4 +159,24 @@ export const updateStageMember = (data) => {
  */
 export const addStageMember = (data) => {
     return axios.post("/stage/add",data)
+}
+
+/**
+ * 获取党委概况信息接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getPartyOverview = () => {
+    return instance.get("/auth/branch/getBranchOverview")
+}
+
+/**
+ * 获取系統公告信息接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getXtggInfo = () => {
+    return instance.get("/systemMessages/page")
 }
