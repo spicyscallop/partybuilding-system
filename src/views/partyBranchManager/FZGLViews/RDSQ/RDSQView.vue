@@ -142,8 +142,8 @@ import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/Ed
 import { ElMessage } from 'element-plus'
 import axios from '@/http';
 
-import { authentication } from '@/stores/authentication.js'
-const authenticationStore = authentication()
+// import { authentication } from '@/stores/authentication.js'
+// const authenticationStore = authentication()
 
 //页面显示变量
 const goTo = ref({
