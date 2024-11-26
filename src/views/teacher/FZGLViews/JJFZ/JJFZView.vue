@@ -226,6 +226,7 @@ export default {
       return formattedDate;
     },
     queryList() {
+      this.batchDialogVisible = false;
       const data = {
         page: {
           pageNumber: this.tableBottom.currentPage,
