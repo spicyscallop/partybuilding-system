@@ -6,6 +6,17 @@
         <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
         </SubpageTitle>
       </v-col>
+      <v-col cols="4">
+          <el-select placeholder="支部选择" size="large" disabled
+              style="width: 200px;float: right;">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
+                  style="">支部选择</span>
+          </div>
+          <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
+              style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
+      </v-col>
     </v-row>
     <!-- 入党介绍人选择对话框 -->
     <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
@@ -190,6 +201,11 @@ export default {
         {value: 1, label: '是'},
         {value: 0, label: '否'},
       ],
+      options:[
+        { label: '第一党支部', value: '第一党支部' },
+        { label: '第二党支部', value: '第二党支部' },
+        { label: '第三党支部', value: '第三党支部' },
+        { label: '第四党支部', value: '第四党支部' }],
       placeholder: '请选择',
       // 入党介绍人对话框相关数据
       dialogVisible: false,
@@ -293,7 +309,7 @@ export default {
         this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
-              this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'P_JJFZ'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('更新失败!');
@@ -306,7 +322,7 @@ export default {
         })
             .then(response => {
               this.$message.success('新增成功!');
-              this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'P_JJFZ'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('新增失败!');
