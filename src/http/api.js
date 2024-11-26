@@ -131,6 +131,18 @@ export const addBranchActivity = (data) => {
 }
 
 /**
+ * 删除自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
+export const deleteSelfActivity = (id) => {
+    return axios.delete('/self-activity/deleteSelfActivity', {
+        data: id,
+    });
+};
+
+/**
  * 获取某个阶段的成员接口
  * @author tfh,qyy
  * @argument 
