@@ -11,7 +11,6 @@ export default defineConfig({
   server: {
     port: "9000",//端口
     // host: "localhost",//ip地址例如192.168.1.177
-    host: true,
     open: false,//服务启动时自动在浏览器中打开应用
     // 热更新
     hmr: true,
@@ -20,7 +19,7 @@ export default defineConfig({
     //自定义代理规则
     proxy: {
       '/api': { // 匹配所有以 '/api'开头的请求路径
-        // target: 'http://localhost:8080/', // 初始本地后端接口路径
+        // target: 'http://localhost:8004/', // 初始本地后端接口路径
         // target: 'http://localhost:9221', // 初始本地后端接口路径
         target: 'http://49.232.10.48:8004/', // 服务器上后端接口路径
         // target: 'http://192.168.1.102:8080/',

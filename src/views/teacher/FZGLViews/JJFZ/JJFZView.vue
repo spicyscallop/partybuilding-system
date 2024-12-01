@@ -164,7 +164,7 @@ export default {
       this.selectedRows = val;
     },
     goToAddPersonView() {
-      this.$router.push({ name: 'EditPersonView' });
+      this.$router.push({ name: 'EditPersonViewJJFZT' });
     },
     editRow() {
       if (this.selectedRows.length !== 1) {
@@ -175,7 +175,7 @@ export default {
         this.$message.warning('请选中要编辑的记录');
         return;
       }
-      this.$router.push({ name: 'EditPersonView', params: { id: this.selectedRows[0].id } });
+      this.$router.push({ name: 'EditPersonViewJJFZT', params: { id: this.selectedRows[0].id } });
     },
     deleteRow() {
       if (this.selectedRows.length === 0) {
@@ -226,6 +226,7 @@ export default {
       return formattedDate;
     },
     queryList() {
+      this.batchDialogVisible = false;
       const data = {
         page: {
           pageNumber: this.tableBottom.currentPage,
@@ -270,5 +271,4 @@ export default {
 </script>
 
 
-<style src="./JJFZView.css"></style>
 <style src="../Common.css"></style>

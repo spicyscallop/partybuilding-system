@@ -9,41 +9,40 @@
             </v-row>
             <v-row class="flex-shrink-1 flex-grow-0">
                 <v-col class="d-flex">
-                    <v-dialog width="50%" persistent>
+                    <!--添加和编辑复用对话框-->
+                    <v-dialog v-model="dialog" width="50%">
                         <template v-slot:activator="{ props }">
-                            <v-btn prepend-icon="mdi-plus" color="party-1" v-bind="props">添加活动信息</v-btn>
+                            <v-btn prepend-icon="mdi-plus" color="party-1" v-bind="props"> 添加活动信息 </v-btn>
                         </template>
                         <template v-slot:default="{ isActive }">
                             <v-card>
-                                <v-toolbar class="ml-5" color="white" title="添加活动信息"></v-toolbar>
+                                <v-toolbar class="ml-5" color="white" :title="formTitle"></v-toolbar>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动名称
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
+                                                <v-text-field class="ml-3" v-model="editedItem.activityName" variant="outlined" :rules="[rules.required]" density="compact" hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动级别
-                                                <v-select class="ml-3" :items="['国家级', '省级', '市级', '校级', '院级']"
-                                                    variant="outlined" hide-details="auto" density="compact"></v-select>
+                                                <v-select class="ml-3" v-model="editedItem.activityLevel" :items="['国家级', '省级', '市级', '校级', '院级']" variant="outlined" :rules="[rules.required]" hide-details="auto" density="compact"></v-select>
                                             </v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 主办单位
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.activitySponsor" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 活动时间
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.activityDate" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="5" class="d-flex flex-row align-center">
                                                 申请学时
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
+                                                <v-text-field class="ml-3" v-model="editedItem.appliedStudyHour" variant="outlined" density="compact"
                                                     hide-details="auto"></v-text-field>
                                             </v-col>
                                             <v-col cols="1"></v-col>
@@ -59,18 +58,18 @@
                                             </v-col>
                                             <v-col cols="6" class="d-flex flex-row align-center">
                                                 活动图谱
-                                                <v-btn class="ml-3">选取文件</v-btn>
+                                                <v-btn class="ml-3" v-model="editedItem.activityGraph" color="party-1">选取文件</v-btn>
                                             </v-col>
                                             <v-col cols="6" class="d-flex flex-row align-center">
                                                 附加文件
-                                                <v-btn class="ml-3">选取文件</v-btn>
+                                                <v-btn class="ml-3" v-model="editedItem.additionFile" color="party-1">选取文件</v-btn>
                                             </v-col>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
                                 <v-card-actions class="justify-start ml-5">
-                                    <v-btn variant="text" @click="isActive.value = false">提交</v-btn>
-                                    <v-btn variant="text" @click="isActive.value = false">取消</v-btn>
+                                    <v-btn @click="save" >提交</v-btn>
+                                    <v-btn @click="close">取消</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </template>
@@ -81,7 +80,7 @@
                 <v-col class="d-flex">
                     <v-sheet class="d-flex flex-grow-1" rounded="lg">
                         <v-col class="d-flex flex-grow-1 flex-column">
-                            <v-row class="flex-shrink-1 flex-grow-0 ma-0">
+                            <v-row class="flex-shrink-1 flex-grow-0 ma-0"> <!--查询条件--><!--TODO-->
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">审核状态</v-label>
                                     <v-select :items="['通过', '未通过', '待审批']" variant="outlined" hide-details="auto"
@@ -89,8 +88,8 @@
                                 </v-col>
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">学年度</v-label>
-                                    <v-select :items="['2019~2020', '2020~2021', '2021~2022']" variant="outlined"
-                                        hide-details="auto" density="compact"></v-select>
+                                    <v-select :items="['2019~2020', '2020~2021', '2021~2022']" variant="outlined" 
+                                        hide-details="auto" density="compact"></v-select> 
                                 </v-col>
                                 <v-col class="d-flex justify-center">
                                     <v-label class="mr-2">活动名称</v-label>
@@ -103,81 +102,54 @@
                             <v-row id="data-table" class="flex-grow-1 flex-shrink-1 fill-height"
                                 style="flex-basis: 0; min-height: 200px;">
                                 <v-col class="pa-0 fill-height">
-                                    <v-table class="fill-height" fixed-header>
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    <v-checkbox-btn value="Jacob"></v-checkbox-btn>
-                                                </th>
-                                                <th>
-                                                    学工号
-                                                </th>
-                                                <th>
-                                                    姓名
-                                                </th>
-                                                <th>
-                                                    发展阶段
-                                                </th>
-                                                <th>
-                                                    活动名称
-                                                </th>
-                                                <th>
-                                                    主办单位
-                                                </th>
-                                                <th>
-                                                    活动时间
-                                                </th>
-                                                <th>
-                                                    活动类型
-                                                </th>
-                                                <th>
-                                                    提交文件/申请学时
-                                                </th>
-                                                <th>
-                                                    状态
-                                                </th>
-                                                <th>
-                                                    操作
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in desserts" :key="item.name">
-                                                <td>
-                                                    <v-checkbox-btn value="Jacob"></v-checkbox-btn>
-                                                </td>
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>{{ item.calories }}</td>
-                                                <td>
-                                                    <v-btn density="comfortable" icon="mdi-pencil-outline" variant="text">
-                                                    </v-btn>
-                                                    <v-btn density="comfortable" icon="mdi-trash-can-outline"
-                                                        variant="text">
-                                                    </v-btn>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </v-table>
+                                    <v-data-table
+                                        :items="activities"
+                                        :headers="headers"
+                                        item-key="name"
+                                        :items-per-page="10"
+                                        show-select
+                                    >
+                                        <template v-slot:top>
+                                            <!--删除对话框-->
+                                            <v-dialog v-model="dialogDelete" max-width="500px">
+                                                <v-card>
+                                                    <v-card-title class="text-h5"
+                                                    >确定删除这条记录？</v-card-title
+                                                    >
+                                                    <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
+                                                        >取消</v-btn
+                                                    >
+                                                    <v-btn
+                                                        color="blue-darken-1"
+                                                        variant="text"
+                                                        @click="deleteItemConfirm"
+                                                        >确定</v-btn
+                                                    >
+                                                    <v-spacer></v-spacer>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                        </template>
+                                        <template v-slot:item.actions="{ item }">
+                                            <v-icon class="me-2" size="small" @click="editItem(item)"> mdi-pencil </v-icon>
+                                            <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+                                        </template>
+                                    </v-data-table>
                                 </v-col>
                             </v-row>
-                            <v-row id="data-table-footer" class="flex-shrink-1 flex-grow-0 flex-row-reverse">
+                            <!--v-row id="data-table-footer" class="flex-shrink-1 flex-grow-0 flex-row-reverse">
                                 <v-row class="align-center ma-0">
                                     <v-col class="flex-shrink-0 flex-grow-1">
                                         <v-checkbox-btn style="padding-left: 4px;" label="全选"></v-checkbox-btn>
                                     </v-col>
                                     <v-col cols="2" class="pa-0" style="min-width: 135px;">
                                         <v-select class="ml-3" :items="['10条/页', '20条/页', '50条/页']" variant="outlined"
-                                            model-value="10条/页" hide-details="auto" density="compact"></v-select>
+                                        v-model="itemsPerPage" hide-details="auto" density="compact"></v-select>
                                     </v-col>
                                     <v-col cols="2" class="pa-0" style="min-width: 155px;">
-                                        <v-pagination v-model="page" :length="6" total-visible="1"></v-pagination>
+                                        <v-pagination v-model="page" :length="6" :total-visible="1"></v-pagination>
                                     </v-col>
                                     <v-col class="d-flex flex-row flex-grow-0 flex-shrink-1 align-center"
                                         style="white-space: nowrap;">
@@ -189,7 +161,7 @@
                                         <div>页</div>
                                     </v-col>
                                 </v-row>
-                            </v-row>
+                            </v-row-->
                         </v-col>
                     </v-sheet>
                 </v-col>
@@ -200,6 +172,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
+import { getSelfActivity, addBranchActivity, deleteSelfActivity } from '@/http/api';
 
 export default {
     components: {
@@ -208,61 +181,154 @@ export default {
     emits: ["drawerToggle"],
     data() {
         return {
-            desserts: [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 150,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                }, {
-                    name: 'KitKat',
-                    calories: 518,
-                },
+            dialog: false,
+            dialogDelete: false,
+            headers: [
+                { title: '活动编号', value: 'id' },
+                { title: '活动名称', value: 'activityName' },
+                { title: '活动级别', value: 'activityLevel' },
+                { title: '主办单位', value: 'activitySponsor' },
+                { title: '活动时间', value: 'activityDate' },
+                { title: '申请学时', value: '还没有' },
+                { title: '提交时间', value: 'createTime' },
+                { title: '审核状态', value: 'auditStatus' },
+                { title: '审核时间', value: 'auditTime' },
+                { title: '操作', key: 'actions', sortable: false }
             ],
-            page: 1
+            activities: [],
+            editedIndex: -1,
+            editedItem: {
+                activityDate: '',
+                activityLevel: 0,
+                activityName: '',
+                activitySponsor: '',
+                auditStatus: 0,
+                auditTime: '',
+                createTime: '',
+                id: 0,
+                userNumber: ''
+            },
+            defaultItem: {
+                activityDate: '',
+                activityLevel: 0,
+                activityName: '',
+                activitySponsor: '',
+                auditStatus: 0,
+                auditTime: '',
+                createTime: '',
+                id: 0,
+                userNumber: ''
+            },
+            rules: {
+                required: value => !!value || '此字段为必填项',
+                date: value => !value || /^\d{4}-\d{2}-\d{2}$/.test(value) || '请输入有效的日期（格式：YYYY-MM-DD）',
+            },
+
+        };
+    },
+    computed: {
+      formTitle() {
+        return this.editedIndex === -1 ? '添加活动信息' : '编辑活动信息'
+      },
+    },
+    watch: {
+      dialog(val) {
+        val || this.close()
+      },
+      dialogDelete(val) {
+        val || this.closeDelete()
+      },
+    },
+    created() {
+        this.fetchActivities();
+    },
+    methods: {
+        async fetchActivities() {
+            try {
+                const response = await getSelfActivity();
+                if (response.data) {
+                    this.activities = response.data;
+                } else {
+                    console.error('获取活动数据失败:', response.data);
+                }
+            } catch (error) {
+                console.error('获取活动数据失败:', error);
+            }
+        },
+
+        close() {
+            this.dialog = false
+            this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+            })
+        },
+
+        async save() {
+            if (this.editedIndex > -1) {
+                //TODO 接口
+                Object.assign(this.activities[this.editedIndex], this.editedItem)
+                this.close()
+            } else {
+                //TODO 接口
+                try {
+                    const response = await addBranchActivity(this.editedItem);
+                    if (response.data) {
+                        console.log('添加活动数据成功:', response.data);
+                    } else {
+                        console.error('更新活动数据失败:', response.data);
+                        this.activities.push(this.editedItem)
+                        this.close()
+                    }
+                } catch (error) {
+                    console.error('更新活动数据失败:', error);
+                }
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.activities.indexOf(item)
+            this.editedItem = { ...item };
+            this.dialog = true
+        },
+
+        async deleteItemConfirm() {
+            try {
+                const response = await deleteSelfActivity(this.editedItem.id);
+                this.activities.splice(this.editedIndex, 1);
+                this.closeDelete();
+            } catch (error) {
+                console.error('接口调用失败:', error.response ? error.response.data : error.message);
+                this.$message.error('删除失败，请重试');
+            }
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+            })
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.activities.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+        
+        validateForm() {
+            const requiredFields = ['activityName', 'activityLevel', 'activitySponsor', 'activityDate'];
+            for (let field of requiredFields) {
+                if (!this.editedItem[field]) {
+                    alert(`${field} 是必填项`);
+                    return false;
+                }
+            }
+            return true;
         }
     },
-}
+};
 </script>
 
 <style lang="scss">

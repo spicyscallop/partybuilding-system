@@ -20,7 +20,10 @@
           </el-table-column>
           <el-table-column prop="userName" label="姓名" align="center">
           </el-table-column>
-          <el-table-column prop="isSatify" label="是否满足推优条件" align="center">
+          <el-table-column prop="isSatisfy" label="是否满足推优条件" align="center">
+            <template v-slot="scope">
+              {{ scope.row.isSatisfy ? '是' : '否' }}
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -64,7 +67,6 @@ export default {
   watch: {
     value: {
       handler(val) {
-        console.log(val)
         this.dialogVisible = val;
         if (val && this.tableData.length === 0) {
           this.loadTableData();
@@ -75,21 +77,18 @@ export default {
   },
   methods: {
     loadTableData() {
-      console.log(this.dialogVisible)
-      this.$axios.post('/stage/page', {
+      this.$axios.post('/stage/pageStateTransition', {
         developmentPhase: this.developmentPhase,
         page: {
           searchCount: false,
           pageSize: -1,
         }
       })
-        .then(response => {
-          console.log(response)
-          this.tableData = response.data.records;
-        })
-        .catch(error => {
-          console.error('获取学生列表失败:', error);
-        });
+          .then(response => {
+            this.tableData = response.data.records;
+          })
+          .catch(error => {
+          });
     },
     handleSelectionChange(val) {
       this.selectedStudents = val;
@@ -100,8 +99,26 @@ export default {
         return;
       }
 
-      const ids = this.selectedStudents.map(student => student.id);
-      // TODO 待开发
+      this.$confirm('确定要修改学生的阶段吗？', '确认修改', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+          .then(() => {
+            // 用户点击确定后执行的逻辑
+            this.$axios.post('/stage/updateStageTransition', this.selectedStudents)
+                .then(response => {
+                  this.$message.success('更新成功');
+                  this.$emit('refreshList');
+                })
+                .catch(error => {
+                  this.$message.error('更新学生列表失败');
+                });
+          })
+          .catch(() => {
+            // 用户点击取消后，什么都不做
+            this.$message.info('取消修改'); // 弹出取消提示
+          });
     },
     closeDialog() {
       this.dialogVisible = false;

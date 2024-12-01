@@ -1,307 +1,232 @@
 <template>
-    <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
-        <v-col class="d-flex fill-height flex-column">
-            <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;批量管理发展阶段" width="600" draggable
-                align-center>
-                <div style="margin: 0px 20px;">
-                    <span>选择以下人员</span>
-                    <div style="width: 100%;height: 300px;">
-                        <el-table :data="satifyStus" :header-row-style="headerRowStyle" :row-style="rowStyle"
-                            @selection-change="handleSelectionChange2" :header-cell-style="headerRowStyle"
-                            max-height="300px">
-                            <el-table-column type="selection" width="30px">
-                            </el-table-column>
-                            <el-table-column prop="userId" label="学工号" align='center'>
-                            </el-table-column>
-                            <el-table-column prop="name" label="姓名" align='center'>
-                            </el-table-column>
-                            <el-table-column prop="isSatify" label="是否满足推优条件" align='center'>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                    <span>是否选择将上述人员转入下一阶段</span>
-                </div>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button class="redBtn" type="primary" @click="changeStuPhase">提交</el-button>
-                        <el-button class="whiteBtn" @click="cancel">取消</el-button>
-                    </div>
-                </template>
-            </el-dialog>
-            <v-row style="height: 60px;">
-                <v-col cols="8">
-                    <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
-                    </SubpageTitle>
-                </v-col>
-                <v-col cols="4">
-                    <el-select placeholder="支部选择" size="large" disabled
-                        style="width: 200px;float: right;">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                    <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
-                            style="">支部选择</span>
-                    </div>
-                    <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
-                        style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
-                </v-col>
-            </v-row>
-            <v-row v-if="!goTo.visiblePersonView" style="height: 80px;">
-                <div
-                    style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
-                    <v-col cols="10">
-                        <span style="margin-left: 30px;">学工号</span><input placeholder="    请输入学工号"
-                            v-model="queryItems.userId"
-                            style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px;width: 10%;">
-                        <span style="margin-left: 30px;">姓名</span><input placeholder="    请输入姓名"
-                            v-model="queryItems.name"
-                            style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px;width: 10%;">
-                        <span style="margin-left: 30px;">积极分子确认时间</span>
-                        <!-- <el-button></el-button> -->
-                        <el-date-picker v-model="queryItems.applyTime" type="daterange" range-separator="——"
+  <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
+    <v-col class="d-flex fill-height flex-column">
+      <v-row style="height: 60px;">
+        <v-col cols="8">
+          <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+          </SubpageTitle>
+        </v-col>
+        <v-col cols="4">
+            <el-select placeholder="支部选择" size="large" disabled
+                style="width: 200px;float: right;">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+            <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
+                    style="">支部选择</span>
+            </div>
+            <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
+                style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
+        </v-col>
+      </v-row>
+      <v-row style="height: 80px;">
+        <div
+            style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
+          <v-col cols="10">
+            <span style="margin-left: 30px;">学工号</span>
+            <input placeholder="    请输入学工号" v-model="queryItems.userId"
+                   style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+            <span style="margin-left: 30px;">姓名</span>
+            <input placeholder="    请输入姓名" v-model="queryItems.name"
+                   style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+            <span style="margin-left: 30px;">积极分子确定时间</span>
+            <el-date-picker v-model="queryItems.applyTime" type="daterange" range-separator="——"
                             start-placeholder="开始日期" end-placeholder="结束日期"
                             style="width: 25%;margin-left: 20px;" />
-                    </v-col>
-                    <v-col cols="2">
-                        <el-button class="redBtn" @click="queryList">查询</el-button>
-                        <el-button class="whiteBtn" @click="clearInputMessage">清除</el-button>
-                    </v-col>
-                </div>
-            </v-row>
-            <v-row v-if="!goTo.visiblePersonView" style="height: 100px;">
-                <div style="padding-top: 10px;display: flex; width: 100%;">
-                    <v-col cols="10">
-                        <el-button class="redBtn" @click="showDialog" style="margin-left: -10px;">批量更改发展阶段</el-button>
-                        <el-button class="whiteBtn" style="border-color: #A5A5A5;"
-                            @click="goToAddPersonView">添加人员信息</el-button>
-                    </v-col>
-                    <v-col cols="2">
-                        <!-- 属性筛选 -->
-                        <AttributeSelection :optionList=colNames style="display: inline-block;float: right;"
-                            @optionChange="changeCheckCols"></AttributeSelection>
-                    </v-col>
-                </div>
-            </v-row>
-            <v-row v-if="!goTo.visiblePersonView" class="d-flex flex-column h-100">
-                <!-- 设置一个占满剩余空间的 div -->
-                <div class="flex-grow-1 overflow-auto">
-                    <el-table ref="multipleTable" :data="tableData" max-height="80vh" :key="tableKey"
-                        style="border-radius: 15px;background-color: #F7F7F7;" :header-row-style="headerRowStyle"
-                        @selection-change="handleSelectionChange" :row-style="rowStyle"
-                        :header-cell-style="headerRowStyle">
-                        <el-table-column type="selection">
-                        </el-table-column>
-                        <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
-                            <template v-slot="scope" v-if="item.type === 'date'">
-                                {{ formatTime(scope.row[item.prop]) }}
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </v-row>
-            <v-row v-if="!goTo.visiblePersonView" style="background-color: #E9E9E9;">
-                <v-col cols="5">
-                    <el-button class="redBtn" style="margin-left: 30px;" @click="goToEditPage">编辑</el-button>
-                    <el-button class="whiteBtn" style="border-color: #A5A5A5;">删除</el-button>
-                </v-col>
-                <v-col cols="7">
-                    <div style="display: inline-block;float: right;">
-                        <div style="display: inline-block;">
-                            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                                :current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList"
-                                background :page-size="queryItems.pageSize"
-                                layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
-                            </el-pagination>
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
-            <v-row v-if="goTo.visiblePersonView" class="fill-height">
-                <AddPersonView v-if="goTo.subPage==0" @addPerson="addPerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
-                </AddPersonView>
-                <EditPersonView v-if="goTo.subPage==1" @savePerson="savePerson" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
-                </EditPersonView>
-            </v-row>
+          </v-col>
+          <v-col cols="2">
+            <el-button class="redBtn" @click="queryList">查询</el-button>
+            <el-button class="whiteBtn" @click="clearInputMessage">清除</el-button>
+          </v-col>
+        </div>
+      </v-row>
+      <v-row style="height: 100px;">
+        <div style="padding-top: 10px;display: flex; width: 100%;">
+          <v-col cols="10">
+            <el-button class="redBtn" style="margin-left: -10px;" @click="batchDialogVisible = true">批量更改发展阶段</el-button>
+            <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
+          </v-col>
+          <v-col cols="2">
+            <AttributeSelection :optionList="colNames" style="display: inline-block;float: right;"
+                                @optionChange=""></AttributeSelection>
+          </v-col>
+        </div>
+      </v-row>
+      <v-row class="d-flex flex-column h-100">
+        <div class="flex-grow-1 overflow-auto">
+          <el-table ref="multipleTable" :data="tableData" max-height="80vh"
+                    style="border-radius: 15px;background-color: #F7F7F7;"
+                    @selection-change="handleSelectionChange" :row-style="rowStyle"
+                    :header-cell-style="headerRowStyle"
+          >
+            <el-table-column type="selection">
+            </el-table-column>
+            <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
+              <template v-slot="scope" v-if="item.type === 'date'">
+                {{ formatTime(scope.row[item.prop]) }}
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </v-row>
+
+      <v-row style="background-color: #E9E9E9;">
+        <v-col cols="5">
+          <el-button type="primary" class="redBtn" size="mini" @click="editRow()">编辑</el-button>
+          <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow()">删除</el-button>
         </v-col>
-    </v-container>
+        <v-col cols="7">
+          <div style="display: inline-block;float: right;">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList" background
+                           :page-size="queryItems.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                           :total="tableBottom.totalNum">
+            </el-pagination>
+          </div>
+        </v-col>
+      </v-row>
+    </v-col>
+    <BatchManagePhaseDialog
+        v-model="batchDialogVisible"
+        :value="batchDialogVisible"
+        developmentPhase="积极分子"
+        @refreshList="queryList">
+    </BatchManagePhaseDialog>
+  </v-container>
 </template>
 
-<script setup>
-import { ref,onMounted } from 'vue';
-import SubpageTitle from '@/components/SubpageTitle.vue'
-import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
-import AddPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddPersonView.vue'
-import EditPersonView from '@/views/partyBranchManager/FZGLViews/JJFZ/subPage/EditPersonView.vue'
-import { ElMessage } from 'element-plus'
-import {getStageMember} from '@/http/api'
+<script>
+import SubpageTitle from '@/components/SubpageTitle.vue';
+import DropDownBox from '@/components/dropDown/DropDownBox.vue';
+import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+import BatchManagePhaseDialog from '@/components/dialog/BatchManagePhaseDialog.vue';
 
-// 下面是数据
-// 页面显示变量
-
-//页面显示变量
-const goTo = ref({
-    visiblePersonView: false,
-    subPage : 0,
-    pageType: 'Add',
-    data: null
-});
-
-const dialogVisible = ref(false)
-
-const queryItems = ref({
-    userId: '',
-    name: '',
-    applyTime: [],
-    pageSize: 10,
-});
-
-const tableBottom = ref({
-    totalNum: 100,
-    pageSizeList: [10, 20, 30, 40]
-});
-
-const checkedCols = ref(['学工号', '姓名', '思想汇报提交时间', '《积极分子登记表》提交时间', '党校培训参与时间', '《群众意见调查表》提交时间','《班主任导师意见表》提交时间']);
-const colNames = ref(['学工号', '姓名', '思想汇报提交时间', '《积极分子登记表》提交时间', '党校培训参与时间', '《群众意见调查表》提交时间','《班主任导师意见表》提交时间']);
-const visList = ref([true, true, true, true, true, true, true]);
-const selectedOption = ref('请选择党支部');
-const options = ref([
-    { label: '第一党支部', value: '第一党支部' },
-    { label: '第二党支部', value: '第二党支部' },
-    { label: '第三党支部', value: '第三党支部' },
-    { label: '第四党支部', value: '第四党支部' }
-]);
-
-
-
-const columns = ref([
-    {
-        label: '学工号',
-        prop: 'userNumber',
+export default {
+  components: {
+    SubpageTitle,
+    DropDownBox,
+    AttributeSelection,
+    BatchManagePhaseDialog
+  },
+  data() {
+    return {
+      queryItems: {
+        userId: '',
+        name: '',
+        applyTime: [],
+        pageSize: 10,
+      },
+      tableData: [],
+      tableBottom: {
+        currentPage: 1,
+        pageSizeList: [10, 20, 30, 50],
+        totalNum: 0,
+      },
+      headerRowStyle:{
+        backgroundColor: '#F7F7F7',
+        color: '#3E3E3E',
+      },
+      rowStyle:{
+        color: '#3E3E3E',
+        backgroundColor: '#F7F7F7',
+        border: '#2E2E2E'
+      },
+      options:[
+        { label: '第一党支部', value: '第一党支部' },
+        { label: '第二党支部', value: '第二党支部' },
+        { label: '第三党支部', value: '第三党支部' },
+        { label: '第四党支部', value: '第四党支部' }],
+      colNames: ['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份'],
+      columns: [
+        {
+          label: '学工号',
+          prop: 'userNumber',
+        },
+        {
+          label: '姓名',
+          prop: 'userName',
+        },
+        {
+          label: '联系培养人',
+          prop: 'cultivateContacts',
+        },
+        {
+          label: '思想汇报提交时间',
+          prop: 'thoughtReport',
+          type: 'date'
+        },
+        {
+          label: '积极分子确定时间',
+          prop: 'activistTime',
+          type: 'date'
+        },
+        {
+          label: '《入党积极分子-考察登记表》提交时间',
+          prop: 'talkActivistTime',
+          type: 'date',
+          width: '300'
+        },
+        {
+          label: '党校参与时间',
+          prop: 'activistPartyTraining',
+          type: 'date'
+        },
+      ],
+      batchDialogVisible: false,
+      selectedRows: [],
+    };
+  },
+  methods: {
+    handleSelectionChange(val) {
+      this.selectedRows = val;
     },
-    {
-        label: '姓名',
-        prop: 'userName',
+    goToAddPersonView() {
+      this.$router.push({ name: 'EditPersonViewJJFZP' });
     },
-    {
-        label: '联系培养人',
-        prop: 'cultivateContacts',
+    editRow() {
+      if (this.selectedRows.length !== 1) {
+        this.$message.warning('请选中一条记录进行编辑');
+        return;
+      }
+      if (this.selectedRows.length === 0) {
+        this.$message.warning('请选中要编辑的记录');
+        return;
+      }
+      this.$router.push({ name: 'EditPersonViewJJFZP', params: { id: this.selectedRows[0].id } });
     },
-    {
-        label: '思想汇报提交时间',
-        prop: 'thoughtReport',
-        type: 'date'
+    deleteRow() {
+      if (this.selectedRows.length === 0) {
+        this.$message.warning('请选中要删除的记录');
+        return;
+      }
+      const ids = this.selectedRows.map(row => row.id);
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/stage/deleteByBatch', ids )
+            .then(response => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.queryList();
+            })
+            .catch(error => {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+              console.error('删除失败:', error);
+            });
+      }).catch(() => {
+        // 用户取消删除操作
+      });
     },
-    {
-        label: '积极分子确定时间',
-        prop: 'activistTime',
-        type: 'date'
-    },
-    {
-        label: '《入党积极分子-考察登记表》提交时间',
-        prop: 'talkRegistrationTime',
-        type: 'date',
-        width: '300'
-    },
-    {
-        label: '党校参与时间',
-        prop: 'activistPartyTraining',
-        type: 'date'
-    },
-])
-
-const tableData = ref([]);
-const selectStus = ref([])
-
-const satifyStus = ref([
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        isSatify: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        isSatify: '是'
-
-    },
-    // 更多数据...
-])
-
-const selectStu = ref({})
-
-
-// 下面是方法
-
-onMounted(() => {
-    queryList();
-});
-
-const formatTime = (timestamp) => {
+    formatTime(timestamp) {
+      if (!timestamp) {
+        return '';
+      }
       let date = new Date(timestamp);
       let year = date.getFullYear();
       let month = date.getMonth() + 1; // 月份从 0 开始，所以需要加 1
@@ -315,160 +240,51 @@ const formatTime = (timestamp) => {
         formattedDate += ` ${hours}:${minutes}:${seconds}`;
       }
       return formattedDate;
-}
-
-const cancel = ()=>{
-    dialogVisible.value = false
-}
-// 批量更改发展阶段方法
-const showDialog = () => {
-    // TODO 向服务器查询可以转正的人员赋值给satifyStus
-    dialogVisible.value = true
-}
-
-const handleSelectionChange2 = (selection) => {
-    selectStus.value = selection
-};
-
-const changeStuPhase = () => {
-    console.log("批准一下同学修改发展阶段", selectStus.value)
-}
-// 主页方法
-const handleSelectionChange = (selection) => {
-    selectStus.value = selection
-    selectStu.value = selection[0]
-};
-
-const goToAddPersonView = () => {
-    goTo.value.pageType = "Add"
-    goTo.value.data = {}
-    goTo.value.subPage = 0
-    goTo.value.visiblePersonView = true;
-};
-
-const goToEditPage = () => {
-    if (selectStus.value.length != 1) {
-        console.log(selectStus.value.length)
-        ElMessage({
-            message: '请选择一名要修改的用户',
-            type: 'warning',
-        })
-    } else {
-        goTo.value.data = selectStu.value
-        // TODO 需要执行一个查询，查询该角色是否满足推优条件（或者查询列表的时候自带）
-        console.log(selectStu.value)
-        goTo.value.visiblePersonView = true;
-        goTo.value.subPage = 1
-    }
-}
-
-const savePerson = () => {
-    goTo.value.visiblePersonView = false;
-    selectStus.value = []
-    queryList()
-}
-
-const backMainPage = () => {
-    console.log("change");
-    goTo.value.visiblePersonView = false;
-    selectStus.value = []
-};
-
-const queryList = () => {
-    const data = {
+    },
+    queryList() {
+      this.batchDialogVisible = false;
+      const data = {
         page: {
-          pageNumber: tableBottom.value.currentPage,
-          pageSize: queryItems.value.pageSize,
+          pageNumber: this.tableBottom.currentPage,
+          pageSize: this.queryItems.pageSize,
           searchCount: true,
         },
-        userNumber: queryItems.value.userId,
-        userName: queryItems.value.name,
-        startActivistsSetTime: queryItems.value.applyTime[0] || null,
-        endActivistsSetTime: queryItems.value.applyTime[1] || null,
+        userNumber: this.queryItems.userId,
+        userName: this.queryItems.name,
+        startActivistsSetTime: this.queryItems.applyTime[0] || null,
+        endActivistsSetTime: this.queryItems.applyTime[1] || null,
         developmentPhase:'积极分子'
       };
 
-      getStageMember(data)
+      this.$axios.post('/stage/page', data)
           .then(response => {
-            console.log(response)
-            tableData.value = response.data.records;
-            tableBottom.value.totalNum = response.data.total;
-        })
+            this.tableData = response.data.records;
+            this.tableBottom.totalNum = response.data.total;
+          })
           .catch(error => {
             console.error('请求失败:', error);
-        });
+          });
+    },
+    clearInputMessage() {
+      this.queryItems.userId = '';
+      this.queryItems.name = '';
+      this.queryItems.applyTime = [];
+    },
+    handleSizeChange(size) {
+      this.queryItems.pageSize = size;
+      this.tableBottom.currentPage = 1;
+      this.queryList();
+    },
+    handleCurrentChange(page) {
+      this.tableBottom.currentPage = page;
+      this.queryList();
+    },
+  },
+  mounted() {
+    this.queryList();
+  },
 };
-
-const clearInputMessage = () => {
-    queryItems.value.userId = "";
-    queryItems.value.name = "";
-    queryItems.value.applyTime = "";
-};
-
-const changeCheckCols = (indexList) => {
-    console.log("cols变化");
-    let new_checkedCols = [];
-    for (let i = 0; i < indexList.length; i++) {
-        new_checkedCols.push(colNames.value[indexList[i]]);
-    }
-    checkedCols.value = new_checkedCols;
-    handleCheckChange();
-};
-
-const tableKey = ref(0)
-
-const handleCheckChange = () => {
-    for (let i = 0; i < colNames.value.length; i++) {
-        visList.value[i] = true
-    }
-    for (let i = 0; i < colNames.value.length; i++) {
-        let flag = false;
-        for (let j = 0; j < checkedCols.value.length; j++) {
-            if (colNames.value[i] === checkedCols.value[j]) {
-                flag = true;
-                break;
-            }
-        }
-        visList.value[i] = flag;
-        // 用于更新表格
-        tableKey.value += 1;
-    }
-};
-
-const handleSizeChange = (val) => {
-    console.log(`每页 ${val} 条`);
-    queryItems.value.pageSize = val;
-    queryList();
-};
-
-const handleCurrentChange = (val) => {
-    console.log(`当前页: ${val}`);
-    queryItems.value.pageIndex = val;
-    queryList();
-};
-
-const rowStyle = ({ row, rowIndex }) => {
-    return {
-        color: '#3E3E3E',
-        backgroundColor: '#F7F7F7',
-        border: '#2E2E2E'
-    };
-};
-
-const headerRowStyle = () => {
-    return {
-        backgroundColor: '#F7F7F7',
-        color: '#3E3E3E',
-    };
-};
-
-const addPerson = (data) => {
-    tableData.value.push(data.value)
-    console.log(data.value)
-    goTo.value.visiblePersonView = false;
-}
 </script>
 
 
 <style src="../Common.css"></style>
-<style src="@/style/button.css"></style>
