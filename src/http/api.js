@@ -180,7 +180,7 @@ export const addStageMember = (data) => {
  * @returns
  */
 export const getPartyOverview = () => {
-    return instance.get("/auth/branch/getBranchOverview")
+    return instance.get("/auth/branch/getPartyOverview")
 }
 
 /**
