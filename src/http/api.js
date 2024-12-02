@@ -201,3 +201,13 @@ export const getPartyOverview = () => {
 export const getXtggInfo = () => {
     return instance.get("/systemMessages/page")
 }
+
+/**
+ * 获取所有支部信息
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const findAllBranches = () => {
+    return instance.get("/auth/branch/findAllBranches")
+}
