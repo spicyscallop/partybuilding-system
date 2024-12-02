@@ -44,8 +44,8 @@
 			<v-row style="height: 100px;">
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
-						<el-button class="redBtn" style="border-color: #A5A5A5;">管理权限信息</el-button>
-						<el-button style="border-color: #A5A5A5;">删除权限信息</el-button>
+						<!-- <el-button class="redBtn" style="border-color: #A5A5A5;">管理权限信息</el-button> -->
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -61,18 +61,19 @@
 						</el-table-column>
 						<el-table-column v-if="visList[0]" prop="userId" label="学工号" align='center' width="100">
 						</el-table-column>
-						<el-table-column v-if="visList[1]" prop="name" label="姓名" align='center' width="180">
+						<el-table-column v-if="visList[1]" prop="name" label="姓名" align='center' width="220">
 						</el-table-column>
-						<el-table-column v-if="visList[2]" prop="access" label="用户权限" min-width="100px" align='center' width="80">
+						<el-table-column v-if="visList[2]" prop="access" label="用户权限" min-width="100px" align='center' width="160">
 						</el-table-column>
-						<el-table-column v-if="visList[3]" prop="registerTime" label="注册时间" align='center' width="140">
+						<el-table-column v-if="visList[3]" prop="registerTime" label="注册时间" align='center' width="160">
 						</el-table-column>
 						<el-table-column v-if="visList[4]" prop="phone" label="手机号" align='center' width="260">
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="200">
+						<el-table-column label="操作" align='center' width="180">
 						  <template #default="scope">
 							  <el-button
 							  size="mini"
+							  class="whiteBtn"
 							  @click="handleEdit(scope.$index, scope.row)">管理</el-button>
 							  <el-button
 							  size="mini"
@@ -110,19 +111,19 @@
 				<el-row :gutter="10">
 					<el-col :span="10">
 						<el-form-item label="学工号" prop="userId">
-							<el-input v-model="accessForm.userId"></el-input>
+							<el-input v-model="accessForm.userId" :disabled="accessFormCanNotEdit.userId"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="姓名" prop="name">
-							<el-input v-model="accessForm.name"></el-input>
+							<el-input v-model="accessForm.name" :disabled="accessFormCanNotEdit.name"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="10">
 					<el-col :span="10">
 						<el-form-item label="当前权限" prop="currentAccess" required>
-							<el-select v-model="accessForm.currentAccess" placeholder="请选择">
+							<el-select v-model="accessForm.currentAccess" placeholder="请选择" :disabled="accessFormCanNotEdit.currentAccess">
 								<el-option
 								v-for="item in accessOptions"
 								:key="item.value"
@@ -134,7 +135,7 @@
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="更改权限" prop="updatedAccess">
-							<el-select v-model="accessForm.updatedAccess" placeholder="请选择">
+							<el-select v-model="accessForm.updatedAccess" placeholder="请选择" :disabled="accessFormCanNotEdit.updatedAccess">
 								<el-option
 									v-for="item in accessOptions"
 									:key="item.value"
@@ -149,7 +150,7 @@
 				<el-row :gutter="10">
 					<el-col :span="10">
 						<el-form-item label="注册时间" prop="registerTime" required>
-							<el-select v-model="accessForm.registerTime" placeholder="请选择">
+							<el-select v-model="accessForm.registerTime" placeholder="请选择" :disabled="accessFormCanNotEdit.registerTime">
 								<el-option
 								v-for="item in registerTimeOptions"
 								:key="item.value"
@@ -161,17 +162,17 @@
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="手机号" prop="phone" required>
-							<el-input v-model="accessForm.phone"></el-input>
+							<el-input v-model="accessForm.phone" :disabled="accessFormCanNotEdit.phone"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 
 				<el-form-item label="备注" prop="remark">
-					<el-input :rows="10" type="textarea" v-model="accessForm.remark"></el-input>
+					<el-input :rows="10" type="textarea" v-model="accessForm.remark" :disabled="accessFormCanNotEdit.remark"></el-input>
 				</el-form-item>
 			</el-form>
 			<template #footer>
-				<el-button type="primary" @click="dialogVisible = false" class="redBtn">确 定</el-button>
+				<el-button type="primary" @click="saveEdit()" class="redBtn">确 定</el-button>
 				<el-button @click="dialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
@@ -184,6 +185,8 @@
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import { ArrowDown } from '@element-plus/icons-vue';
+  import { getPersonAccessList, updatePersonAccess } from "@/http/api"
+  import "@/style/Common.css"
   
   /**
    * 用户权限
@@ -280,6 +283,15 @@
 				phone: "",
 				remark: "",
 			},
+			accessFormCanNotEdit: {
+				userId: true,
+				name: true,
+				currentAccess: true,
+				updatedAccess: false,
+				registerTime: true,
+				phone: true,
+				remark: false,
+			},
 			accessManageRules: {
 				userId: [
 					{ required: true, message: '请输入学工号', trigger: 'blur' },
@@ -299,6 +311,9 @@
 			}
 		}
 	},
+	mounted() {
+		this.queryList();
+	},
 	methods: {
 		clearInputMessage() {
 			this.queryItems.userId = "";
@@ -313,7 +328,7 @@
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.queryItems.pageIndex = val;
-			queryList();
+			this.queryList();
 		},
 		rowStyle({ row, rowIndex }) {
 			return {
@@ -333,6 +348,9 @@
 		},
 		queryList() {
 		  console.log("执行了查询列表的请求");
+		  getPersonAccessList(this.queryItems).then(res => {
+			this.tableData = res.data;
+		  });
 		},
 		handleCheckChange() {
 		  console.log("处理表格列变动：", this.checkedCols);
@@ -373,12 +391,17 @@
 		  this.selectedOption = newOption;
 		},
 		handleEdit(i, val) {
+			this.accessForm = JSON.parse(JSON.stringify(val))
+			this.accessForm.currentAccess = val.access
 			this.dialogVisible = true
+		},
+		saveEdit() {
+			// 根据userId请求修改
+			updatePersonAccess(this.accessForm).then((res) => {
+				this.queryList();
+				dialogVisible = false
+			})
 		}
 	},
   }
   </script>
-  
-  <style>
-  @import "@/style/Common.css"
-  </style>

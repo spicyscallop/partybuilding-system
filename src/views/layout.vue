@@ -124,6 +124,7 @@ export default {
           this.menuLinks = {
             message: '/teacher/message',
             setting: '/teacher/setting',
+            permission: '/teacher/permission',
           };
           this.sidebarItems = [
             { title: '党委概况', icon: 'mdi-home', link: '/teacher/home' },

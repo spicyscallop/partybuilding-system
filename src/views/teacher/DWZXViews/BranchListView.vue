@@ -150,6 +150,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "./Common.css";
+<style>
+@import "@/style/Common.css";
 </style>
