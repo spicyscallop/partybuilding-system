@@ -61,6 +61,10 @@ instance.interceptors.response.use((response) => {
     return response.data;
 }, (error) => {
     console.log(error)
+    
+    // 请求失败也应该取消Loading
+    hideLoading()
+
     let message=""
     //响应错误
     if(error.response&&error.response.status){
