@@ -72,6 +72,9 @@ instance.interceptors.response.use((response) => {
           case 401:
               message = '请求错误';
               break;
+          case 403:
+              message = '未授权, 需要更高的权限';
+              break;
           case 404:
               message = '请求地址出错';
               break;
