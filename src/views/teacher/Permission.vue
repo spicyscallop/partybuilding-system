@@ -44,7 +44,7 @@
 			<v-row style="height: 100px;">
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
-						<!-- <el-button class="redBtn" style="border-color: #A5A5A5;">管理权限信息</el-button> -->
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">导入</el-button>
 						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
 					</v-col>
 				</div>
@@ -176,6 +176,21 @@
 				<el-button @click="dialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
+
+		<el-dialog
+			title="导入"
+			v-model="importDialogVisible"
+			width="50%"
+			:before-close="handleClose">
+			<upload-excel-component :on-success="handleImportSuccess" :before-upload="beforeUpload" />
+			<!-- <el-table :data="importTableData" border highlight-current-row style="width: 100%;margin-top:20px;">
+				<el-table-column v-for="item of importTableHeader" :key="item" :prop="item" :label="item" />
+			</el-table> -->
+			<template #footer>
+				<el-button type="primary" @click="saveImport()" class="redBtn">确 定</el-button>
+				<el-button @click="importDialogVisible = false">取 消</el-button>
+			</template>
+		</el-dialog>
 	</v-container>
   </template>
   
@@ -184,6 +199,7 @@
   import SubpageTitle from '@/components/SubpageTitle.vue';
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+  import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
   import { getPersonAccessList, updatePersonAccess, deleteItem } from "@/http/permission.js"
   import "@/style/Common.css"
@@ -217,10 +233,12 @@
 		DropDownBox,
 		AttributeSelection,
 		ArrowDown,
+		UploadExcelComponent,
 	},
 	data() {
 		return {
 			tableKey: 0,
+			importDialogVisible: false,
 			dialogVisible: false,
 			applyTime: "",
 			tableBottom: {
@@ -250,6 +268,8 @@
 				  phone: "123543534",
 			  }
 			],
+			importTableData: [],
+			importTableHeader: [],
 			queryItems: {
 			  userAccess: "",
 			  registerTime: "",
@@ -421,6 +441,28 @@
 				});
 			});
 		},
+		// 表格导入
+		importData() {
+			this.importDialogVisible = true
+		},
+		saveImport() {
+			// 发送请求
+		},
+		beforeUpload(file) {
+			const isLt1M = file.size / 1024 / 1024 < 1
+			if (isLt1M) {
+				return true
+			}
+			this.$message({
+				message: 'Please do not upload files larger than 1m in size.',
+				type: 'warning'
+			})
+			return false
+		},
+		handleImportSuccess({ results, header }) {
+			this.importTableData = results
+			this.importTableHeader = header
+		}
 	},
   }
   </script>
