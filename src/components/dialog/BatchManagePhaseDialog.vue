@@ -68,7 +68,7 @@ export default {
     value: {
       handler(val) {
         this.dialogVisible = val;
-        if (val && this.tableData.length === 0) {
+        if (val) {     //这里去掉了 this.tableData.length === 0 的条件，是为了修正转阶段后，再次点击转阶段时，数据没有刷新的bug
           this.loadTableData();
         }
       },
