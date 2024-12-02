@@ -174,9 +174,18 @@ export const addStageMember = (data) => {
 }
 
 /**
- * 获取党委概况信息接口
+ * 获取支部概况信息接口
  * @author 安俊霖
  * @argument 
+ * @returns
+ */
+export const getBranchOverview = () => {
+    return instance.get("/auth/branch/getBranchOverview")
+}
+/**
+ * 获取党委概况信息接口
+ * @author 安俊霖
+ * @argument
  * @returns
  */
 export const getPartyOverview = () => {
