@@ -253,7 +253,7 @@ export default {
       const data = {
         page: {
           pageNumber: this.userTableBottom.currentPage,
-          size: this.queryItems.pageSize,
+          pageSize: this.queryItems.pageSize,
           searchCount: true,
         },
         userNumber: this.queryItems.userNumber,
