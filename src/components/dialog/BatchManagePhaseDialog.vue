@@ -121,7 +121,7 @@ export default {
           });
     },
     closeDialog() {
-      this.dialogVisible = false;
+      this.$emit('cancalList');
       this.selectedStudents = [];
     },
   },

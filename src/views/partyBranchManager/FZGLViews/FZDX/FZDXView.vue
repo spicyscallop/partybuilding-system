@@ -89,7 +89,8 @@
         v-model="batchDialogVisible"
         :value="batchDialogVisible"
         developmentPhase="发展对象"
-        @refreshList="queryList">
+        @refreshList="queryList"
+        @cancalList="closeDialog">
     </BatchManagePhaseDialog>
   </v-container>
 </template>
@@ -222,6 +223,9 @@ export default {
       }).catch(() => {
         // 用户取消删除操作
       });
+    },
+    closeDialog(){
+      this.batchDialogVisible = false;
     },
     formatTime(timestamp) {
       if (!timestamp) {
