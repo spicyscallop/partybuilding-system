@@ -185,7 +185,7 @@
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getPersonAccessList, updatePersonAccess } from "@/http/api"
+  import { getPersonAccessList, updatePersonAccess, deleteItem } from "@/http/permission.js"
   import "@/style/Common.css"
   
   /**
@@ -401,7 +401,26 @@
 				this.queryList();
 				dialogVisible = false
 			})
-		}
+		},
+		handleDelete(i, val) {
+			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				// center: true,
+				dangerouslyUseHTMLString: true, // 允许使用 HTML
+				confirmButtonClass: 'redBtn', // 自定义确认按钮的类名
+				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
+			}).then(() => {
+				// 根据userId请求删除
+				deleteItem(val.userId)
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
+		},
 	},
   }
   </script>
