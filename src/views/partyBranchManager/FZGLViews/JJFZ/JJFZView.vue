@@ -89,7 +89,8 @@
         v-model="batchDialogVisible"
         :value="batchDialogVisible"
         developmentPhase="积极分子"
-        @refreshList="queryList">
+        @refreshList="queryList"
+        @cancalList="closeDialog">
     </BatchManagePhaseDialog>
   </v-container>
 </template>
@@ -240,6 +241,9 @@ export default {
         formattedDate += ` ${hours}:${minutes}:${seconds}`;
       }
       return formattedDate;
+    },
+    closeDialog(){
+      this.batchDialogVisible = false;
     },
     queryList() {
       this.batchDialogVisible = false;

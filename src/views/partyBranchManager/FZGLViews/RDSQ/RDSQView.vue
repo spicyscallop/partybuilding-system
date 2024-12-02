@@ -90,15 +90,15 @@
                         :header-cell-style="headerRowStyle">
                         <el-table-column type="selection">
                         </el-table-column>
-                        <el-table-column v-if="visList[0]" prop="userId" label="学工号" align='center'>
+                        <el-table-column v-if="visList[0]" prop="userNumber" label="学工号" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[1]" prop="name" label="姓名" align='center'>
+                        <el-table-column v-if="visList[1]" prop="userName" label="姓名" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[2]" prop="applyTime" label="入党申请书递交时间" align='center'>
+                        <el-table-column v-if="visList[2]" prop="partyApplicationTime" label="入党申请书递交时间" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[3]" prop="talkerName" label="谈话人" align='center'>
+                        <el-table-column v-if="visList[3]" prop="talker" label="谈话人" align='center'>
                         </el-table-column>
-                        <el-table-column v-if="visList[4]" prop="talkerTime" label="《入党申请人谈话登记表》提交时间" align='center'>
+                        <el-table-column v-if="visList[4]" prop="talkRegistrationTime" label="《入党申请人谈话登记表》提交时间" align='center'>
                         </el-table-column>
                         <el-table-column v-if="visList[5]" prop="isCommunistYouthLeagueMember" label="团员身份"
                             align='center'>
@@ -134,12 +134,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
 import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddPersonView.vue'
 import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
+import axios from '@/http';
+
+// import { authentication } from '@/stores/authentication.js'
+// const authenticationStore = authentication()
 
 //页面显示变量
 const goTo = ref({
@@ -161,6 +165,7 @@ const queryItems = ref({
 });
 
 const tableBottom = ref({
+    currentPage: 1,
     totalNum: 100,
     pageSizeList: [10, 20, 30, 40]
 });
@@ -175,25 +180,7 @@ const options = ref([
     { label: '第三党支部', value: '第三党支部' },
     { label: '第四党支部', value: '第四党支部' }
 ]);
-const tableData = ref([
-    {
-        userId: '22351006',
-        name: '郭宗豪',
-        applyTime: '2021-09-10',
-        talkerName: 'hgfhf',
-        talkerTime: '2021-10-10',
-        isCommunistYouthLeagueMember: '是'
-    },
-    {
-        userId: '22351007',
-        name: '鲁兴',
-        applyTime: '2021-09-10',
-        talkerName: 'hgfhf',
-        talkerTime: '2021-10-10',
-        isCommunistYouthLeagueMember: '是'
-    }
-    // 更多数据...
-]);
+const tableData = ref([]);
 const selectStus = ref([])
 
 const satifyStus = ref([
@@ -338,6 +325,33 @@ const backMainPage = () => {
 const queryList = () => {
     // TODO 执行查询列表的请求（需携带相应的参数），并修改tableBottom
     console.log("执行了查询列表的请求");
+    console.log('queryItems: ', queryItems)
+    const data = {
+        page: {
+          pageNumber: tableBottom.value.currentPage,
+          pageSize: queryItems.value.pageSize,
+          searchCount: true,
+        },
+        userNumber: queryItems.value.userId,
+        userName: queryItems.value.name,
+        startActivistsSetTime: queryItems.value.applyTime[0] || null,
+        endActivistsSetTime: queryItems.value.applyTime[1] || null,
+        partyBranchId: selectedOption.value,
+        developmentPhase: "申请人"
+        // developmentPhase: '积极分子'
+    };
+    console.log('查询数据', data)
+    axios.post('/stage/page', data)
+        .then(response => {
+        console.log('查询到的数据: ', response.data.records)
+        tableData.value = response.data.records;
+        tableBottom.value.totalNum = response.data.total;
+        console.log('tableData', tableData)
+        console.log('tableBottom', tableBottom)
+        })
+        .catch(error => {
+        console.error('请求失败:', error);
+        });
 };
 
 const clearInputMessage = () => {
@@ -403,6 +417,20 @@ const headerRowStyle = () => {
         color: '#3E3E3E',
     };
 };
+
+function formatTime(row, column, cellValue) {
+  if (!cellValue) return '';
+  const date = new Date(cellValue);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 月份从 0 开始，需要加 1
+  const day = date.getDate();
+  return `${year}-${month}-${day}`;
+}
+
+onMounted(() => {
+    console.log('初始化页面,查询数据')
+    queryList();
+});
 </script>
 
 
