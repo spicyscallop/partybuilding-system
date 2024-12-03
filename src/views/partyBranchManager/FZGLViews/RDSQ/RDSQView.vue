@@ -174,12 +174,19 @@ const checkedCols = ref(['学工号', '姓名', '入党申请书递交时间', '
 const colNames = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const visList = ref([true, true, true, true, true, true]);
 const selectedOption = ref('请选择党支部');
+// const options = ref([
+//     { label: '第一党支部', value: '第一党支部' },
+//     { label: '第二党支部', value: '第二党支部' },
+//     { label: '第三党支部', value: '第三党支部' },
+//     { label: '第四党支部', value: '第四党支部' }
+// ]);
 const options = ref([
-    { label: '第一党支部', value: '第一党支部' },
-    { label: '第二党支部', value: '第二党支部' },
-    { label: '第三党支部', value: '第三党支部' },
-    { label: '第四党支部', value: '第四党支部' }
+    { label: '第一党支部', value: '1' },
+    { label: '第二党支部', value: '2' },
+    { label: '第三党支部', value: '3' },
+    { label: '第四党支部', value: '4' }
 ]);
+
 const tableData = ref([]);
 const selectStus = ref([])
 

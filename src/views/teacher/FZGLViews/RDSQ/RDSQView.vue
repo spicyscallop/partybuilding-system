@@ -178,6 +178,7 @@ const selectedOption = ref('请选择党支部');
 //     { label: '第四党支部', value: '第四党支部' }
 // ]);
 const options = ref([
+    // {label: '所有党支部', value: '0'},
     { label: '第一党支部', value: '1' },
     { label: '第二党支部', value: '2' },
     { label: '第三党支部', value: '3' },
