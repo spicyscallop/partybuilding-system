@@ -111,13 +111,23 @@ export const getXtgg = () => {
 }
 
 /**
- * 获取自主活动（实践成长）接口
+ * 根据id获取自主活动（实践成长）接口
  * @author 孙普华
  * @argument 
  * @returns
  */
 export const getSelfActivity = () => {
     return axios.get("/self-activity/getMySelfActivity")
+}
+
+/**
+ * 分页获取自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument {Object} data
+ * @returns
+ */
+export const getSelfActivityPage = (data) => {
+    return axios.post("/self-activity/page",data)
 }
 
 /**

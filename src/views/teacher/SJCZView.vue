@@ -172,7 +172,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { getSelfActivity, addBranchActivity, deleteSelfActivity } from '@/http/api';
+import { getSelfActivity, addBranchActivity, deleteSelfActivity, getSelfActivityPage } from '@/http/api';
 
 export default {
     components: {
@@ -245,11 +245,16 @@ export default {
     methods: {
         async fetchActivities() {
             try {
-                const response = await getSelfActivity();
-                if (response.data) {
-                    this.activities = response.data;
+                let pageData = {
+                        pageNumber: 0,
+                        pageSize: 10,
+                        searchCount: true
+                    };
+                const response = await getSelfActivityPage({page: pageData});
+                if (response.success) {
+                    this.activities = response.data.records;
                 } else {
-                    console.error('获取活动数据失败:', response.data);
+                    console.error('获取活动数据失败:', response);
                 }
             } catch (error) {
                 console.error('获取活动数据失败:', error);
