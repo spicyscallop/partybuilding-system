@@ -89,7 +89,8 @@
         v-model="batchDialogVisible"
         :value="batchDialogVisible"
         developmentPhase="积极分子"
-        @refreshList="queryList">
+        @refreshList="queryList"
+        @cancalList="closeDialog">
     </BatchManagePhaseDialog>
   </v-container>
 </template>
@@ -241,7 +242,11 @@ export default {
       }
       return formattedDate;
     },
+    closeDialog(){
+      this.batchDialogVisible = false;
+    },
     queryList() {
+      this.batchDialogVisible = false;
       const data = {
         page: {
           pageNumber: this.tableBottom.currentPage,

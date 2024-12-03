@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <!-- 入党介绍人选择对话框 -->
-    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
+    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;谈话人选择" width="850" height="600"
                draggable align-center>
       <div style="margin: 0px 20px;">
         <v-row>
@@ -252,8 +252,8 @@ export default {
     queryUserList() {
       const data = {
         page: {
-          current: this.userTableBottom.currentPage,
-          size: this.queryItems.pageSize,
+          pageNumber: this.userTableBottom.currentPage,
+          pageSize: this.queryItems.pageSize,
           searchCount: true,
         },
         userNumber: this.queryItems.userNumber,

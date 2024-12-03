@@ -107,6 +107,12 @@ const router = createRouter({
           name: 'XTGG',
           component: () => import('@/views/teacher/XTGGView.vue')
         },
+        // 权限管理
+        {
+          path: '/teacher/permission',
+          name: 'Permission',
+          component: () => import('@/views/teacher/Permission.vue')
+        }
       ]
     },
     {

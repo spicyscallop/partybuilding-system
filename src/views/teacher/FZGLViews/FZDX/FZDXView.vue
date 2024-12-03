@@ -78,7 +78,8 @@
         v-model="batchDialogVisible"
         :value="batchDialogVisible"
         developmentPhase="发展对象"
-        @refreshList="queryList">
+        @refreshList="queryList"
+        @cancalList="closeDialog">
     </BatchManagePhaseDialog>
   </v-container>
 </template>
@@ -207,6 +208,9 @@ export default {
         // 用户取消删除操作
       });
     },
+    closeDialog(){
+      this.batchDialogVisible = false;
+    },
     formatTime(timestamp) {
       if (!timestamp) {
         return '';
@@ -226,6 +230,7 @@ export default {
       return formattedDate;
     },
     queryList() {
+      this.batchDialogVisible = false;
       const data = {
         page: {
           pageNumber: this.tableBottom.currentPage,

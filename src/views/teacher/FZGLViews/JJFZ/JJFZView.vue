@@ -78,7 +78,8 @@
         v-model="batchDialogVisible"
         :value="batchDialogVisible"
         developmentPhase="积极分子"
-        @refreshList="queryList">
+        @refreshList="queryList"
+        @cancalList="closeDialog">
     </BatchManagePhaseDialog>
   </v-container>
 </template>
@@ -226,6 +227,7 @@ export default {
       return formattedDate;
     },
     queryList() {
+      this.batchDialogVisible = false;
       const data = {
         page: {
           pageNumber: this.tableBottom.currentPage,
@@ -247,6 +249,9 @@ export default {
           .catch(error => {
             console.error('请求失败:', error);
           });
+    },
+    closeDialog(){
+      this.batchDialogVisible = false;
     },
     clearInputMessage() {
       this.queryItems.userId = '';

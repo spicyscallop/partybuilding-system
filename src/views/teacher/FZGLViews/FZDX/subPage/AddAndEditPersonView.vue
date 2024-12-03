@@ -253,8 +253,8 @@ export default {
     queryUserList() {
       const data = {
         page: {
-          current: this.userTableBottom.currentPage,
-          size: this.queryItems.pageSize,
+          pageNumber: this.userTableBottom.currentPage,
+          pageSize: this.queryItems.pageSize,
           searchCount: true,
         },
         userNumber: this.queryItems.userNumber,
