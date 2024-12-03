@@ -196,6 +196,8 @@ export default {
                 { title: '操作', key: 'actions', sortable: false }
             ],
             activities: [],
+            pageNumber: 1,
+            pageSize: 10,
             editedIndex: -1,
             editedItem: {
                 activityDate: '',
@@ -246,9 +248,9 @@ export default {
         async fetchActivities() {
             try {
                 let pageData = {
-                        pageNumber: 0,
-                        pageSize: 10,
-                        searchCount: true
+                        pageNumber: this.pageNumber,
+                        pageSize: this.pageSize,
+                        searchCount: false
                     };
                 const response = await getSelfActivityPage({page: pageData});
                 if (response.success) {
@@ -300,6 +302,7 @@ export default {
         async deleteItemConfirm() {
             try {
                 const response = await deleteSelfActivity(this.editedItem.id);
+                console.log(response)
                 this.activities.splice(this.editedIndex, 1);
                 this.closeDelete();
             } catch (error) {
