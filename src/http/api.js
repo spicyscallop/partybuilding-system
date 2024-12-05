@@ -127,7 +127,7 @@ export const getSelfActivity = () => {
  * @returns
  */
 export const getSelfActivityPage = (data) => {
-    return axios.post("/self-activity/page",data)
+    return axios.post("/self-activity/page", data)
 }
 
 /**
@@ -147,7 +147,7 @@ export const updateSelfActivity = (data) => {
  * @returns
  */
 export const addBranchActivity = (data) => {
-    return axios.post("/self-activity/addBranchActivity", data)
+    return axios.post("/self-activity/add", data)
 }
 
 /**
@@ -157,7 +157,9 @@ export const addBranchActivity = (data) => {
  * @returns
  */
 export const deleteSelfActivity = (id) => {
-    return axios.post('/self-activity/delete', id);
+    return axios.get('/self-activity/delete', {
+        params: { id },
+    });
 };
 
 /**

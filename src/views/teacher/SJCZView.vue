@@ -105,9 +105,8 @@
                                     <v-data-table
                                         :items="activities"
                                         :headers="headers"
-                                        item-key="name"
-                                        :items-per-page="10"
                                         show-select
+                                        hide-default-footer
                                     >
                                         <template v-slot:top>
                                             <!--删除对话框-->
@@ -136,6 +135,19 @@
                                             <v-icon class="me-2" size="small" @click="editItem(item)"> mdi-pencil </v-icon>
                                             <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
                                         </template>
+                                        <!-- <template v-slot:footer>
+                                            <v-pagination
+                                                v-model="page"
+                                                :length="页"
+                                                @input="onPageChange"
+                                            ></v-pagination>
+                                            <v-select
+                                                v-model="itemsPerPage"
+                                                :items="[5, 10, 15, 20]"
+                                                label="每页显示"
+                                                class="mt-4"
+                                            ></v-select>
+                                        </template> -->
                                     </v-data-table>
                                 </v-col>
                             </v-row>
@@ -172,7 +184,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { getSelfActivity, addBranchActivity, deleteSelfActivity, getSelfActivityPage } from '@/http/api';
+import { addBranchActivity, deleteSelfActivity, getSelfActivityPage, updateSelfActivity } from '@/http/api';
 
 export default {
     components: {
@@ -197,29 +209,18 @@ export default {
             ],
             activities: [],
             pageNumber: 1,
-            pageSize: 10,
+            itemsPerPage: 10,
             editedIndex: -1,
-            editedItem: {
-                activityDate: '',
-                activityLevel: 0,
-                activityName: '',
-                activitySponsor: '',
-                auditStatus: 0,
-                auditTime: '',
-                createTime: '',
-                id: 0,
-                userNumber: ''
-            },
+            editedItem: {},
             defaultItem: {
-                activityDate: '',
-                activityLevel: 0,
-                activityName: '',
-                activitySponsor: '',
-                auditStatus: 0,
-                auditTime: '',
-                createTime: '',
-                id: 0,
-                userNumber: ''
+                activityDate: this.getTodayDate(),
+                activityGraph: "string",
+                activityLevel: "院级",
+                activityName: "",
+                activitySponsor: "",
+                additionFile: "string",
+                appliedStudyHour: 0,
+                auditStatus: "已提交"
             },
             rules: {
                 required: value => !!value || '此字段为必填项',
@@ -243,13 +244,21 @@ export default {
     },
     created() {
         this.fetchActivities();
+        this.editedItem = Object.assign({}, this.defaultItem)
     },
     methods: {
+        getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // 月份从0开始
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
         async fetchActivities() {
             try {
                 let pageData = {
                         pageNumber: this.pageNumber,
-                        pageSize: this.pageSize,
+                        pageSize: this.itemsPerPage,
                         searchCount: false
                     };
                 const response = await getSelfActivityPage({page: pageData});
@@ -266,25 +275,29 @@ export default {
         close() {
             this.dialog = false
             this.$nextTick(() => {
-            this.editedItem = Object.assign({}, this.defaultItem)
-            this.editedIndex = -1
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
             })
         },
 
         async save() {
             if (this.editedIndex > -1) {
-                //TODO 接口
-                Object.assign(this.activities[this.editedIndex], this.editedItem)
-                this.close()
+                try {
+                    const response = await updateSelfActivity(this.editedItem);
+                    if (response.success) {
+                        Object.assign(this.activities[this.editedIndex], this.editedItem)
+                        this.close()
+                    }
+                } catch (error) {
+                    console.error('更新活动数据失败:', error);
+                }
             } else {
-                //TODO 接口
                 try {
                     const response = await addBranchActivity(this.editedItem);
-                    if (response.data) {
-                        console.log('添加活动数据成功:', response.data);
-                    } else {
-                        console.error('更新活动数据失败:', response.data);
-                        this.activities.push(this.editedItem)
+                    console.log(response)
+                    if (response.success) {
+                        this.editedItem.id = response.data.id;
+                        this.activities.splice(0, 0, this.editedItem);
                         this.close()
                     }
                 } catch (error) {
@@ -314,8 +327,8 @@ export default {
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
-            this.editedItem = Object.assign({}, this.defaultItem)
-            this.editedIndex = -1
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
             })
         },
 
