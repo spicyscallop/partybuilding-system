@@ -3,8 +3,19 @@
     <v-col class="d-flex fill-height flex-column">
     <v-row style="height: 60px;">
       <v-col cols="8">
-        <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+        <SubpageTitle text="发展对象阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
         </SubpageTitle>
+      </v-col>
+      <v-col cols="4">
+          <el-select  placeholder="支部选择" size="large" disabled
+              style="width: 200px;float: right;">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
+                  style="">支部选择</span>
+          </div>
+          <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
+              style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
       </v-col>
     </v-row>
     <!-- 入党介绍人选择对话框 -->
@@ -98,16 +109,16 @@
         <!-- 第一行 -->
         <v-row>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
+            <div style="margin-bottom: 5px;"><span>《群众意见调查表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              <el-date-picker v-model="form.probationaryPublicTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;"/>
             </div>
           </v-col>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
+            <div style="margin-bottom: 5px;"><span>《班主任导师意见表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              <el-date-picker v-model="form.teacherTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;"/>
             </div>
           </v-col>
@@ -115,27 +126,44 @@
         <!-- 第二行 -->
         <v-row>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子确认时间</span></div>
+            <div style="margin-bottom: 5px;"><span>支委会确定为发展对象时间</span></div>
             <div>
-              <el-date-picker v-model="form.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;" />
+              <el-date-picker v-model="form.confirmTime" type="date" placeholder="系统自动接入" size="large"
+              :disabled="isEdit" style="width: 90%;" />
             </div>
           </v-col>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
+            <div style="margin-bottom: 5px;"><span>《入党对象政治审查综合表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.activistPartyTraining" type="date" placeholder="系统自动接入" size="large"
+              <el-date-picker v-model="form.politicalReviewTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;" />
             </div>
           </v-col>
         </v-row>
         <!-- 第三行 -->
+        <v-row>
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>发展对象备案时间</span></div>
+            <div>
+              <el-date-picker v-model="form.recordTime" type="date" placeholder="系统自动接入" size="large"
+                              style="width: 90%;" />
+            </div>
+          </v-col>
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>党校培训班参与时间</span></div>
+            <div>
+              <el-date-picker v-model="form.developPartyTraining" type="date" placeholder="yyyy-mm-dd" size="large"
+              disabled style="width: 90%;" />
+            </div>
+          </v-col>
+        </v-row>
+        <!-- 第四行 -->
         <v-row style="width: 100%;margin-top: 30px;">
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
+            <div style="margin-bottom: 5px;"><span>入党介绍人</span></div>
             <div>
-              <el-input v-model="form.cultivateContacts" placeholder="" @click="openDialog" 
-                        style="width: 92%;height: 40px;"></el-input>
+              <el-input v-model="form.partySponsor" placeholder="" @click="openDialog" 
+              :disabled="isEdit" style="width: 92%;height: 40px;"></el-input>
             </div>
           </v-col>
           <v-col cols="3" style="padding-left: 30px">
@@ -149,7 +177,7 @@
             <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
             <div>
               <el-date-picker v-model="form.nextReportTime" type="date" placeholder="系统自动接入" size="large"
-                              style="width: 90%;" disabled/>
+              style="width: 90%;" disabled/>
             </div>
           </v-col>
         </v-row>
@@ -208,6 +236,11 @@ export default {
         pageSizeList: [10, 20, 30, 50],
         totalNum: 0,
       },
+      options:[
+        { label: '第一党支部', value: '第一党支部' },
+        { label: '第二党支部', value: '第二党支部' },
+        { label: '第三党支部', value: '第三党支部' },
+        { label: '第四党支部', value: '第四党支部' }],
       checkedUsers: [],
       isEdit: false,
     };
@@ -277,7 +310,7 @@ export default {
     // 选择入党介绍人
     chooseUsers() {
       if (this.checkedUsers.length > 0) {
-        this.form.cultivateContacts = this.checkedUsers.map(user => user.userName).join(', ');
+        this.form.partySponsor = this.checkedUsers.map(user => user.userName).join(', ');
         this.dialogVisible = false;
       } else {
         this.$message({
@@ -293,7 +326,7 @@ export default {
         this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
-              this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'P_FZDX'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('更新失败!');
@@ -302,11 +335,11 @@ export default {
       } else {
         this.$axios.post('/stage/add', {
           ...submitData,
-          developmentPhase: '积极分子'
+          developmentPhase: '发展对象'
         })
             .then(response => {
               this.$message.success('新增成功!');
-              this.$router.push({name: 'T_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'P_FZDX'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('新增失败!');

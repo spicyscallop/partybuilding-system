@@ -55,7 +55,7 @@
                             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                             <el-button
                             size="mini"
-                            type="danger"
+                            class="redBtn"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                       </el-table-column>
@@ -150,6 +150,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "./Common.css";
+<style>
+@import "@/style/Common.css";
 </style>
