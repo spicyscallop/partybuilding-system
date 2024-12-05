@@ -101,7 +101,7 @@
                             </v-row>
                             <v-row id="data-table" class="flex-grow-1 flex-shrink-1 fill-height"
                                 style="flex-basis: 0; min-height: 200px;">
-                                <v-col class="pa-0 fill-height">
+                                <v-col class="pa-0 fill-height" style="overflow-y: auto; max-height: 100%; min-height: 200px;">
                                     <v-data-table
                                         :items="activities"
                                         :headers="headers"
@@ -208,8 +208,6 @@ export default {
                 { title: '操作', key: 'actions', sortable: false }
             ],
             activities: [],
-            pageNumber: 1,
-            itemsPerPage: 10,
             editedIndex: -1,
             editedItem: {},
             defaultItem: {
@@ -257,8 +255,8 @@ export default {
         async fetchActivities() {
             try {
                 let pageData = {
-                        pageNumber: this.pageNumber,
-                        pageSize: this.itemsPerPage,
+                        pageNumber: 0,
+                        pageSize: 999,
                         searchCount: false
                     };
                 const response = await getSelfActivityPage({page: pageData});
