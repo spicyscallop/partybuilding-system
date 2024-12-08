@@ -1,183 +1,92 @@
 <template>
-    <v-container fluid class="ma-0 fill-height bg-grey-lighten-3">
+    <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
         <v-col class="d-flex fill-height flex-column">
-            <v-row class="flex-shrink-1 flex-grow-0">
-                <v-col>
-                    <SubpageTitle text="实践成长录入" icon="mdi-book-open-variant" @drawerToggle="$emit('drawerToggle')">
-                    </SubpageTitle>
+            <v-row style="height: 60px;">
+                <v-col cols="8">
+                <SubpageTitle text="实践成长录入" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+                </SubpageTitle>
                 </v-col>
             </v-row>
-            <v-row class="flex-shrink-1 flex-grow-0">
-                <v-col class="d-flex">
-                    <!--添加和编辑复用对话框-->
-                    <v-dialog v-model="dialog" width="50%">
-                        <template v-slot:activator="{ props }">
-                            <v-btn prepend-icon="mdi-plus" color="party-1" v-bind="props"> 添加活动信息 </v-btn>
-                        </template>
-                        <template v-slot:default="{ isActive }">
-                            <v-card>
-                                <v-toolbar class="ml-5" color="white" :title="formTitle"></v-toolbar>
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                活动名称
-                                                <v-text-field class="ml-3" v-model="editedItem.activityName" variant="outlined" :rules="[rules.required]" density="compact" hide-details="auto"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="1"></v-col>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                活动级别
-                                                <v-select class="ml-3" v-model="editedItem.activityLevel" :items="['国家级', '省级', '市级', '校级', '院级']" variant="outlined" :rules="[rules.required]" hide-details="auto" density="compact"></v-select>
-                                            </v-col>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                主办单位
-                                                <v-text-field class="ml-3" v-model="editedItem.activitySponsor" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="1"></v-col>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                活动时间
-                                                <v-text-field class="ml-3" v-model="editedItem.activityDate" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                申请学时
-                                                <v-text-field class="ml-3" v-model="editedItem.appliedStudyHour" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="1"></v-col>
-                                            <v-col cols="5" class="d-flex flex-row align-center">
-                                                参与人员
-                                                <v-text-field class="ml-3" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" class="d-flex flex-column justify-start">
-                                                备注
-                                                <v-textarea class="mt-3" variant="outlined" density="compact"
-                                                    hide-details="auto"></v-textarea>
-                                            </v-col>
-                                            <v-col cols="6" class="d-flex flex-row align-center">
-                                                活动图谱
-                                                <v-btn class="ml-3" v-model="editedItem.activityGraph" color="party-1">选取文件</v-btn>
-                                            </v-col>
-                                            <v-col cols="6" class="d-flex flex-row align-center">
-                                                附加文件
-                                                <v-btn class="ml-3" v-model="editedItem.additionFile" color="party-1">选取文件</v-btn>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-                                <v-card-actions class="justify-start ml-5">
-                                    <v-btn @click="save" >提交</v-btn>
-                                    <v-btn @click="close">取消</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </template>
-                    </v-dialog>
+        <v-row style="height: 80px;">
+            <div
+                style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
+            <v-col cols="10">
+                <span style="margin-left: 30px;">关键字</span>
+                <input placeholder="    请输入关键字" v-model="queryItems.keyword"
+                    style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                <span style="margin-left: 30px;">学习时间</span>
+                <el-date-picker v-model="queryItems.time" type="daterange" range-separator="——"
+                                start-placeholder="开始日期" end-placeholder="结束日期"
+                                style="width: 20%;margin-left: 20px;" />
+                <span style="margin-left: 30px;">关键字</span>
+                <input placeholder="    主办单位" v-model="queryItems.name"
+                    style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                <span style="margin-left: 30px;">审核状态</span>
+                <select v-model="selectedAuditStatusOptin"
+                        style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                    <option v-for="option in auditStatusOptins" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                    </option>
+                </select>
+                <span style="margin-left: 30px;">级别</span>
+                <select v-model="selectedLevelOptions"
+                        style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                    <option v-for="option in levelOptions" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                    </option>
+                </select>
+            </v-col>
+            <v-col cols="2">
+                <el-button class="redBtn" @click="queryList">查询</el-button>
+                <el-button class="whiteBtn" @click="clearInputMessage">清除</el-button>
+            </v-col>
+            </div>
+        </v-row>
+        <v-row style="height: 100px;">
+            <div style="padding-top: 10px;display: flex; width: 100%;">
+                <v-col cols="10">
+                    <el-button class="redBtn" @click="">添加活动信息</el-button>
+                    <el-button class="whiteBtn" @click="">删除活动信息</el-button>
                 </v-col>
-            </v-row>
-            <v-row class="flex-grow-1">
-                <v-col class="d-flex">
-                    <v-sheet class="d-flex flex-grow-1" rounded="lg">
-                        <v-col class="d-flex flex-grow-1 flex-column">
-                            <v-row class="flex-shrink-1 flex-grow-0 ma-0"> <!--查询条件--><!--TODO-->
-                                <v-col class="d-flex justify-center">
-                                    <v-label class="mr-2">审核状态</v-label>
-                                    <v-select :items="['通过', '未通过', '待审批']" variant="outlined" hide-details="auto"
-                                        density="compact"></v-select>
-                                </v-col>
-                                <v-col class="d-flex justify-center">
-                                    <v-label class="mr-2">学年度</v-label>
-                                    <v-select :items="['2019~2020', '2020~2021', '2021~2022']" variant="outlined" 
-                                        hide-details="auto" density="compact"></v-select> 
-                                </v-col>
-                                <v-col class="d-flex justify-center">
-                                    <v-label class="mr-2">活动名称</v-label>
-                                    <v-text-field variant="outlined" density="compact" hide-details="auto"></v-text-field>
-                                </v-col>
-                                <v-col class="flex-shrink-1 flex-grow-0">
-                                    <v-btn color="party-1">查询</v-btn>
-                                </v-col>
-                            </v-row>
-                            <v-row id="data-table" class="flex-grow-1 flex-shrink-1 fill-height"
-                                style="flex-basis: 0; min-height: 200px;">
-                                <v-col class="pa-0 fill-height" style="overflow-y: auto; max-height: 100%; min-height: 200px;">
-                                    <v-data-table
-                                        :items="activities"
-                                        :headers="headers"
-                                        show-select
-                                        hide-default-footer
-                                    >
-                                        <template v-slot:top>
-                                            <!--删除对话框-->
-                                            <v-dialog v-model="dialogDelete" max-width="500px">
-                                                <v-card>
-                                                    <v-card-title class="text-h5"
-                                                    >确定删除这条记录？</v-card-title
-                                                    >
-                                                    <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
-                                                        >取消</v-btn
-                                                    >
-                                                    <v-btn
-                                                        color="blue-darken-1"
-                                                        variant="text"
-                                                        @click="deleteItemConfirm"
-                                                        >确定</v-btn
-                                                    >
-                                                    <v-spacer></v-spacer>
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </v-dialog>
-                                        </template>
-                                        <template v-slot:item.actions="{ item }">
-                                            <v-icon class="me-2" size="small" @click="editItem(item)"> mdi-pencil </v-icon>
-                                            <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
-                                        </template>
-                                        <!-- <template v-slot:footer>
-                                            <v-pagination
-                                                v-model="page"
-                                                :length="页"
-                                                @input="onPageChange"
-                                            ></v-pagination>
-                                            <v-select
-                                                v-model="itemsPerPage"
-                                                :items="[5, 10, 15, 20]"
-                                                label="每页显示"
-                                                class="mt-4"
-                                            ></v-select>
-                                        </template> -->
-                                    </v-data-table>
-                                </v-col>
-                            </v-row>
-                            <!--v-row id="data-table-footer" class="flex-shrink-1 flex-grow-0 flex-row-reverse">
-                                <v-row class="align-center ma-0">
-                                    <v-col class="flex-shrink-0 flex-grow-1">
-                                        <v-checkbox-btn style="padding-left: 4px;" label="全选"></v-checkbox-btn>
-                                    </v-col>
-                                    <v-col cols="2" class="pa-0" style="min-width: 135px;">
-                                        <v-select class="ml-3" :items="['10条/页', '20条/页', '50条/页']" variant="outlined"
-                                        v-model="itemsPerPage" hide-details="auto" density="compact"></v-select>
-                                    </v-col>
-                                    <v-col cols="2" class="pa-0" style="min-width: 155px;">
-                                        <v-pagination v-model="page" :length="6" :total-visible="1"></v-pagination>
-                                    </v-col>
-                                    <v-col class="d-flex flex-row flex-grow-0 flex-shrink-1 align-center"
-                                        style="white-space: nowrap;">
-                                        <div>前往第</div>
-
-                                        <div contenteditable class="mx-3"
-                                            style="min-width: 50px;min-height: 40px;padding: 6px 8px; font-size:16px;border: 1px solid #ababab;border-radius: 4px;">
-                                        </div>
-                                        <div>页</div>
-                                    </v-col>
-                                </v-row>
-                            </v-row-->
-                        </v-col>
-                    </v-sheet>
+                <v-col cols="2">
+                    <AttributeSelection :optionList="colNames" style="display: inline-block; float: right;"
+                                        @optionChange=""></AttributeSelection>
                 </v-col>
-            </v-row>
+            </div>
+        </v-row>
+        <v-row class="d-flex flex-column h-100">
+            <div class="flex-grow-1 overflow-auto">
+                <el-table ref="multipleTable" :data="tableData" max-height="80vh"
+                            style="border-radius: 15px;background-color: #F7F7F7;"
+                            @selection-change="handleSelectionChange" :row-style="rowStyle"
+                            :header-cell-style="headerRowStyle"
+                >
+                    <el-table-column type="selection">
+                    </el-table-column>
+                    <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
+                    <template v-slot="scope" v-if="item.type === 'date'">
+                        {{ formatTime(scope.row[item.prop]) }}
+                    </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </v-row>
+        
+        <v-row style="background-color: #E9E9E9;">
+            <v-col cols="5">
+                <el-button type="primary" class="redBtn" size="mini" @click="editRow()">编辑</el-button>
+                <el-button type="danger" class="whiteBtn" size="mini" @click="deleteRow()">删除</el-button>
+            </v-col>
+            <v-col cols="7">
+                <div style="display: inline-block;float: right;">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                                :current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList" background
+                                :page-size="queryItems.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                                :total="tableBottom.totalNum">
+                    </el-pagination>
+                </div>
+            </v-col>
+        </v-row>
         </v-col>
     </v-container>
 </template>
@@ -193,58 +102,102 @@ export default {
     emits: ["drawerToggle"],
     data() {
         return {
-            dialog: false,
-            dialogDelete: false,
-            headers: [
-                { title: '活动编号', value: 'id' },
-                { title: '活动名称', value: 'activityName' },
-                { title: '活动级别', value: 'activityLevel' },
-                { title: '主办单位', value: 'activitySponsor' },
-                { title: '活动时间', value: 'activityDate' },
-                { title: '申请学时', value: 'appliedStudyHour' },
-                { title: '提交时间', value: 'createTime' },
-                { title: '审核状态', value: 'auditStatus' },
-                { title: '审核时间', value: 'auditTime' },
-                { title: '操作', key: 'actions', sortable: false }
+            columns: [
+                { label: '活动编号', prop: 'id' },
+                { label: '活动名称', prop: 'activityName' },
+                { label: '活动级别', prop: 'activityLevel' },
+                { label: '主办单位', prop: 'activitySponsor' },
+                { label: '活动时间', prop: 'activityDate' },
+                { label: '申请学时', prop: 'appliedStudyHour' },
+                { label: '提交时间', prop: 'createTime' },
+                { label: '审核状态', prop: 'auditStatus' },
+                // { label: '审核时间', prop: 'auditTime' },
+                { label: '审核时间', prop: 'updateTime' },
+                { label: '操作', prop: 'actions',}
             ],
-            activities: [],
-            editedIndex: -1,
-            editedItem: {},
-            defaultItem: {
-                activityDate: this.getTodayDate(),
-                activityGraph: "string",
-                activityLevel: "院级",
-                activityName: "",
-                activitySponsor: "",
-                additionFile: "string",
-                appliedStudyHour: 0,
-                auditStatus: "已提交"
+            selectedAuditStatusOptin:"",
+            selectedLevelOptions:"",
+            auditStatusOptins: [
+                { label: '已提交', value: '已提交' },
+                { label: '已审核', value: '已审核' },
+                { label: '未通过', value: '未通过' }
+            ],
+            levelOptions: [
+                { label: '院级', value: '院级' },
+                { label: '校级', value: '校级' },
+                { label: '市级', value: '市级' },
+                { label: '省级', value: '省级' },
+                { label: '国家级', value: '国家级' }
+            ],
+            selectedRows: [],
+            tableData: [],
+            queryItems: {
+                keyword: '',
+                name: '',
+                time: [],
+                pageSize: 10,
             },
-            rules: {
-                required: value => !!value || '此字段为必填项',
-                date: value => !value || /^\d{4}-\d{2}-\d{2}$/.test(value) || '请输入有效的日期（格式：YYYY-MM-DD）',
+            tableBottom: {
+                currentPage: 1,
+                pageSizeList: [10, 20, 30, 50],
+                totalNum: 0,
             },
-
         };
     },
-    computed: {
-      formTitle() {
-        return this.editedIndex === -1 ? '添加活动信息' : '编辑活动信息'
-      },
-    },
-    watch: {
-      dialog(val) {
-        val || this.close()
-      },
-      dialogDelete(val) {
-        val || this.closeDelete()
-      },
-    },
-    created() {
-        this.fetchActivities();
-        this.editedItem = Object.assign({}, this.defaultItem)
+    mounted() {
+        this.queryList();
     },
     methods: {
+        queryList() {
+            let data ={
+                page: {
+                    pageNumber: this.tableBottom.currentPage,
+                    pageSize: this.queryItems.pageSize,
+                    searchCount: true
+                },
+                activityName: this.queryItems.keyword,
+                activitySponsor: this.queryItems.name,
+                auditStatus: this.selectedAuditStatusOptin,
+                activityLevel: this.selectedLevelOptions,
+            } 
+            console.log(data)
+            getSelfActivityPage(data).then(res => {
+                console.log(res.data)
+                this.tableData = res.data.records;
+                this.tableBottom.totalNum = res.data.total;
+            });
+        },
+        clearInputMessage() {
+            this.queryItems.keyword = '';
+            this.queryItems.name = '';
+            this.selectedAuditStatusOptin = '';
+            this.selectedLevelOptions = '';
+            this.queryItems.time = [];
+        },
+        editRow() {
+            if (this.selectedRows.length !== 1) {
+                this.$message.warning('请选中一条记录进行编辑');
+                return;
+            }
+            if (this.selectedRows.length === 0) {
+                this.$message.warning('请选中要编辑的记录');
+                return;
+            }
+            this.$router.push({ name: 'EditPersonViewJJFZT', params: { id: this.selectedRows[0].id } });
+        },
+        handleSelectionChange(val) {
+            this.selectedRows = val;
+        },
+        handleSizeChange(size) {
+            this.queryItems.pageSize = size;
+            this.tableBottom.currentPage = 1;
+            this.queryList();
+        },
+        handleCurrentChange(page) {
+            this.tableBottom.currentPage = page;
+            this.queryList();
+        },
+
         getTodayDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -252,100 +205,6 @@ export default {
             const day = String(today.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         },
-        async fetchActivities() {
-            try {
-                let pageData = {
-                        pageNumber: 0,
-                        pageSize: 999,
-                        searchCount: false
-                    };
-                const response = await getSelfActivityPage({page: pageData});
-                if (response.success) {
-                    this.activities = response.data.records;
-                } else {
-                    console.error('获取活动数据失败:', response);
-                }
-            } catch (error) {
-                console.error('获取活动数据失败:', error);
-            }
-        },
-
-        close() {
-            this.dialog = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-        async save() {
-            if (this.editedIndex > -1) {
-                try {
-                    const response = await updateSelfActivity(this.editedItem);
-                    if (response.success) {
-                        Object.assign(this.activities[this.editedIndex], this.editedItem)
-                        this.close()
-                    }
-                } catch (error) {
-                    console.error('更新活动数据失败:', error);
-                }
-            } else {
-                try {
-                    const response = await addBranchActivity(this.editedItem);
-                    console.log(response)
-                    if (response.success) {
-                        this.editedItem.id = response.data.id;
-                        this.activities.splice(0, 0, this.editedItem);
-                        this.close()
-                    }
-                } catch (error) {
-                    console.error('更新活动数据失败:', error);
-                }
-            }
-        },
-
-        editItem(item) {
-            this.editedIndex = this.activities.indexOf(item)
-            this.editedItem = { ...item };
-            this.dialog = true
-        },
-
-        async deleteItemConfirm() {
-            try {
-                const response = await deleteSelfActivity(this.editedItem.id);
-                console.log(response)
-                this.activities.splice(this.editedIndex, 1);
-                this.closeDelete();
-            } catch (error) {
-                console.error('接口调用失败:', error.response ? error.response.data : error.message);
-                this.$message.error('删除失败，请重试');
-            }
-        },
-
-        closeDelete() {
-            this.dialogDelete = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-        deleteItem(item) {
-            this.editedIndex = this.activities.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
-        },
-        
-        validateForm() {
-            const requiredFields = ['activityName', 'activityLevel', 'activitySponsor', 'activityDate'];
-            for (let field of requiredFields) {
-                if (!this.editedItem[field]) {
-                    alert(`${field} 是必填项`);
-                    return false;
-                }
-            }
-            return true;
-        }
     },
 };
 </script>
@@ -362,5 +221,17 @@ export default {
 
 #data-table-footer {
     box-shadow: inset 0 1px 0 rgba(var(--v-border-color), var(--v-border-opacity))
+}
+
+.redBtn {
+    background-color: #C83C23;
+    color: #FFFFFF;
+    border: 1px solid #C83C23;
+}
+
+.whiteBtn {
+  background-color: #F7F7F7;
+  border-color: #A5A5A5;
+  color: #C83C23;
 }
 </style>
