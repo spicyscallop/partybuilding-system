@@ -141,6 +141,9 @@ import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/Add
 import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
 import axios from '@/http';
+import {useRoute} from 'vue-router';
+
+const route = useRoute();
 
 // import { authentication } from '@/stores/authentication.js'
 // const authenticationStore = authentication()
@@ -173,7 +176,7 @@ const tableBottom = ref({
 const checkedCols = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const colNames = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const visList = ref([true, true, true, true, true, true]);
-const selectedOption = ref('请选择党支部');
+const selectedOption = ref(route.query.partyBranchId);
 // const options = ref([
 //     { label: '第一党支部', value: '第一党支部' },
 //     { label: '第二党支部', value: '第二党支部' },

@@ -65,7 +65,7 @@
             </v-col>
             <v-col cols="5">
                 <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;" @click="$emit('backMainPage')">取消</el-button>
-                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;">保存</el-button>
+                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;" @click="handleSave">保存</el-button>
                 <el-select v-model="localFormData.changeToPhase" placeholder="更改发展阶段" size="large" style="width: 150px;float: right;">
                     <el-option v-for="item in phaseOptions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
@@ -76,6 +76,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
     pageType: {
@@ -114,6 +115,32 @@ const phaseOptions = ref([
     { label: '正式党员', value: '正式党员' },
 ])
 
+const addPerson = () => {
+    console('添加人员请求')
+}
+
+const handleSave = async () => {
+    try{
+        // 添加人员
+        addPerson();
+        
+        ElMessage({
+            message: '人员添加成功！',
+            type: 'success',
+            duration: 2000, // 提示框显示时长，单位毫秒
+            });
+
+        // 触发事件'backMainPage'
+        $emit('backMainPage');
+    }catch(error) {
+        ElMessage({
+            message: '人员添加失败！',
+            type: 'error',
+            duration: 2000,
+        });
+        console.error('保存失败:', error);
+    }
+}
 
 </script>
 
