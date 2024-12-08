@@ -28,7 +28,7 @@
     <v-list theme="navBarTheme">
       <!-- 动态渲染菜单项 -->
       <template v-for="item in sidebarItems" :key="item.title">
-        <v-list-group v-if="item.children" :value="true">
+        <v-list-group v-if="item.children" :value="item.title">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" :prepend-icon="item.icon" :title="item.title"></v-list-item>
           </template>
@@ -115,7 +115,14 @@ export default {
               ],
             },
             { title: '组织生活', icon: 'mdi-notebook-edit', link: '/partyManager/zzsh' },
-            { title: '活动安排', icon: 'mdi-calendar-range', link: '/partyManager/arrange' },
+            {
+              title: '活动安排',
+              icon: 'mdi-calendar-range',
+              children: [
+                { title: '自主学习', link: '/teacher/hdap/zzxx' },
+                { title: '自主活动', link: '/teacher/hdap/zzhd' },
+              ],
+            },
             { title: '风采记录', icon: 'mdi-folder-multiple-image', link: '/partyManager/album' },
             { title: '荣誉奖项', icon: 'mdi-medal', link: '/partyManager/award' },
             { title: '档案管理', icon: 'mdi-file-cog', link: '/partyManager/file' },
@@ -141,7 +148,14 @@ export default {
               ],
             },
             { title: '组织生活', icon: 'mdi-calendar-range', link: '/teacher/calendar' },
-            { title: '活动安排', icon: 'mdi-calendar-range', link: '/teacher/calendar' },
+            {
+              title: '活动安排',
+              icon: 'mdi-calendar-range',
+              children: [
+                { title: '自主学习', link: '/teacher/hdap/zzxx' },
+                { title: '自主活动', link: '/teacher/hdap/zzhd' },
+              ],
+            },
             { title: '更多内容', icon: 'mdi-notebook-edit', link: '/teacher/notebook' },
             { title: '党委中心', icon: 'mdi-home', link: '/teacher/dwzx' },
           ];

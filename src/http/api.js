@@ -112,7 +112,7 @@ export const getXtgg = () => {
 }
 
 /**
- * 获取自主活动（实践成长）接口
+ * 根据id获取自主活动（实践成长）接口
  * @author 孙普华
  * @argument 
  * @returns
@@ -122,13 +122,33 @@ export const getSelfActivity = () => {
 }
 
 /**
+ * 分页获取自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument {Object} data
+ * @returns
+ */
+export const getSelfActivityPage = (data) => {
+    return axios.post("/self-activity/page", data)
+}
+
+/**
  * 更新自主活动（实践成长）接口
  * @author 孙普华
  * @argument 
  * @returns
  */
+export const updateSelfActivity = (data) => {
+    return axios.post("/self-activity/update", data)
+}
+
+/**
+ * 团委新增支部活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
 export const addBranchActivity = (data) => {
-    return axios.get("/self-activity/addBranchActivity", data)
+    return axios.post("/self-activity/add", data)
 }
 
 /**
@@ -138,8 +158,8 @@ export const addBranchActivity = (data) => {
  * @returns
  */
 export const deleteSelfActivity = (id) => {
-    return axios.delete('/self-activity/deleteSelfActivity', {
-        data: id,
+    return axios.get('/self-activity/delete', {
+        params: { id },
     });
 };
 
