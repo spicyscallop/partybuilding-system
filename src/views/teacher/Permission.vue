@@ -45,8 +45,9 @@
 			<v-row style="height: 100px;">
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">模板下载</el-button>
 						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">导入</el-button>
-						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -110,8 +111,7 @@
 		<el-dialog
 			title="管理权限信息"
 			v-model="dialogVisible"
-			width="50%"
-			:before-close="handleClose">
+			width="50%">
 			<el-form :model="accessForm" :rules="accessManageRules" ref="accessForm" label-width="100px" class="demo-ruleForm">
 				<el-row :gutter="10">
 					<el-col :span="10">
@@ -159,7 +159,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="邮箱" prop="email" required>
+						<el-form-item label="邮箱" prop="email">
 							<el-input v-model="accessForm.email" :disabled="accessFormCanNotEdit.email"></el-input>
 						</el-form-item>
 					</el-col>
@@ -174,8 +174,7 @@
 		<el-dialog
 			title="添加人员信息"
 			v-model="addDialogVisible"
-			width="50%"
-			:before-close="handleClose">
+			width="50%">
 			<el-form :model="form" :rules="accessManageRules" ref="form" label-width="100px" class="demo-ruleForm">
 				<el-row :gutter="10">
 					<el-col :span="12">
@@ -208,8 +207,23 @@
 
 				<el-row :gutter="10">
 					<el-col :span="12">
-						<el-form-item label="邮箱" prop="email" required>
+						<el-form-item label="邮箱" prop="email">
 							<el-input v-model="form.email"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="发展阶段" prop="developmentPhase">
+							<el-select v-model="form.developmentPhase" placeholder="请选择">
+								<el-option
+									v-for="item in developmentPhaseOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -224,8 +238,7 @@
 		<el-dialog
 			title="导入"
 			v-model="importDialogVisible"
-			width="50%"
-			:before-close="handleClose">
+			width="80%">
 			<upload-excel-component :on-success="handleImportSuccess" :before-upload="beforeUpload" />
 			<!-- <el-table :data="importTableData" border highlight-current-row style="width: 100%;margin-top:20px;">
 				<el-table-column v-for="item of importTableHeader" :key="item" :prop="item" :label="item" />
@@ -245,7 +258,7 @@
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch } from "@/http/permission.js"
+  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate } from "@/http/permission.js"
   import "@/style/Common.css"
   
   /**
@@ -304,11 +317,20 @@
 			// 	{ label: '半年内', value: '半年内'},
 			// 	{ label: '一年内', value: '一年内'},
 			// ],
+			developmentPhaseOptions: [
+				{ label: '共青团员', value: '共青团员' },
+				{ label: '入党申请人', value: '入党申请人' },
+				{ label: '积极分子', value: '积极分子' },
+				{ label: '发展对象', value: '发展对象' },
+				{ label: '预备党员', value: '预备党员' },
+				{ label: '正式党员', value: '正式党员' },
+			],
 			form: {
 				userNumber: "",
 				userName: "",
 				role: "",
 				email: "",
+				developmentPhase: "",
 			},
 			selectedOption: '请选择党支部',
 			accessForm: {
@@ -319,6 +341,7 @@
 				updatedRole: "",
 				createTime: "",
 				email: "",
+				developmentPhase: "",
 			},
 			accessFormCanNotEdit: {
 				userNumber: true,
@@ -326,7 +349,8 @@
 				currentRole: true,
 				updatedRole: false,
 				createTime: true,
-				email: true,
+				email: false,
+				developmentPhase: true,
 			},
 			accessManageRules: {
 				userNumber: [
@@ -335,14 +359,17 @@
 				userName: [
 					{ required: true, message: '请输入姓名', trigger: 'blur' },
 				],
+				role: [
+					{ required: true, message: '请选择权限', trigger: 'change' },
+				],
 				currentRole: [
 					{ required: true, message: '请选择当前权限', trigger: 'change' },
 				],
 				createTime: [
 					{ required: true, message: '请选择注册时间', trigger: 'change' },
 				],
-				email: [
-					{ required: true, message: '请输入邮箱', trigger: 'blur' },
+				developmentPhase: [
+					{ required: true, message: '请选择发展阶段', trigger: 'change' },
 				],
 			},
 			selectedIds: [],
@@ -500,16 +527,26 @@
 			return formattedDate;
 		},
 		saveAdd() {
-			addItem(this.form).then(res => {
-				this.queryList();
-				this.$message.success("添加成功")
-			})
+			this.$refs['form'].validate((valid) => {
+				if (valid) {
+					addItem(this.form).then(res => {
+						this.queryList();
+						this.$message.success("添加成功")
+						this.addDialogVisible = false
+					})
+				} else {
+					return false;
+				}
+			});
 		},
 		handleSelectionChange(vals) {
 			this.selectedIds = vals.map(item => item.id)
-			console.log("***", this.selectedIds)
 		},
 		deleteBatch() {
+			if (this.selectedIds.length === 0) {
+				this.$message.info("还未选择记录")
+				return
+			}
 			this.$confirm('此操作将永久删除已选中记录, 是否继续?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -530,8 +567,21 @@
 				});
 			});
 		},
-		handleClose() {
-
+		// 模板下载
+		downloadTemplate(fileName) {
+			downloadTemplate(fileName).then(blob => {
+				const url = window.URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', fileName + ".xlsx");
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				window.URL.revokeObjectURL(url);
+			}).catch(error => {
+				this.$message.error('下载失败')
+				console.log(error)
+			});
 		}
 	},
   }

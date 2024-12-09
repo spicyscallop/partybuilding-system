@@ -49,3 +49,14 @@ export const deleteByBatch = (ids) => {
 export const addItem = (data) => {
     return instance.post("/stage/add", data);
 }
+
+export const downloadTemplate = (type) => {
+    return instance({
+        method: "get",
+        url: "/files/downloadByDocTemplateType",
+        params: {
+            type
+        },
+        responseType: 'blob',
+    })
+}
