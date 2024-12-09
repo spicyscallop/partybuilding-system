@@ -7,11 +7,7 @@ import instance from "./index";
  * @returns
  */
 export const getPersonAccessList = (queryItem) => {
-    return instance.get("/auth/xxx", {
-        params: {
-            ...queryItem,
-        }
-    })
+    return instance.post("/stage/page", queryItem)
 }
 
 /**
@@ -21,7 +17,7 @@ export const getPersonAccessList = (queryItem) => {
  * @returns
  */
 export const updatePersonAccess = (data) => {
-    return instance.post("/auth/xxx", data)
+    return instance.post("/stage/update", data)
 }
 
 /**
@@ -30,10 +26,26 @@ export const updatePersonAccess = (data) => {
  * @argument 
  * @returns
  */
-export const deleteItem = (userId) => {
-    return instance.get("/auth/xxx", {
-        params: {
-            userId: userId
-        }
-    });
+export const deleteItem = (id) => {
+    return instance.post("/stage/delete", id);
+}
+
+/**
+ * 批量删除人员权限记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteByBatch = (ids) => {
+    return instance.post("/stage/deleteByBatch", ids);
+}
+
+/**
+ * 添加人员权限记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addItem = (data) => {
+    return instance.post("/stage/add", data);
 }

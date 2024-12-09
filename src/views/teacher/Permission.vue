@@ -3,7 +3,7 @@
 		<v-col class="d-flex fill-height flex-column">
 			<v-row style="height: 60px;">
 				<v-col cols="8">
-					<SubpageTitle text="权限管理" width="43" height=43>
+					<SubpageTitle text="权限管理" :width="43" :height="43">
 					</SubpageTitle>
 				</v-col>
 			</v-row>
@@ -13,7 +13,8 @@
 					<v-col cols="10">
 						<!-- 用户权限 -->
 						<span style="margin-left: 30px;">用户权限</span>
-						<el-select v-model="queryItems.userAccess" placeholder="请选择" style="width: 20%; margin-left: 20px;">
+						<el-select v-model="queryItems.role" placeholder="请选择" style="width: 20%; margin-left: 20px;">
+							<el-option label="全部" value="全部"></el-option>
 							<el-option
 							v-for="item in accessOptions"
 							:key="item.value"
@@ -23,17 +24,17 @@
 						</el-select>
 
 						<!-- 注册时间 -->
-						<span style="margin-left: 30px;">注册时间</span>
-						<el-select v-model="queryItems.registerTime" placeholder="请选择" style="width: 20%; margin-left: 20px;">
+						<!-- <span style="margin-left: 30px;">注册时间</span>
+						<el-select v-model="queryItems.createTime" placeholder="请选择" style="width: 20%; margin-left: 20px;">
 							<el-option
 							v-for="item in registerTimeOptions"
 							:key="item.value"
 							:label="item.label"
 							:value="item.value">
 							</el-option>
-						</el-select>
+						</el-select> -->
 						<span style="margin-left: 30px;">学工号</span>
-						<el-input style="width: 20%; margin-left: 20px;" v-model="queryItems.userId" placeholder="请输入内容"></el-input>
+						<el-input style="width: 20%; margin-left: 20px;" v-model="queryItems.userNumber" placeholder="请输入内容"></el-input>
 					</v-col>
 					<v-col cols="2">
 						<el-button class="redBtn" @click="queryList">查询</el-button>
@@ -45,7 +46,7 @@
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
 						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">导入</el-button>
-						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="goToAddPersonView">添加人员信息</el-button>
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -55,28 +56,33 @@
 					<el-table ref="multipleTable" :data="tableData" max-height="80vh"
 						:key="tableKey"
 						style="border-radius: 15px;background-color: #F7F7F7;" 
-						:header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle">
+						:header-row-style="headerRowStyle" 
+						:row-style="rowStyle" 
+						:header-cell-style="headerRowStyle"
+						@selection-change="handleSelectionChange"
+						>
 						<!-- 表格列定义 -->
-						<el-table-column type="selection" width="55">
+						<el-table-column type="selection">
 						</el-table-column>
-						<el-table-column v-if="visList[0]" prop="userId" label="学工号" align='center' width="100">
+						<el-table-column v-if="visList[0]" prop="userNumber" label="学工号" align='center'>
 						</el-table-column>
-						<el-table-column v-if="visList[1]" prop="name" label="姓名" align='center' width="220">
+						<el-table-column v-if="visList[1]" prop="userName" label="姓名" align='center'>
 						</el-table-column>
-						<el-table-column v-if="visList[2]" prop="access" label="用户权限" min-width="100px" align='center' width="160">
+						<el-table-column v-if="visList[2]" prop="role" label="用户权限" min-width="100px" align='center'>
 						</el-table-column>
-						<el-table-column v-if="visList[3]" prop="registerTime" label="注册时间" align='center' width="160">
+						<el-table-column v-if="visList[3]" prop="createTime" label="注册时间" align='center'>
+							<template v-slot="scope">
+								{{ formatTime(scope.row.createTime) }}
+							</template>
 						</el-table-column>
-						<el-table-column v-if="visList[4]" prop="phone" label="手机号" align='center' width="260">
+						<el-table-column v-if="visList[4]" prop="email" label="邮箱" align='center'>
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="180">
+						<el-table-column label="操作" align='center'>
 						  <template #default="scope">
 							  <el-button
-							  size="mini"
 							  class="whiteBtn"
 							  @click="handleEdit(scope.$index, scope.row)">管理</el-button>
 							  <el-button
-							  size="mini"
 							  class="redBtn"
 							  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 						  </template>
@@ -86,15 +92,14 @@
 			</v-row>
 			<v-row style="background-color: #E9E9E9;">
 				<v-col cols="5">  
-					<el-button class="redBtn" style="margin-left: 30px;">编辑</el-button>
-					<el-button class="whiteBtn" style="border-color: #A5A5A5;">删除</el-button>
+					<el-button class="redBtn" style="border-color: #A5A5A5;" @click="deleteBatch">批量删除</el-button>
 				</v-col>
 				<v-col cols="7">
 					<div style="display: inline-block;float: right;">
 						<div style="display: inline-block;">
 							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
 								:current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList" background
-								:page-size="queryItems.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
+								:page-size="queryItems.page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
 							</el-pagination>
 						</div>
 					</div>
@@ -110,20 +115,20 @@
 			<el-form :model="accessForm" :rules="accessManageRules" ref="accessForm" label-width="100px" class="demo-ruleForm">
 				<el-row :gutter="10">
 					<el-col :span="10">
-						<el-form-item label="学工号" prop="userId">
-							<el-input v-model="accessForm.userId" :disabled="accessFormCanNotEdit.userId"></el-input>
+						<el-form-item label="学工号" prop="userNumber">
+							<el-input v-model="accessForm.userNumber" :disabled="accessFormCanNotEdit.userNumber"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="姓名" prop="name">
-							<el-input v-model="accessForm.name" :disabled="accessFormCanNotEdit.name"></el-input>
+						<el-form-item label="姓名" prop="userName">
+							<el-input v-model="accessForm.userName" :disabled="accessFormCanNotEdit.userName"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="10">
 					<el-col :span="10">
-						<el-form-item label="当前权限" prop="currentAccess" required>
-							<el-select v-model="accessForm.currentAccess" placeholder="请选择" :disabled="accessFormCanNotEdit.currentAccess">
+						<el-form-item label="当前权限" prop="currentRole" required>
+							<el-select v-model="accessForm.currentRole" placeholder="请选择" :disabled="accessFormCanNotEdit.currentRole">
 								<el-option
 								v-for="item in accessOptions"
 								:key="item.value"
@@ -134,8 +139,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="更改权限" prop="updatedAccess">
-							<el-select v-model="accessForm.updatedAccess" placeholder="请选择" :disabled="accessFormCanNotEdit.updatedAccess">
+						<el-form-item label="更改权限" prop="updatedRole">
+							<el-select v-model="accessForm.updatedRole" placeholder="请选择" :disabled="accessFormCanNotEdit.updatedRole">
 								<el-option
 									v-for="item in accessOptions"
 									:key="item.value"
@@ -149,33 +154,72 @@
 
 				<el-row :gutter="10">
 					<el-col :span="10">
-						<el-form-item label="注册时间" prop="registerTime" required>
-							<el-select v-model="accessForm.registerTime" placeholder="请选择" :disabled="accessFormCanNotEdit.registerTime">
-								<el-option
-								v-for="item in registerTimeOptions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-								</el-option>
-							</el-select>
+						<el-form-item label="注册时间" prop="createTime" required>
+							<el-input :value="formatTime(accessForm.createTime)" :disabled="accessFormCanNotEdit.createTime"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="手机号" prop="phone" required>
-							<el-input v-model="accessForm.phone" :disabled="accessFormCanNotEdit.phone"></el-input>
+						<el-form-item label="邮箱" prop="email" required>
+							<el-input v-model="accessForm.email" :disabled="accessFormCanNotEdit.email"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
-
-				<el-form-item label="备注" prop="remark">
-					<el-input :rows="10" type="textarea" v-model="accessForm.remark" :disabled="accessFormCanNotEdit.remark"></el-input>
-				</el-form-item>
 			</el-form>
 			<template #footer>
 				<el-button type="primary" @click="saveEdit()" class="redBtn">确 定</el-button>
 				<el-button @click="dialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
+
+		<el-dialog
+			title="添加人员信息"
+			v-model="addDialogVisible"
+			width="50%"
+			:before-close="handleClose">
+			<el-form :model="form" :rules="accessManageRules" ref="form" label-width="100px" class="demo-ruleForm">
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="学工号" prop="userNumber">
+							<el-input v-model="form.userNumber"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="姓名" prop="userName">
+							<el-input v-model="form.userName"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="权限" prop="role">
+							<el-select v-model="form.role" placeholder="请选择">
+								<el-option
+									v-for="item in accessOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+				</el-row>
+
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="邮箱" prop="email" required>
+							<el-input v-model="form.email"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+			<template #footer>
+				<el-button type="primary" @click="saveAdd()" class="redBtn">确 定</el-button>
+				<el-button @click="addDialogVisible = false">取 消</el-button>
+			</template>
+		</el-dialog>
+
 
 		<el-dialog
 			title="导入"
@@ -201,20 +245,8 @@
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getPersonAccessList, updatePersonAccess, deleteItem } from "@/http/permission.js"
+  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch } from "@/http/permission.js"
   import "@/style/Common.css"
-  
-  /**
-   * 用户权限
-   */
-  const UserAccessDict = {
-	formalPartyMember: "正式党员",
-	studentPartyMember: "党员学生",
-	branchSecretary: "支部书记",
-	facultyPartyCommitteeYouthLeagueCommittee: "院党委/团委",
-	systemAdministrator: "系统管理员",
-	unassigned: "未分配"
-  };
   
   /**
    * 注册时间
@@ -238,116 +270,107 @@
 	data() {
 		return {
 			tableKey: 0,
+			addDialogVisible: false,
 			importDialogVisible: false,
 			dialogVisible: false,
 			applyTime: "",
 			tableBottom: {
-			  totalNum: 100,
-			  pageSizeList: [10, 20, 30, 40]
+			  totalNum: 0,
+			  pageSizeList: [5, 10, 20, 30, 40]
 			},
-			tableData: [
-			  {
-				  userId: '22351006',
-				  name: '郭宗豪',
-				  access: UserAccessDict.branchSecretary,
-				  registerTime: RegisterTimeDict.withinAWeek,
-				  phone: "123543534",
-			  },
-			  {
-				userId: '22351006',
-				  name: '郭宗豪',
-				  access: UserAccessDict.formalPartyMember,
-				  registerTime: RegisterTimeDict.allTime,
-				  phone: "123543534",
-			  },
-			  {
-				userId: '22351006',
-				  name: '郭宗豪',
-				  access: UserAccessDict.branchSecretary,
-				  registerTime: RegisterTimeDict.withinAWeek,
-				  phone: "123543534",
-			  }
-			],
+			tableData: [],
 			importTableData: [],
 			importTableHeader: [],
 			queryItems: {
-			  userAccess: "",
-			  registerTime: "",
-			  userId: "",
-			  pageIndex: 1,
-			  pageSize: 10,
+			  role: "",
+			//   createTime: "",
+			  userNumber: "",
+			  page: {
+				pageNumber: 1,
+				pageSize: 10,
+			  }
 			},
 			visList: [true, true, true, true, true, true, true],
 			accessOptions: [
-			  { label: '非党员学生', value: '非党员学生' },
-			  { label: '党员学生', value: '党员学生' },
-			  { label: '支部书记', value: '支部书记' },
-			  { label: '院党委/团委', value: '院党委/团委' },
-			  { label: '系统管理员', value: '系统管理员' },
-			  { label: '未分配', value: '未分配' },
+				{ label: '支部书记', value: '支部书记' },
+				{ label: '学校党委', value: '学校党委' },
+				{ label: '系统管理员', value: '系统管理员' },
+				{ label: '学生', value: '学生' },
 			],
-			registerTimeOptions: [
-				{ label: '一周内', value: '一周内'},
-				{ label: '一月内', value: '一月内'},
-				{ label: '半年内', value: '半年内'},
-				{ label: '一年内', value: '一年内'},
-				{ label: '全部', value: '全部'},
-			],
+			// registerTimeOptions: [
+			// 	{ label: '全部', value: '全部'},
+			// 	{ label: '一周内', value: '一周内'},
+			// 	{ label: '一月内', value: '一月内'},
+			// 	{ label: '半年内', value: '半年内'},
+			// 	{ label: '一年内', value: '一年内'},
+			// ],
+			form: {
+				userNumber: "",
+				userName: "",
+				role: "",
+				email: "",
+			},
 			selectedOption: '请选择党支部',
 			accessForm: {
-				userId: "",
-				name: "",
-				currentAccess: "",
-				updatedAccess: "",
-				registerTime: "",
-				phone: "",
-				remark: "",
+				id: "",
+				userNumber: "",
+				userName: "",
+				currentRole: "",
+				updatedRole: "",
+				createTime: "",
+				email: "",
 			},
 			accessFormCanNotEdit: {
-				userId: true,
-				name: true,
-				currentAccess: true,
-				updatedAccess: false,
-				registerTime: true,
-				phone: true,
-				remark: false,
+				userNumber: true,
+				userName: true,
+				currentRole: true,
+				updatedRole: false,
+				createTime: true,
+				email: true,
 			},
 			accessManageRules: {
-				userId: [
+				userNumber: [
 					{ required: true, message: '请输入学工号', trigger: 'blur' },
 				],
-				name: [
+				userName: [
 					{ required: true, message: '请输入姓名', trigger: 'blur' },
 				],
-				currentAccess: [
+				currentRole: [
 					{ required: true, message: '请选择当前权限', trigger: 'change' },
 				],
-				registerTime: [
+				createTime: [
 					{ required: true, message: '请选择注册时间', trigger: 'change' },
 				],
-				phone: [
-					{ required: true, message: '请输入手机号', trigger: 'blur' },
+				email: [
+					{ required: true, message: '请输入邮箱', trigger: 'blur' },
 				],
-			}
+			},
+			selectedIds: [],
 		}
 	},
 	mounted() {
 		this.queryList();
 	},
 	methods: {
+		queryList() {
+			if (this.queryItems.role === "全部") this.queryItems.role = "";
+			getPersonAccessList(this.queryItems).then(res => {
+				this.tableData = res.data.records;
+				this.tableBottom.totalNum = res.data.total;
+			});
+		},
 		clearInputMessage() {
-			this.queryItems.userId = "";
-			this.queryItems.name = "";
+			this.queryItems.userNumber = "";
 			this.queryItems.applyTime = "";
+			this.queryItems.role = "";
+			this.queryItems.createTime = "";
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
-			this.queryItems.pageSize = val;
+			this.queryItems.page.pageSize = val;
 			this.queryList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
-			this.queryItems.pageIndex = val;
+			this.queryItems.page.pageNumber = val;
 			this.queryList();
 		},
 		rowStyle({ row, rowIndex }) {
@@ -365,12 +388,6 @@
 		},
 		showDialog() {
 			this.dialogVisible = true
-		},
-		queryList() {
-		  console.log("执行了查询列表的请求");
-		  getPersonAccessList(this.queryItems).then(res => {
-			this.tableData = res.data;
-		  });
 		},
 		handleCheckChange() {
 		  console.log("处理表格列变动：", this.checkedCols);
@@ -390,9 +407,6 @@
 			  this.tableKey += 1;
 		  }
 		},
-		handleSelectionChange(val) {
-		  this.multipleSelection = val;
-		},
 		handleCommand(command) {
 		  console.log(command);
 		  this.selectedOption = command;
@@ -411,15 +425,19 @@
 		  this.selectedOption = newOption;
 		},
 		handleEdit(i, val) {
+			// 先进行赋值
 			this.accessForm = JSON.parse(JSON.stringify(val))
-			this.accessForm.currentAccess = val.access
+			this.accessForm.currentRole = val.role
 			this.dialogVisible = true
 		},
 		saveEdit() {
-			// 根据userId请求修改
-			updatePersonAccess(this.accessForm).then((res) => {
+			updatePersonAccess({
+				id: this.accessForm.id,
+				role: this.accessForm.updatedRole
+			}).then((res) => {
 				this.queryList();
-				dialogVisible = false
+				this.$message.success("修改成功")
+				this.dialogVisible = false
 			})
 		},
 		handleDelete(i, val) {
@@ -433,7 +451,7 @@
 				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
 			}).then(() => {
 				// 根据userId请求删除
-				deleteItem(val.userId)
+				deleteItem(val.id)
 			}).catch(() => {
 				this.$message({
 					type: 'info',
@@ -462,6 +480,58 @@
 		handleImportSuccess({ results, header }) {
 			this.importTableData = results
 			this.importTableHeader = header
+		},
+		formatTime(timestamp) {
+			if (!timestamp) {
+				return '';
+			}
+			let date = new Date(timestamp);
+			let year = date.getFullYear();
+			let month = date.getMonth() + 1; // 月份从 0 开始，所以需要加 1
+			let day = date.getDate();
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			let seconds = date.getSeconds();
+			let formattedDate = `${year}-${month}-${day}`;
+			// 如果时、分、秒不全为 00，则添加时间部分
+			if (hours !== 0 || minutes !== 0 || seconds !== 0) {
+				formattedDate += ` ${hours}:${minutes}:${seconds}`;
+			}
+			return formattedDate;
+		},
+		saveAdd() {
+			addItem(this.form).then(res => {
+				this.queryList();
+				this.$message.success("添加成功")
+			})
+		},
+		handleSelectionChange(vals) {
+			this.selectedIds = vals.map(item => item.id)
+			console.log("***", this.selectedIds)
+		},
+		deleteBatch() {
+			this.$confirm('此操作将永久删除已选中记录, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				// center: true,
+				dangerouslyUseHTMLString: true, // 允许使用 HTML
+				confirmButtonClass: 'redBtn', // 自定义确认按钮的类名
+				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
+			}).then(() => {
+				deleteByBatch(this.selectedIds).then(res => {
+					this.queryList();
+					this.$message.success("删除成功")
+				})
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
+		},
+		handleClose() {
+
 		}
 	},
   }
