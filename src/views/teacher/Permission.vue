@@ -22,17 +22,6 @@
 							:value="item.value">
 							</el-option>
 						</el-select>
-
-						<!-- 注册时间 -->
-						<!-- <span style="margin-left: 30px;">注册时间</span>
-						<el-select v-model="queryItems.createTime" placeholder="请选择" style="width: 20%; margin-left: 20px;">
-							<el-option
-							v-for="item in registerTimeOptions"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-							</el-option>
-						</el-select> -->
 						<span style="margin-left: 30px;">学工号</span>
 						<el-input style="width: 20%; margin-left: 20px;" v-model="queryItems.userNumber" placeholder="请输入内容"></el-input>
 					</v-col>
@@ -45,9 +34,8 @@
 			<v-row style="height: 100px;">
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">模板下载</el-button>
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">导入</el-button>
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importDialogVisible = true">批量导入</el-button>
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible = true">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -236,15 +224,14 @@
 
 
 		<el-dialog
-			title="导入"
+			title="批量导入"
 			v-model="importDialogVisible"
+			style="margin-top: 2%;"
 			width="80%">
+			<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">下载模板</el-button>
 			<upload-excel-component :on-success="handleImportSuccess" :before-upload="beforeUpload" />
-			<!-- <el-table :data="importTableData" border highlight-current-row style="width: 100%;margin-top:20px;">
-				<el-table-column v-for="item of importTableHeader" :key="item" :prop="item" :label="item" />
-			</el-table> -->
 			<template #footer>
-				<el-button type="primary" @click="saveImport()" class="redBtn">确 定</el-button>
+				<el-button type="primary" @click="submitExcel()" class="redBtn">确 定</el-button>
 				<el-button @click="importDialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
@@ -258,19 +245,8 @@
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate } from "@/http/permission.js"
+  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate, importUsers } from "@/http/permission.js"
   import "@/style/Common.css"
-  
-  /**
-   * 注册时间
-   */
-  const RegisterTimeDict = {
-	"withinAWeek": "一周内",
-	"withinAMonth": "一月内",
-	"withinSixMonths": "半年内",
-	"withinAYear": "一年内",
-	"allTime": "全部"
-};
   
   export default {
 	components: {
@@ -295,13 +271,12 @@
 			importTableData: [],
 			importTableHeader: [],
 			queryItems: {
-			  role: "",
-			//   createTime: "",
-			  userNumber: "",
-			  page: {
-				pageNumber: 1,
-				pageSize: 10,
-			  }
+				role: "",
+				userNumber: "",
+				page: {
+					pageNumber: 0,
+					pageSize: 10,
+				}
 			},
 			visList: [true, true, true, true, true, true, true],
 			accessOptions: [
@@ -310,13 +285,6 @@
 				{ label: '系统管理员', value: '系统管理员' },
 				{ label: '学生', value: '学生' },
 			],
-			// registerTimeOptions: [
-			// 	{ label: '全部', value: '全部'},
-			// 	{ label: '一周内', value: '一周内'},
-			// 	{ label: '一月内', value: '一月内'},
-			// 	{ label: '半年内', value: '半年内'},
-			// 	{ label: '一年内', value: '一年内'},
-			// ],
 			developmentPhaseOptions: [
 				{ label: '共青团员', value: '共青团员' },
 				{ label: '入党申请人', value: '入党申请人' },
@@ -373,12 +341,14 @@
 				],
 			},
 			selectedIds: [],
+			file: null,
 		}
 	},
 	mounted() {
 		this.queryList();
 	},
 	methods: {
+		// 查询
 		queryList() {
 			if (this.queryItems.role === "全部") this.queryItems.role = "";
 			getPersonAccessList(this.queryItems).then(res => {
@@ -388,9 +358,7 @@
 		},
 		clearInputMessage() {
 			this.queryItems.userNumber = "";
-			this.queryItems.applyTime = "";
 			this.queryItems.role = "";
-			this.queryItems.createTime = "";
 		},
 		handleSizeChange(val) {
 			this.queryItems.page.pageSize = val;
@@ -400,6 +368,9 @@
 			this.queryItems.page.pageNumber = val;
 			this.queryList();
 		},
+		// -----------------------------
+
+		// common
 		rowStyle({ row, rowIndex }) {
 			return {
 				color: '#3E3E3E',
@@ -413,100 +384,18 @@
 				color: '#3E3E3E',
 			}
 		},
-		showDialog() {
-			this.dialogVisible = true
-		},
-		handleCheckChange() {
-		  console.log("处理表格列变动：", this.checkedCols);
-		  for (let i = 0; i < this.colNames.length; i++){
-			  this.visList[i]= true
-		  }
-		  for (let i = 0; i < this.colNames.length; i++) {
-			  let flag = false;
-			  for (let j = 0; j < this.checkedCols.length; j++) {
-				  if (this.colNames[i] === this.checkedCols[j]) {
-					  flag = true;
-					  break;
-				  }
-			  }
-			  this.visList[i] = flag;
-			  // 用于更新表格
-			  this.tableKey += 1;
-		  }
-		},
-		handleCommand(command) {
-		  console.log(command);
-		  this.selectedOption = command;
-		},
-	   toggleSelection(rows) {
-		  if (rows) {
-			  rows.forEach(row => {
-				  this.$refs.multipleTable.toggleRowSelection(row);
-			  });
-		  } else {
-			  this.$refs.multipleTable.clearSelection();
-		  }
+	   	toggleSelection(rows) {
+			if (rows) {
+				rows.forEach(row => {
+					this.$refs.multipleTable.toggleRowSelection(row);
+				});
+			} else {	
+				this.$refs.multipleTable.clearSelection();
+			}
 		},
 		handleOptionChange (newOption) {
-		  console.log('选项变化：', newOption);
-		  this.selectedOption = newOption;
-		},
-		handleEdit(i, val) {
-			// 先进行赋值
-			this.accessForm = JSON.parse(JSON.stringify(val))
-			this.accessForm.currentRole = val.role
-			this.dialogVisible = true
-		},
-		saveEdit() {
-			updatePersonAccess({
-				id: this.accessForm.id,
-				role: this.accessForm.updatedRole
-			}).then((res) => {
-				this.queryList();
-				this.$message.success("修改成功")
-				this.dialogVisible = false
-			})
-		},
-		handleDelete(i, val) {
-			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning',
-				// center: true,
-				dangerouslyUseHTMLString: true, // 允许使用 HTML
-				confirmButtonClass: 'redBtn', // 自定义确认按钮的类名
-				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
-			}).then(() => {
-				// 根据userId请求删除
-				deleteItem(val.id)
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				});
-			});
-		},
-		// 表格导入
-		importData() {
-			this.importDialogVisible = true
-		},
-		saveImport() {
-			// 发送请求
-		},
-		beforeUpload(file) {
-			const isLt1M = file.size / 1024 / 1024 < 1
-			if (isLt1M) {
-				return true
-			}
-			this.$message({
-				message: 'Please do not upload files larger than 1m in size.',
-				type: 'warning'
-			})
-			return false
-		},
-		handleImportSuccess({ results, header }) {
-			this.importTableData = results
-			this.importTableHeader = header
+			console.log('选项变化：', newOption);
+			this.selectedOption = newOption;
 		},
 		formatTime(timestamp) {
 			if (!timestamp) {
@@ -526,21 +415,49 @@
 			}
 			return formattedDate;
 		},
-		saveAdd() {
-			this.$refs['form'].validate((valid) => {
-				if (valid) {
-					addItem(this.form).then(res => {
-						this.queryList();
-						this.$message.success("添加成功")
-						this.addDialogVisible = false
-					})
-				} else {
-					return false;
-				}
-			});
-		},
 		handleSelectionChange(vals) {
 			this.selectedIds = vals.map(item => item.id)
+		},
+		// -----------------------------
+		// 编辑
+		handleEdit(i, val) {
+			// 先进行赋值
+			this.accessForm = JSON.parse(JSON.stringify(val))
+			this.accessForm.currentRole = val.role
+			this.dialogVisible = true
+		},
+		saveEdit() {
+			updatePersonAccess({
+				id: this.accessForm.id,
+				role: this.accessForm.updatedRole,
+				email: this.accessForm.email
+			}).then((res) => {
+				this.queryList();
+				this.$message.success("修改成功")
+				this.dialogVisible = false
+			})
+		},
+		// --------------------------
+
+		// 删除
+		handleDelete(i, val) {
+			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				// center: true,
+				dangerouslyUseHTMLString: true,
+				confirmButtonClass: 'redBtn',
+				cancelButtonClass: 'whiteBtn',
+			}).then(() => {
+				// 根据userId请求删除
+				deleteItem(val.id)
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
 		},
 		deleteBatch() {
 			if (this.selectedIds.length === 0) {
@@ -567,6 +484,25 @@
 				});
 			});
 		},
+		// ------------------------------
+
+		// 添加
+		saveAdd() {
+			this.$refs['form'].validate((valid) => {
+				if (valid) {
+					addItem(this.form).then(res => {
+						this.queryList();
+						this.$message.success("添加成功")
+						this.addDialogVisible = false
+					})
+				} else {
+					return false;
+				}
+			});
+		},
+		// ------------------------------
+
+		// 批量导入
 		// 模板下载
 		downloadTemplate(fileName) {
 			downloadTemplate(fileName).then(blob => {
@@ -582,7 +518,45 @@
 				this.$message.error('下载失败')
 				console.log(error)
 			});
-		}
+		},
+		beforeUpload(file) {
+			this.file = file
+			const extension = file.name.substring(file.name.lastIndexOf('.') + 1)
+			const isLt5M = file.size / 1024 / 1024 < 5
+			if (extension !== 'xlsx' && extension !== 'xls') {
+				this.$message({
+					message: '只能上传Excel（即后缀是.xlsx或者.xls)的文件.',
+					type: 'warning'
+				})
+				return false
+			}
+			if (isLt5M) {
+				return true
+			}
+			this.$message({
+				message: '请不要上传大于5MB的文件.',
+				type: 'warning'
+			})
+			return false
+		},
+		// 导入
+		submitExcel() {
+			// 装载成formdata数据
+			const formdata = new FormData()
+			formdata.append('file', this.file, this.file.name)
+			this.loading = true
+			importUsers(formdata).then(res => {
+				this.$message.success(res.msg)
+				this.queryList()
+				this.importDialogVisible = false
+			}).catch(err => {
+				this.$message.error("文件导入出错")
+			})
+		},
+		handleImportSuccess({ results, header }) {
+			this.importTableData = results
+			this.importTableHeader = header
+		},
 	},
   }
   </script>
