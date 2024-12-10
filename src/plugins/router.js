@@ -19,10 +19,16 @@ const router = createRouter({
           name: 'TeacherHome',
           component: () => import('@/views/teacher/HomeView.vue')
         },
+        //自主学习
         {
           path: '/teacher/zzxx/sjcz',
           name: 'T_SJCZ',
           component: () => import('@/views/teacher/SJCZView.vue')
+        },
+        {
+          path: '/teacher/zzxx/sjcz/edit/:id?',
+          name: 'EditSJCZT',
+          component: () => import('@/views/teacher/AddAndEditActivityView.vue')
         },
         // 发展阶段
         {

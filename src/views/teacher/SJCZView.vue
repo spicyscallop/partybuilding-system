@@ -12,29 +12,25 @@
                 style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
             <v-col cols="10">
                 <span style="margin-left: 30px;">关键字</span>
-                <input placeholder="    请输入关键字" v-model="queryItems.keyword"
-                    style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                <el-input placeholder="    请输入关键字" v-model="queryItems.keyword"
+                    style=" margin-left:10px;width: 10%;"/>
                 <span style="margin-left: 30px;">学习时间</span>
                 <el-date-picker v-model="queryItems.time" type="daterange" range-separator="——"
                                 start-placeholder="开始日期" end-placeholder="结束日期"
                                 style="width: 20%;margin-left: 20px;" />
                 <span style="margin-left: 30px;">关键字</span>
-                <input placeholder="    主办单位" v-model="queryItems.name"
-                    style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
+                <el-input placeholder="    主办单位" v-model="queryItems.name"
+                    style=" margin-left:10px;width: 10%;"/>
                 <span style="margin-left: 30px;">审核状态</span>
-                <select v-model="selectedAuditStatusOptin"
-                        style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
-                    <option v-for="option in auditStatusOptins" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                    </option>
-                </select>
+                <el-select v-model="selectedAuditStatusOptin"
+                        style=" margin-left:10px;width: 10%;">
+                    <el-option v-for="option in auditStatusOptins" :key="option.value" :value="option.value"/>
+                </el-select>
                 <span style="margin-left: 30px;">级别</span>
-                <select v-model="selectedLevelOptions"
-                        style=" margin-left:10px;background-color: white;font-size: 12px;height: 25px; width: 10%;">
-                    <option v-for="option in levelOptions" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                    </option>
-                </select>
+                <el-select v-model="selectedLevelOptions"
+                        style=" margin-left:10px;width: 10%;">
+                    <el-option v-for="option in levelOptions" :key="option.value" :value="option.value"/>
+                </el-select>
             </v-col>
             <v-col cols="2">
                 <el-button class="redBtn" @click="queryList">查询</el-button>
@@ -45,8 +41,7 @@
         <v-row style="height: 100px;">
             <div style="padding-top: 10px;display: flex; width: 100%;">
                 <v-col cols="10">
-                    <el-button class="redBtn" @click="">添加活动信息</el-button>
-                    <el-button class="whiteBtn" @click="">删除活动信息</el-button>
+                    <el-button class="redBtn" @click="goToAddActivityView">添加活动信息</el-button>
                 </v-col>
                 <v-col cols="2">
                     <AttributeSelection :optionList="colNames" style="display: inline-block; float: right;"
@@ -93,7 +88,7 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { addBranchActivity, deleteSelfActivity, getSelfActivityPage, updateSelfActivity } from '@/http/api';
+import { addBranchActivity, getSelfActivityPage, updateSelfActivity } from '@/http/api';
 
 export default {
     components: {
@@ -183,7 +178,40 @@ export default {
                 this.$message.warning('请选中要编辑的记录');
                 return;
             }
-            this.$router.push({ name: 'EditPersonViewJJFZT', params: { id: this.selectedRows[0].id } });
+            this.$router.push({ name: 'EditSJCZT', params: { id: this.selectedRows[0].id } });
+        },
+        goToAddActivityView() {
+            this.$router.push({ name: 'EditSJCZT' });
+        },
+        deleteRow() {
+            if (this.selectedRows.length === 0) {
+                this.$message.warning('请选中要删除的记录');
+                return;
+            }
+            const ids = this.selectedRows.map(row => row.id);
+            this.$confirm('此操作将永久删除记录, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$axios.delete('/self-activity/batchDeleteSelfActivity', { data: ids })
+                    .then(response => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.queryList();
+                    })
+                    .catch(error => {
+                    this.$message({
+                        type: 'error',
+                        message: '删除失败!'
+                    });
+                    console.error('删除失败:', error);
+                    });
+            }).catch(() => {
+                // 用户取消删除操作
+            });
         },
         handleSelectionChange(val) {
             this.selectedRows = val;
