@@ -45,9 +45,8 @@
 			<v-row style="height: 100px;">
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">模板下载</el-button>
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">批量导入</el-button>
-						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importDialogVisible = true">批量导入</el-button>
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible = true">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -239,12 +238,13 @@
 			title="导入"
 			v-model="importDialogVisible"
 			width="80%">
+			<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">下载模板</el-button>
 			<upload-excel-component :on-success="handleImportSuccess" :before-upload="beforeUpload" />
 			<!-- <el-table :data="importTableData" border highlight-current-row style="width: 100%;margin-top:20px;">
 				<el-table-column v-for="item of importTableHeader" :key="item" :prop="item" :label="item" />
 			</el-table> -->
 			<template #footer>
-				<el-button type="primary" @click="saveImport()" class="redBtn">确 定</el-button>
+				<el-button type="primary" @click="submitExcel()" class="redBtn">确 定</el-button>
 				<el-button @click="importDialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
@@ -258,7 +258,7 @@
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate } from "@/http/permission.js"
+  import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate, importUsers } from "@/http/permission.js"
   import "@/style/Common.css"
   
   /**
@@ -373,6 +373,7 @@
 				],
 			},
 			selectedIds: [],
+			file: null,
 		}
 	},
 	mounted() {
@@ -417,26 +418,25 @@
 			this.dialogVisible = true
 		},
 		handleCheckChange() {
-		  console.log("处理表格列变动：", this.checkedCols);
-		  for (let i = 0; i < this.colNames.length; i++){
-			  this.visList[i]= true
-		  }
-		  for (let i = 0; i < this.colNames.length; i++) {
-			  let flag = false;
-			  for (let j = 0; j < this.checkedCols.length; j++) {
-				  if (this.colNames[i] === this.checkedCols[j]) {
-					  flag = true;
-					  break;
-				  }
-			  }
-			  this.visList[i] = flag;
-			  // 用于更新表格
-			  this.tableKey += 1;
-		  }
+			for (let i = 0; i < this.colNames.length; i++){
+				this.visList[i]= true
+			}
+			for (let i = 0; i < this.colNames.length; i++) {
+				let flag = false;
+				for (let j = 0; j < this.checkedCols.length; j++) {
+					if (this.colNames[i] === this.checkedCols[j]) {
+						flag = true;
+						break;
+					}
+				}
+				this.visList[i] = flag;
+				// 用于更新表格
+				this.tableKey += 1;
+			}
 		},
 		handleCommand(command) {
-		  console.log(command);
-		  this.selectedOption = command;
+			console.log(command);
+			this.selectedOption = command;
 		},
 	   toggleSelection(rows) {
 		  if (rows) {
@@ -487,23 +487,39 @@
 				});
 			});
 		},
-		// 表格导入
-		importData() {
-			this.importDialogVisible = true
-		},
-		saveImport() {
-			// 发送请求
-		},
 		beforeUpload(file) {
-			const isLt1M = file.size / 1024 / 1024 < 1
-			if (isLt1M) {
+			this.file = file
+			const extension = file.name.substring(file.name.lastIndexOf('.') + 1)
+			const isLt5M = file.size / 1024 / 1024 < 5
+			if (extension !== 'xlsx' && extension !== 'xls') {
+				this.$message({
+					message: '只能上传Excel（即后缀是.xlsx或者.xls)的文件.',
+					type: 'warning'
+				})
+				return false
+			}
+			if (isLt5M) {
 				return true
 			}
 			this.$message({
-				message: 'Please do not upload files larger than 1m in size.',
+				message: '请不要上传大于5MB的文件.',
 				type: 'warning'
 			})
 			return false
+		},
+		// 导入
+		submitExcel() {
+			// 装载成formdata数据
+			const formdata = new FormData()
+			formdata.append('file', this.file, this.file.name)
+			this.loading = true
+			importUsers(formdata).then(res => {
+				this.$message.success(res.msg)
+				this.queryList()
+				this.importDialogVisible = false
+			}).catch(err => {
+				this.$message.error("文件导入出错")
+			})
 		},
 		handleImportSuccess({ results, header }) {
 			this.importTableData = results

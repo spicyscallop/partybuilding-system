@@ -50,6 +50,12 @@ export const addItem = (data) => {
     return instance.post("/stage/add", data);
 }
 
+/**
+ * 下载导入人员权限模板
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
 export const downloadTemplate = (type) => {
     return instance({
         method: "get",
@@ -58,5 +64,22 @@ export const downloadTemplate = (type) => {
             type
         },
         responseType: 'blob',
+    })
+}
+
+/**
+ * 批量导入人员权限记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const importUsers = (formData) => {
+    return instance({
+        url: '/files/importUsers',
+        method: 'POST',
+        headers: {
+           'Content-Type': 'multipart/form-data'
+        },
+        data: formData
     })
 }
