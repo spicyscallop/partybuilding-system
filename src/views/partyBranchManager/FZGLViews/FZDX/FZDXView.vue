@@ -47,7 +47,7 @@
           </v-col>
           <v-col cols="2">
             <AttributeSelection :optionList="colNames" style="display: inline-block;float: right;"
-                                @optionChange=""></AttributeSelection>
+                                @optionChange="changeCheckCols"></AttributeSelection>
           </v-col>
         </div>
       </v-row>
@@ -136,7 +136,8 @@ export default {
         { label: '第二党支部', value: '第二党支部' },
         { label: '第三党支部', value: '第三党支部' },
         { label: '第四党支部', value: '第四党支部' }],
-      colNames: ['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份'],
+      colNames: ['学工号', '姓名', '发展对象确定时间','发展对象备案时间','入党介绍人','《入党对象政治审查综合表》提交时间','思想汇报提交时间'],
+      originColumns:[],
       columns: [
         {
           label: '学工号',
@@ -224,6 +225,14 @@ export default {
         // 用户取消删除操作
       });
     },
+    changeCheckCols(indexList){
+      let new_columns = [];
+      for (let i = 0; i < indexList.length; i++) {
+          new_columns.push(this.originColumns[indexList[i]]);
+      }
+      this.columns = new_columns;
+      console.log(this.columns);
+    },
     closeDialog(){
       this.batchDialogVisible = false;
     },
@@ -285,6 +294,7 @@ export default {
     },
   },
   mounted() {
+    this.originColumns = this.columns;
     this.queryList();
   },
 };
