@@ -1,13 +1,13 @@
 <template>
     <div>
-      <el-dropdown :show="false" :trigger="click" style="margin-top: 10px;">
+      <el-dropdown :show="false" trigger="click" style="margin-top: 10px;">
         <el-button type="primary" class="custom-button">
           属性筛选
           <ArrowDown style="width: 20px;height: 20px;margin-right: -10px;margin-left: 10px;" />
         </el-button>
         <template #dropdown>
             <div>
-                <el-checkbox v-model=checkAll style="margin-left: 10px;">全选</el-checkbox>
+                <el-checkbox v-model="checkAll" style="margin-left: 10px;">全选</el-checkbox>
             </div>
             <hr>
           <el-checkbox-group v-model="selectedOptions" style="padding-left: 10px;">
@@ -46,7 +46,6 @@
     },
     watch: {
         selectedOptions(newOption) {
-            console.log('选中的选项：', newOption);
             this.$emit('optionChange', newOption);
         },
         checkAll(newOption){
