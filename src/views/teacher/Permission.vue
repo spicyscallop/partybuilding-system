@@ -46,8 +46,8 @@
 				<div style="padding-top: 10px;display: flex; width: 100%;">
 					<v-col cols="10">
 						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="downloadTemplate('批量导入人员表格模板')">模板下载</el-button>
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">导入</el-button>
-						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="importData">批量导入</el-button>
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="addDialogVisible=true">添加人员信息</el-button>
 					</v-col>
 				</div>
 			</v-row>
@@ -460,7 +460,8 @@
 		saveEdit() {
 			updatePersonAccess({
 				id: this.accessForm.id,
-				role: this.accessForm.updatedRole
+				role: this.accessForm.updatedRole,
+				email: this.accessForm.email
 			}).then((res) => {
 				this.queryList();
 				this.$message.success("修改成功")
