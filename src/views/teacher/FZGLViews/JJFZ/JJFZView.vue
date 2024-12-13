@@ -45,11 +45,12 @@
           <el-table ref="multipleTable" :data="tableData" max-height="80vh"
                     style="border-radius: 15px;background-color: #F7F7F7;"
                     @selection-change="handleSelectionChange" :row-style="rowStyle"
-                    :header-cell-style="headerRowStyle"
+                    :header-cell-style="headerRowStyle" 
+                    :key="tableKey"
           >
             <el-table-column type="selection">
             </el-table-column>
-            <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''"  align="center">
+            <el-table-column v-for="item in columns" v-show="false" :prop="item.prop" :label="item.label" :width="item.width || ''" align="center">
               <template v-slot="scope" v-if="item.type === 'date'">
                 {{ formatTime(scope.row[item.prop]) }}
               </template>
@@ -159,6 +160,7 @@ export default {
       ],
       batchDialogVisible: false,
       selectedRows: [],
+      tableKey:0
     };
   },
   methods: {
@@ -230,9 +232,11 @@ export default {
     changeCheckCols(indexList){
       let new_columns = [];
       for (let i = 0; i < indexList.length; i++) {
-          new_columns.push(this.originColumns[indexList[i]]);
+          new_columns.push(this.originColumns[indexList[i]]); 
       }
       this.columns = new_columns;
+      // 用于更新表格
+      this.tableKey += 1;
     },
     queryList() {
       this.batchDialogVisible = false;

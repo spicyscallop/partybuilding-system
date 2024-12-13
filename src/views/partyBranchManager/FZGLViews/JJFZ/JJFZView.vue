@@ -57,6 +57,7 @@
                     style="border-radius: 15px;background-color: #F7F7F7;"
                     @selection-change="handleSelectionChange" :row-style="rowStyle"
                     :header-cell-style="headerRowStyle"
+                    :key="tableKey"
           >
             <el-table-column type="selection">
             </el-table-column>
@@ -175,6 +176,7 @@ export default {
       ],
       batchDialogVisible: false,
       selectedRows: [],
+      tableKey:0
     };
   },
   methods: {
@@ -252,7 +254,8 @@ export default {
           new_columns.push(this.originColumns[indexList[i]]);
       }
       this.columns = new_columns;
-      console.log(this.columns);
+      // 用于更新表格
+      this.tableKey += 1;
     },
     queryList() {
       this.batchDialogVisible = false;
