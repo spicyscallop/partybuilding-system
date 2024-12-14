@@ -51,20 +51,20 @@
                       style="border-radius: 15px;background-color: #F7F7F7;" 
                       :header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle">
                       <!-- 表格列定义 -->
-                      <el-table-column type="selection" width="55">
+                      <el-table-column type="selection">
                       </el-table-column>
-                      <el-table-column v-if="visList[0]" prop="userId" label="学工号" align='center' width="100">
+                      <el-table-column v-if="visList[0]" prop="userNumber" label="学工号" align='center'>
                       </el-table-column>
-                      <el-table-column v-if="visList[1]" prop="name" label="姓名" align='center' width="180">
+                      <el-table-column v-if="visList[1]" prop="userName" label="姓名" align='center'>
                       </el-table-column>
-                      <el-table-column v-if="visList[2]" prop="isLeagueMember" label="团员身份" min-width="100px" align='center' :formatter=formatter width="80">
+                      <el-table-column v-if="visList[2]" prop="isLeague" label="团员身份" min-width="100px" align='center' :formatter=formatter>
                       </el-table-column>
-                      <el-table-column v-if="visList[3]" prop="developmentStage" label="发展阶段" align='center' width="140">
+                      <el-table-column v-if="visList[3]" prop="developmentPhase" label="发展阶段" align='center'>
                       </el-table-column>
-                      <el-table-column v-if="visList[4]" prop="branch" label="所在支部" align='center' width="260">
+                      <!-- <el-table-column v-if="visList[4]" prop="branch" label="所在支部" align='center' width="260">
                       </el-table-column>
                       <el-table-column v-if="visList[5]" prop="branchSecretary" label="支部书记" align='center' width="130">
-                      </el-table-column>
+                      </el-table-column> -->
                       <el-table-column label="操作" align='center' width="200">
                         <template #default="scope">
                             <el-button
@@ -105,191 +105,149 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-
-/**
- * 党员发展阶段
- */
-const DevelopmentStage = {
-  FormalPartyMember: '正式党员',
-  ProbationaryPartyMember: '预备党员',
-  DevelopmentTarget: '发展对象',
-  Activist: '积极分子',
-  Applicant: '入党申请人',
-  LeagueMember: '共青团员'
-};
+import { findByPhase } from "@/http/party"
+import "@/style/Common.css"
 
 export default {
-  components: {
-      SubpageTitle,
-      DropDownBox,
-      AttributeSelection,
-      ArrowDown,
-  },
-  data() {
-      return {
-          tableKey: 0,
-          dialogVisible: false,
-          applyTime: "",
-          tableBottom: {
-            totalNum: 100,
-            pageSizeList: [10, 20, 30, 40]
-          },
-          tableData: [
-            {
-                userId: '22351006',
-                name: '郭宗豪',
-                isLeagueMember: true,
-                developmentStage: DevelopmentStage.Applicant,
-                branch: "浙江大学软件学院第一党支部",
-                branchSecretary: "某某某",
-            },
-            {
-                userId: '22351006',
-                name: '郭宗豪',
-                isLeagueMember: true,
-                developmentStage: DevelopmentStage.Applicant,
-                branch: "浙江大学软件学院第一党支部",
-                branchSecretary: "某某某",
-            },
-            {
-                userId: '22351006',
-                name: '郭宗豪',
-                isLeagueMember: true,
-                developmentStage: DevelopmentStage.Applicant,
-                branch: "浙江大学软件学院第一党支部",
-                branchSecretary: "某某某",
-            }
-          ],
-          queryItems: {
-            branchName: "",
-            branchSecretary: "",
-            name: "",
-            pageIndex: 1,
-            pageSize: 10,
-          },
-          satifyStus: [
-            {
-                userId: '22351006',
-                name: '郭宗豪',
-                isSatify: '是'
-            },
-            {
-                userId: '22351007',
-                name: '鲁兴',
-                isSatify: '是'
+	components: {
+		SubpageTitle,
+		DropDownBox,
+		AttributeSelection,
+		ArrowDown,
+	},
+	mounted() {
+		this.queryItems.developmentPhase = this.$route.query.phase ? this.$route.query.phase : "";
 
-            },
-            {
-                userId: '22351006',
-                name: '郭宗豪',
-                isSatify: '是'
-            },
-            // 更多数据...
-          ],
-          // 属性筛选
-          checkedCols: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
-          colNames: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
-          visList: [true, true, true, true, true, true, true],
-          options: [
-            { label: '正式党员', value: '正式党员' },
-            { label: '预备党员', value: '预备党员' },
-            { label: '发展对象', value: '发展对象' },
-            { label: '积极分子', value: '积极分子' },
-            { label: '入党申请人', value: '入党申请人' },
-            { label: '共青团员', value: '共青团员' },
-          ],
-          selectedOption: '请选择党支部',
-      }
-  },
-  methods: {
-      formatter(row, col, cellVal) {
-        return cellVal ? '是' : '否'; 
-      },
-      clearInputMessage() {
-          this.queryItems.userId = "";
-          this.queryItems.name = "";
-          this.queryItems.applyTime = "";
-      },
-      handleSizeChange(val) {
-          console.log(`每页 ${val} 条`);
-          this.queryItems.pageSize = val;
-          this.queryList();
-      },
-      handleCurrentChange(val) {
-          console.log(`当前页: ${val}`);
-          this.queryItems.pageIndex = val;
-          queryList();
-      },
-      rowStyle({ row, rowIndex }) {
-          return {
-              color: '#3E3E3E',
-              backgroundColor: '#F7F7F7',
-              border: '#2E2E2E'
-          };
-      },
-      headerRowStyle() {
-          return {
-              backgroundColor: '#F7F7F7',
-              color: '#3E3E3E',
-          }
-      },
-      showDialog() {
-          this.dialogVisible = true
-      },
-      queryList() {
-        console.log("执行了查询列表的请求");
-      },
-      handleCheckChange() {
-        console.log("处理表格列变动：", this.checkedCols);
-        for (let i = 0; i < this.colNames.length; i++){
-            this.visList[i]= true
-        }
-        for (let i = 0; i < this.colNames.length; i++) {
-            let flag = false;
-            for (let j = 0; j < this.checkedCols.length; j++) {
-                if (this.colNames[i] === this.checkedCols[j]) {
-                    flag = true;
-                    break;
-                }
-            }
-            this.visList[i] = flag;
-            // 用于更新表格
-            this.tableKey += 1;
-        }
-      },
-      changeCheckCols(indexList) {
-        console.log("cols变化");
-        let new_checkedCols = [];
-        for (let i = 0; i < indexList.length; i++) {
-            new_checkedCols.push(this.colNames[indexList[i]]);
-        }
-        this.checkedCols = new_checkedCols;
-        this.handleCheckChange();
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      handleCommand(command) {
-        console.log(command);
-        this.selectedOption = command;
-      },
-     toggleSelection(rows) {
-        if (rows) {
-            rows.forEach(row => {
-                this.$refs.multipleTable.toggleRowSelection(row);
-            });
-        } else {
-            this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleOptionChange (newOption) {
-        console.log('选项变化：', newOption);
-        this.selectedOption = newOption;
-      },
-  },
+		this.queryList();
+	},
+	data() {
+		return {
+			developmentPhase: "",
+			tableKey: 0,
+			dialogVisible: false,
+			applyTime: "",
+			tableBottom: {
+				totalNum: 0,
+				pageSizeList: [10, 20, 30, 40]
+			},
+			tableData: [
+				{
+					userNumber: "",
+					userName: "",
+					isLeague: false,
+					developmentPhase: "",
+					branch: "xxx",
+					branchSecretary: "xxx",
+				},
+			],
+			queryItems: {
+				developmentPhase: "",
+				page: {
+					pageNumber: 0,
+					pageSize: 10,
+				}
+			},
+			// 属性筛选
+			checkedCols: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
+			colNames: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
+			visList: [true, true, true, true, true, true, true],
+			options: [
+				{ label: '正式党员', value: '正式党员' },
+				{ label: '预备党员', value: '预备党员' },
+				{ label: '发展对象', value: '发展对象' },
+				{ label: '积极分子', value: '积极分子' },
+				{ label: '入党申请人', value: '入党申请人' },
+				{ label: '共青团员', value: '共青团员' },
+			],
+			selectedOption: '请选择党支部',
+		}
+	},
+	methods: {
+		queryList() {
+			findByPhase(this.queryItems).then(res => {
+				this.tableData = res.data.records;
+				this.tableBottom.totalNum = res.data.total;
+			})
+		},
+		formatter(row, col, cellVal) {
+			return cellVal ? '是' : '否'; 
+		},
+		clearInputMessage() {
+			this.queryItems.userId = "";
+			this.queryItems.name = "";
+			this.queryItems.applyTime = "";
+		},
+		handleSizeChange(val) {
+			this.queryItems.pageSize = val;
+			this.queryList();
+		},
+		handleCurrentChange(val) {
+			this.queryItems.pageIndex = val;
+			queryList();
+		},
+		rowStyle({ row, rowIndex }) {
+			return {
+				color: '#3E3E3E',
+				backgroundColor: '#F7F7F7',
+				border: '#2E2E2E'
+			};
+		},
+		headerRowStyle() {
+			return {
+				backgroundColor: '#F7F7F7',
+				color: '#3E3E3E',
+			}
+		},
+		showDialog() {
+			this.dialogVisible = true
+		},
+		handleCheckChange() {
+			console.log("处理表格列变动：", this.checkedCols);
+			for (let i = 0; i < this.colNames.length; i++){
+				this.visList[i]= true
+			}
+			for (let i = 0; i < this.colNames.length; i++) {
+				let flag = false;
+				for (let j = 0; j < this.checkedCols.length; j++) {
+					if (this.colNames[i] === this.checkedCols[j]) {
+						flag = true;
+						break;
+					}
+				}
+				this.visList[i] = flag;
+				// 用于更新表格
+				this.tableKey += 1;
+			}
+		},
+		changeCheckCols(indexList) {
+			console.log("cols变化");
+			let new_checkedCols = [];
+			for (let i = 0; i < indexList.length; i++) {
+				new_checkedCols.push(this.colNames[indexList[i]]);
+			}
+			this.checkedCols = new_checkedCols;
+			this.handleCheckChange();
+		},
+		handleSelectionChange(val) {
+			this.multipleSelection = val;
+		},
+		handleCommand(command) {
+			console.log(command);
+			this.selectedOption = command;
+		},
+		toggleSelection(rows) {
+			if (rows) {
+				rows.forEach(row => {
+					this.$refs.multipleTable.toggleRowSelection(row);
+				});
+			} else {
+				this.$refs.multipleTable.clearSelection();
+		}
+		},
+		handleOptionChange (newOption) {
+			console.log('选项变化：', newOption);
+			this.selectedOption = newOption;
+		},
+	},
 }
 </script>
-
-<style>
-@import "./Common.css"
-</style>
