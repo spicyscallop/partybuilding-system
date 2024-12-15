@@ -8,6 +8,7 @@
 				</v-col>
 				<v-col cols="4">
 					<el-select v-model="queryItems.developmentPhase" size="large" style="width: 200px;float: right;" @change="handleOptionChange">
+						<el-option label="全部" value="全部"></el-option>
 						<el-option v-for="item in developmentPhaseOptions" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
 					<div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;">
@@ -47,6 +48,7 @@
 				<!-- 设置一个占满剩余空间的 div -->
 				<div class="flex-grow-1 overflow-auto">
 					<el-table ref="multipleTable" :data="tableData" max-height="80vh"
+						@selection-change="handleSelectionChange"
 						:key="tableKey"
 						style="border-radius: 15px;background-color: #F7F7F7;" 
 						:header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle">
@@ -81,8 +83,7 @@
 			</v-row>
 			<v-row style="background-color: #E9E9E9;">
 				<v-col cols="5">  
-					<el-button class="redBtn" style="margin-left: 30px;">编辑</el-button>
-					<el-button class="whiteBtn" style="border-color: #A5A5A5;">删除</el-button>
+					<el-button class="whiteBtn" style="border-color: #A5A5A5;">批量删除</el-button>
 				</v-col>
 				<v-col cols="7">
 					<div style="display: inline-block;float: right;">
@@ -145,7 +146,7 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { findByPhase } from "@/http/party"
+import { findByPhase, deleteItem, deleteByBatch } from "@/http/party"
 import "@/style/Common.css"
 
 export default {
@@ -202,7 +203,6 @@ export default {
 			colNames: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
 			visList: [true, true, true, true, true, true, true],
 			developmentPhaseOptions: [
-				{ label: '全部', value: '全部' },
 				{ label: '正式党员', value: '正式党员' },
 				{ label: '预备党员', value: '预备党员' },
 				{ label: '发展对象', value: '发展对象' },
@@ -221,6 +221,7 @@ export default {
 					{ required: true, message: '请选择发展阶段', trigger: 'change' },
 				],
 			},
+			selectedIds: [],
 		}
 	},
 	methods: {
@@ -234,7 +235,7 @@ export default {
 		submit() {
 
 		},
-		hanleEdit(index, item) {
+		handleEdit(index, item) {
 			this.dialogTitle = "编辑人员信息";
 			this.form.userNumber = item.userNumber;
 			this.form.userName = item.userName;
@@ -254,8 +255,51 @@ export default {
 			
 			this.dialogVisible = true;
 		},
-		handleDelete(index, item) {
+		// 删除
+		handleDelete(i, item) {
+			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				// center: true,
+				dangerouslyUseHTMLString: true,
+				confirmButtonClass: 'redBtn',
+				cancelButtonClass: 'whiteBtn',
+			}).then(() => {
+				// 根据id请求删除
+				deleteItem(item.id)
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
+		},
 
+		deleteBatch() {
+			if (this.selectedIds.length === 0) {
+				this.$message.info("还未选择记录")
+				return
+			}
+			this.$confirm('此操作将永久删除已选中记录, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				// center: true,
+				dangerouslyUseHTMLString: true, // 允许使用 HTML
+				confirmButtonClass: 'redBtn', // 自定义确认按钮的类名
+				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
+			}).then(() => {
+				deleteByBatch(this.selectedIds).then(res => {
+					this.queryList();
+					this.$message.success("删除成功")
+				})
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
 		},
 		handleOptionChange() {
 			this.queryList();
@@ -289,9 +333,6 @@ export default {
 				color: '#3E3E3E',
 			}
 		},
-		showDialog() {
-			this.dialogVisible = true
-		},
 		handleCheckChange() {
 			console.log("处理表格列变动：", this.checkedCols);
 			for (let i = 0; i < this.colNames.length; i++){
@@ -319,17 +360,8 @@ export default {
 			this.checkedCols = new_checkedCols;
 			this.handleCheckChange();
 		},
-		handleSelectionChange(val) {
-			this.multipleSelection = val;
-		},
-		toggleSelection(rows) {
-			if (rows) {
-				rows.forEach(row => {
-					this.$refs.multipleTable.toggleRowSelection(row);
-				});
-			} else {
-				this.$refs.multipleTable.clearSelection();
-		}
+		handleSelectionChange(vals) {
+			this.selectedIds = vals.map(item => item.id)
 		},
 	},
 }

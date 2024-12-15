@@ -39,3 +39,23 @@ export const findAllBranches = () => {
 export const findByPhase = (queryItems) => {
     return instance.post("/stage/page", queryItems)
 }
+
+/**
+ * 删除人员列表记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteItem = (id) => {
+    return instance.post("/stage/delete", id);
+}
+
+/**
+ * 批量删除人员列表记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteByBatch = (ids) => {
+    return instance.post("/stage/deleteByBatch", ids);
+}
