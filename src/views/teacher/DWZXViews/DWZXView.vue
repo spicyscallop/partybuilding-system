@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="ma-0 fill-height bg-grey-lighten-3">
+    <v-container fluid class="ma-0 fill-height">
         <v-col class="d-flex fill-height flex-column">
             <v-row
                 class="flex-shrink-0 flex-grow-0"
