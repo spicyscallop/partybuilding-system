@@ -131,7 +131,7 @@ export default {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"
                 x.viewLink = "/teacher/dwzx/personlist"
-                x.requestParam = x.title.split("数量")[0]
+                x.phase = x.title.split("数量")[0]
             })
         })
     },
@@ -140,7 +140,7 @@ export default {
             this.$router.push({
                 path: item.viewLink,
                 query: {
-                    phase: item.requestParam,
+                    phase: item.phase,
                 },
             });
         }

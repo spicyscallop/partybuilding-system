@@ -157,11 +157,11 @@
 
 <script setup>
 import { onMounted, ref } from "vue"
-import { getPartyOverview } from "@/http/api"
-import { getXtggInfo } from "@/http/api"
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import IconParty from '@/components/icons/IconParty.vue';
 import { RouterLink } from "vue-router";
+import { getPartyOverview } from "@/http/party"
+import { getXtggInfo } from "@/http/party"
 
 defineEmits(['drawerToggle']);
 

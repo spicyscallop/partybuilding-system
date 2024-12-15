@@ -57,7 +57,7 @@
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
   import { ArrowDown } from '@element-plus/icons-vue';
-  import { getXtggInfo } from "@/http/api"
+  import { getXtggInfo } from "@/http/party.js"
   import "@/style/Common.css"
   
   export default {
