@@ -63,9 +63,9 @@
 						</el-table-column>
 						<el-table-column v-if="visList[3]" prop="developmentPhase" label="发展阶段" align='center'>
 						</el-table-column>
-						<el-table-column v-if="visList[4]" prop="branch" label="所在支部" align='center' width="260">
+						<el-table-column v-if="visList[4]" prop="branchName" label="所在支部" align='center' width="260">
 						</el-table-column>
-						<el-table-column v-if="visList[5]" prop="branchSecretary" label="支部书记" align='center' width="130">
+						<el-table-column v-if="visList[5]" prop="branchLeaderName" label="支部书记" align='center' width="130">
 						</el-table-column>
 						<el-table-column label="操作" align='center' width="200">
 						<template #default="scope">
@@ -130,6 +130,20 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="所在支部" prop="branchName">
+							<el-input v-model="form.branchName"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="12">
+						<el-form-item label="支部书记" prop="branchLeaderName">
+							<el-input v-model="form.branchLeaderName"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
 			</el-form>
 			<template #footer>
 				<el-button type="primary" @click="submit()" class="redBtn">确 定</el-button>
@@ -146,7 +160,7 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { findByPhase, deleteItem, deleteByBatch } from "@/http/party"
+import { findByPhase, deleteItem, deleteByBatch, addItem, updateItem } from "@/http/party"
 import "@/style/Common.css"
 
 export default {
@@ -178,16 +192,17 @@ export default {
 					userName: "",
 					isLeague: false,
 					developmentPhase: "",
-					branch: "xxx",
-					branchSecretary: "xxx",
+					branchName: "",
+					branchLeaderName: "",
 				},
 			],
 			form: {
+				id: "",
 				userNumber: "",
 				userName: "",
 				developmentPhase: "",
-				branch: "",
-				branchSecretary: "",
+				branchName: "",
+				branchLeaderName: "",
 			},
 			queryItems: {
 				userNumber: "",
@@ -196,7 +211,9 @@ export default {
 				page: {
 					pageNumber: 0,
 					pageSize: 10,
-				}
+				},
+				needBranchLeaderName: true,
+				needBranchName: true,
 			},
 			// 属性筛选
 			checkedCols: ['学工号', '姓名', '团员身份', '发展阶段', '所在支部', '支部书记'],
@@ -233,26 +250,29 @@ export default {
 			})
 		},
 		submit() {
-
+			if (this.dialogTitle === "添加人员信息") {
+				addItem(this.form).then(res => {
+					
+				})
+			} else if (this.dialogTitle === "编辑人员信息") {
+				updateItem(this.form).then(res => {
+					console.log("update ", this.form);
+				})
+			}
 		},
 		handleEdit(index, item) {
 			this.dialogTitle = "编辑人员信息";
-			this.form.userNumber = item.userNumber;
-			this.form.userName = item.userName;
-			this.form.developmentPhase = item.developmentPhase;
-			this.form.branch = item.branch;
-			this.form.branchSecretary = item.branchSecretary;
+			this.form = {
+				...item
+			}
 
 			this.dialogVisible = true;
 		},
 		handleAdd() {
 			this.dialogTitle = "添加人员信息";
-			this.form.userNumber = "";
-			this.form.userName = "";
+			Object.keys(this.form).forEach(key => { this.form[key] = "" })
 			this.form.developmentPhase = this.queryItems.developmentPhase;
-			this.form.branch = "";
-			this.form.branchSecretary = "";
-			
+
 			this.dialogVisible = true;
 		},
 		// 删除

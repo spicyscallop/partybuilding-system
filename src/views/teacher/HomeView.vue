@@ -53,7 +53,7 @@
 						</v-card>
 				</v-col>
 				<!-- 系统公告 -->
-				<v-col class="fill-height" cols="3">
+				<v-col cols="3" class="fill-height d-flex flex-column justify-space-between" >
 					<v-card
 						class="mx-auto my-2"
 						elevation="5"

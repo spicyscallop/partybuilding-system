@@ -59,3 +59,23 @@ export const deleteItem = (id) => {
 export const deleteByBatch = (ids) => {
     return instance.post("/stage/deleteByBatch", ids);
 }
+
+/**
+ * 添加人员列表记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addItem = (data) => {
+    return instance.post("/stage/add", data);
+}
+
+/**
+ * 修改人员列表记录
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const updateItem = (data) => {
+    return instance.post("/stage/update", data)
+}
