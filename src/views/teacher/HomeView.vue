@@ -23,7 +23,7 @@
 								</h1>
 							</div>
 							<div class="d-flex">
-								<p class="ml-5 mb-4 mr-4" style="line-height: 2;">计算机科学与技术学院和软件学院党委坚持以习近平新时代中国特色社会主义思想为指导，紧紧围绕立德树人根本任务，在“四个更加”的战略导向下，秉承着“人为本，和为贵，变则通”的学院文化理念，构建完善“开放、开环、联动、包容、共享”的学院治理体系，为建设世界一流的计算机科学与技术学院和软件学院提供坚强的政治保证和组织保证。</p>
+								<p class="ml-5 mb-4 mr-4" style="line-height: 2;">{{ briefIntroduction }}</p>
 							</div>
 						</v-card>
 					<!-- 党委荣誉 -->
@@ -60,23 +60,39 @@
 						width="100%"
 						height="100%"
 					>
-						<div class="d-flex justify-space-between align-center mt-4 mb-3">
-							<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-								<v-icon class="icon-item">mdi-bell-outline</v-icon>
-								系统公告
-							</h1>
-							<RouterLink to="/teacher/xtgg" class="mr-3">更多></RouterLink>
-						</div>
-						<v-list lines="one" class="py-0 pl-1">
-							<v-sheet v-for="(item, index) in xtgg" :key="index">
-								<v-list-item  :title="item.title">
-								<template v-slot:append>
-									<v-label class="ml-5" :text="item.date"></v-label>
-								</template>
-								</v-list-item>
-								<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-							</v-sheet>
-						</v-list>
+						<v-tabs v-model="tab">
+							<v-tab value="sysAnnouncement">系统公告</v-tab>
+							<v-tab value="learnModel">学习样板</v-tab>
+							<!-- <v-tab value="three">Three</v-tab> -->
+						</v-tabs>
+						<v-tabs-window v-model="tab">
+							<v-tabs-window-item value="sysAnnouncement">
+								<div class="d-flex justify-space-between align-center mt-4 mb-3">
+									<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
+										<v-icon class="icon-item">mdi-bell-outline</v-icon>
+										系统公告
+									</h1>
+									<RouterLink to="/teacher/xtgg" class="mr-3">更多></RouterLink>
+								</div>
+								<v-list lines="one" class="py-0 pl-1">
+									<v-sheet v-for="(item, index) in xtgg" :key="index">
+										<v-list-item  :title="item.title">
+										<template v-slot:append>
+											<v-label class="ml-5" :text="item.date"></v-label>
+										</template>
+										</v-list-item>
+										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
+									</v-sheet>
+								</v-list>
+							</v-tabs-window-item>
+
+							<!-- <v-tabs-window-item value="learnModel">
+								<h1>Two</h1>
+							</v-tabs-window-item>
+							<v-tabs-window-item value="three">
+								<h1>Three</h1>
+							</v-tabs-window-item> -->
+						</v-tabs-window>
 					</v-card>
 				</v-col>
 			</v-row>
@@ -131,8 +147,9 @@
 								v-for="(item, index) in dwzx" 
 								:key="index" 
 								class="scrollbar-demo-item"
-								width="20%"
-								height="20%"
+								width="25%"
+								height="25%"
+								hover
 							>
 								<v-sheet rounded="lg">
 									<v-card-title>
@@ -163,6 +180,10 @@ import { getPartyOverview } from "@/http/party"
 import { getXtggInfo } from "@/http/party"
 
 defineEmits(['drawerToggle']);
+
+let briefIntroduction = ref("计算机科学与技术学院和软件学院党委坚持以习近平新时代中国特色社会主义思想为指导，紧紧围绕立德树人根本任务，在“四个更加”的战略导向下，秉承着“人为本，和为贵，变则通”的学院文化理念，构建完善“开放、开环、联动、包容、共享”的学院治理体系，为建设世界一流的计算机科学与技术学院和软件学院提供坚强的政治保证和组织保证。");
+
+let tab = ref(null)
 
 let xtgg = ref([
 {
