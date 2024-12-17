@@ -35,7 +35,7 @@
                 </v-col>
                 <v-col cols="4">
                     <el-select v-model="selectedOption" placeholder="支部选择" size="large"
-                        style="width: 200px;float: right;">
+                        style="width: 200px;float: right;" @change="queryList">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                     <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
@@ -102,6 +102,9 @@
                         </el-table-column>
                         <el-table-column v-if="visList[5]" prop="isLeague" label="团员身份"
                             align='center'>
+                            <template #default="scope">
+                                {{ scope.row.isLeague === 1 ? '是' : '否' }}
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -170,7 +173,7 @@ const tableBottom = ref({
 const checkedCols = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const colNames = ref(['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份']);
 const visList = ref([true, true, true, true, true, true]);
-const selectedOption = ref('请选择党支部');
+const selectedOption = ref('请选择党支部')
 // const options = ref([
 //     { label: '第一党支部', value: '第一党支部' },
 //     { label: '第二党支部', value: '第二党支部' },
@@ -178,7 +181,7 @@ const selectedOption = ref('请选择党支部');
 //     { label: '第四党支部', value: '第四党支部' }
 // ]);
 const options = ref([
-    // {label: '所有党支部', value: '0'},
+    { label: '所有党支部', value: '0'},
     { label: '第一党支部', value: '1' },
     { label: '第二党支部', value: '2' },
     { label: '第三党支部', value: '3' },
@@ -312,10 +315,19 @@ const goToEditPage = () => {
         })
     } else {
         goTo.value.pageType = "Edit"
-        goTo.value.data = selectStu.value
-        goTo.value.subPage = 0
+        console.log(selectStus.value[0])
+        goTo.value.data = selectStus.value[0]
+        // goTo.value.data = {
+        //     userId: selectStus.value[0].userNumber,
+        //     name: selectStus.value[0].userName,
+        //     isParty: selectStus.value[0].isLeague,
+        //     // talkerName:
+        //     applyTime: selectStus.value[0].deliveryTime, // 《入党申请书》提交时间
+        //     submitTime: selectStus.value[0].talkApplicantTime //《入党申请人谈话登记表》提交时间
+        // }
+        goTo.value.subPage = 1
         goTo.value.visiblePersonView = true;
-        console.log(selectStus.value[0].name)
+        
     }
 }
 
@@ -327,6 +339,7 @@ const backMainPage = () => {
 const queryList = () => {
     // TODO 执行查询列表的请求（需携带相应的参数），并修改tableBottom
     console.log("执行了查询列表的请求");
+    console.log('本地存储', localStorage)
     console.log('queryItems: ', queryItems)
     const data = {
         page: {
@@ -338,9 +351,10 @@ const queryList = () => {
         userName: queryItems.value.name,
         startActivistsSetTime: queryItems.value.applyTime[0] || null,
         endActivistsSetTime: queryItems.value.applyTime[1] || null,
-        partyBranchId: selectedOption.value,
-        developmentPhase: "申请人"
-        // developmentPhase: '积极分子'
+        // partyBranchId: selectedOption.value,
+        developmentPhase: "申请人",
+        needTalkApplicantPersonName: true,
+        ...(selectedOption.value !== '0' && selectedOption.value!== '请选择党支部' && { partyBranchId: selectedOption.value }),
     };
     console.log('查询数据', data)
     axios.post('/stage/page', data)
@@ -431,6 +445,7 @@ function formatTime(row, column, cellValue) {
 
 onMounted(() => {
     console.log('初始化页面,查询数据')
+    // console.log(selectedOption.value)
     queryList();
 });
 </script>

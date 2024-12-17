@@ -4,16 +4,16 @@
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>学工号</span><input required
                     :class="{ disableInput: isEditPage, customInput: !isEditPage }" :disabled=isEditPage placeholder=""
-                    v-model="props.formData.userId">
+                    v-model="props.formData.userNumber">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;margin-left: 30px;">*</span><span>姓名</span><input required
                     :class="{ disableInput: isEditPage, customInput: !isEditPage }" :disabled=isEditPage placeholder=""
-                    v-model="props.formData.name">
+                    v-model="props.formData.userName">
             </v-col>
             <v-col cols="4">
                 <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-                <el-select v-model="props.formData.isCommunistYouthLeagueMember" :placeholder="placeholder" size="large" style="width: 200px"
+                <el-select v-model="props.formData.isLeague" :placeholder="placeholder" size="large" style="width: 200px"
                     :disabled="isEditPage">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
@@ -23,7 +23,7 @@
             <v-row style="width: 100%;margin-top: 20px;">
                 <v-col>
                     <span style="margin-left: 0px;">《入党申请书》提交时间</span>
-                    <el-date-picker v-model="props.formData.applyTime" type="date" placeholder="点击选择时间"
+                    <el-date-picker v-model="props.formData.deliveryTime" type="date" placeholder="点击选择时间"
                                 size="large" style="width: 450px;margin-left: 100px;" />
                     <el-button type="primary" class="checkFileBtn"
                                 style="margin-left: 100px; height: 36px;width: 150px;color: #ffffff;">查看文件</el-button>
@@ -32,14 +32,14 @@
             <v-row style="width: 100%;margin-top: 30px;">
                 <v-col>
                     <span style="margin-left: 0px;">《入党申请人谈话登记表》提交时间</span>
-                    <el-date-picker v-model="props.formData.talkerTime" type="date" placeholder="点击选择时间"
+                    <el-date-picker v-model="props.formData.talkRegistrationFileId" type="date" placeholder="点击选择时间"
                                 size="large" style="width: 620px;margin-left: 100px;" />
                 </v-col>
             </v-row>
             <v-row style="width: 100%;margin-top: 30px;">
                 <v-col cols="6">
                     <span style="margin-left: 0px;">谈话人</span>
-                    <input class="customInput" placeholder="郭宗豪；" v-model="props.formData.talkerName" style="width: 400px;margin-left: 20px;">
+                    <input class="customInput" placeholder="郭宗豪；" v-model="props.formData.talkApplicantPersonName" style="width: 400px;margin-left: 20px;">
                 </v-col>
                 <v-col cols="6">
                     <span style="margin-left: 0px;">是否满足推优条件</span>
@@ -55,7 +55,8 @@
             </v-col>
             <v-col cols="5">
                 <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;" @click="$emit('backMainPage')">取消</el-button>
-                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;">保存</el-button>
+                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;" @click="saveInfo">保存</el-button>
+                <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;" @click="showInfo">展示表格信息</el-button>
             </v-col>
         </v-row>
     </v-container>
@@ -72,22 +73,15 @@ const props = defineProps({
     },
     formData: {
         type: Object,
-        default: () => ({
-            userId: '',
-            name: '',
-            isCommunistYouthLeagueMember: '',
-            talkerName: '',
-            talkerTime: '',
-            applyTime: '',
-            changeToPhase: '',
-        })
+        default: () => ref()
     }
 })
+// console.log('formData', formData)
 
 const satify = ref(false)
 const options = ref([
-    { value: '是', label: '是' },
-    { value: '否', label: '否' }
+    { value: 1, label: '是' },
+    { value: 0, label: '否' }
 ])
 const isEditPage = computed(() => {
     console.log(props.formData)
@@ -103,6 +97,28 @@ const phaseOptions = ref([
     { label: '正式党员', value: '正式党员' },
 ])
 
+const showInfo = () => {
+    console.log('编辑页面信息', console.log(props.formData))
+}
+
+const saveData = () => {
+
+}
+
+const saveInfo = async () => {
+  try {
+    // 模拟保存操作，比如调用API
+    const result = await saveData() // 假设saveData是你调用的保存方法
+
+    // 如果保存成功，触发backMainPage事件
+    emit('backMainPage')
+  } catch (error) {
+    // 如果保存失败，处理错误
+    console.error('保存失败:', error)
+    // 显示错误信息给用户，比如弹出提示
+    alert('保存失败，请稍后再试。')
+  }
+}
 
 </script>
 
