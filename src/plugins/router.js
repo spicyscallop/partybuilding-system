@@ -11,8 +11,8 @@ const router = createRouter({
     },
     {
       path: '/xtgg',
-      name: 'Xtgg',
-      component: () => import('@/views/teacher/XtggView.vue'),
+      name: 'Xtgg', // different from XTGG
+      component: () => import('@/views/teacher/XTGGView.vue'),
     },
     {
       path: '/teacher',
