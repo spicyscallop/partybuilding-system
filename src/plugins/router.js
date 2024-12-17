@@ -109,6 +109,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/FZGLViews/YBDY/subPage/AddAndEditPersonView.vue')
         },
         {
+          path: '/teacher/zsdy/edit-person/:id?',
+          name: 'EditPersonViewZSDYT',
+          component: () => import('@/views/teacher/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
+        },
+        {
           path: '/teacher/dwzx/personlist',
           name: 'PersonList',
           component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
@@ -248,6 +253,11 @@ const router = createRouter({
           path: 'partyManager/ybdy/edit-person/:id?',
           name: 'EditPersonViewYBDYP',
           component: () => import('@/views/partyBranchManager/FZGLViews/YBDY/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: 'partyManager/zsdy/edit-person/:id?',
+          name: 'EditPersonViewZSDYP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
         },
       ]
     },
