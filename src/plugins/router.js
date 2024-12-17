@@ -27,7 +27,7 @@ const router = createRouter({
         //自主学习
         {
           path: '/teacher/zzxx/llxx',
-          name: 'T_SJCZ',
+          name: 'T_LLXX',
           component: () => import('@/views/teacher/LLXXView.vue')
         },
         {
@@ -37,12 +37,12 @@ const router = createRouter({
         },
         {
           path: '/teacher/zzxx/jdbf',
-          name: 'T_SJCZ',
+          name: 'T_JDBF',
           component: () => import('@/views/teacher/JDBFView.vue')
         },
         {
           path: '/teacher/zzxx/zyfw',
-          name: 'T_SJCZ',
+          name: 'T_ZYFW',
           component: () => import('@/views/teacher/ZYFWView.vue')
         },
         {
