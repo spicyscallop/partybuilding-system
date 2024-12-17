@@ -9,7 +9,7 @@
 			<!-- 党委简介、党委荣誉、系统公告 -->
 			<v-row style="flex-basis: 0; overflow: visible;">
 				<v-col class="fill-height d-flex flex-column justify-space-between" cols="9">
-					<!-- 党委简介 -->
+						<!-- 党委简介 -->
 						<v-card
 							class="mx-auto my-2"
 							elevation="5"
@@ -26,7 +26,8 @@
 								<p class="ml-5 mb-4 mr-4" style="line-height: 2;">{{ briefIntroduction }}</p>
 							</div>
 						</v-card>
-					<!-- 党委荣誉 -->
+						
+						<!-- 党委荣誉 -->
 						<v-card
 							class="mx-auto my-2"
 							elevation="5"
@@ -159,66 +160,65 @@ let briefIntroduction = ref("计算机科学与技术学院和软件学院党委
 let tab = ref(null)
 
 let xtgg = ref([
-{
-    title: "系统公告",
-    url: "",
-    content: "",
-    date: "2024-09"
-  },
+	{
+		title: "系统公告",
+		url: "",
+		content: "",
+		date: "2024-09"
+	},
 ]);
 
 let xxyb = [
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
-  {
-    title: "学习样板",
-    date: "2024-09",
-  },
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09",
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
 ];
 
 let dwry = [
-  {
-    title: "浙江大学计算机科学与技术学院和软件学院党委入选第三批全省高校党建“双创”培育创建对象",
-    date: "2024-09"
-  },
-  {
-    title: "浙江大学xxxxxxx基地",
-    date: "2024-09",
-  },
+	{
+		title: "浙江大学计算机科学与技术学院和软件学院党委入选第三批全省高校党建“双创”培育创建对象",
+		date: "2024-09"
+	},
+	{
+		title: "浙江大学xxxxxxx基地",
+		date: "2024-09",
+	},
 ];
 
 let dwzx = ref([]);
 
 onMounted(() => {
-  // 获取党委中心人员数量
+  	// 获取党委中心人员数量
 	getPartyOverview().then(res => {
 		dwzx.value = res.data
-    // console.log(res.data)
 	})
 
-  // 获取系统公告信息
-  getXtggInfo().then(res => {
-      xtgg.value = res.data.records.map(item => ({
-          title: item.title,
-          url: item.url,
-          content: item.content,
-          date: item.createTime.split(' ')[0],
-      }));
-  });
+	// 获取系统公告信息
+	getXtggInfo().then(res => {
+		xtgg.value = res.data.records.map(item => ({
+			title: item.title,
+			url: item.url,
+			content: item.content,
+			date: item.createTime.split(' ')[0],
+		}));
+	});
 });
 
 function handleTabChange(value) {
@@ -230,31 +230,30 @@ function goToExternUrl(url) {
 
 </script>
 
-
 <style scoped>
 .el-scrollbar__wrap {
-  border-bottom: none !important;
+	border-bottom: none !important;
 }
 .scrollbar-demo-item {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  margin: 10px;
-  text-align: start;
-  border-radius: 4px;
-  color: var(--el-color-danger);
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	margin: 10px;
+	text-align: start;
+	border-radius: 4px;
+	color: var(--el-color-danger);
 }
 
 .icon-item {
-  color: grey
+	color: grey
 }
 
 a {
-  text-decoration: none;
-  color: #000;
+	text-decoration: none;
+	color: #000;
 }
 
 .tab-title {
