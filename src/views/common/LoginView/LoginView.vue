@@ -13,7 +13,7 @@
 					<v-row class="d-none d-sm-flex flex-grow-1 flex-shrink-0" style="flex-basis: 0; width: 100%;">
 						<v-col class="bg-grey-lighten-4">
 							<div class="bg-grey-lighten-4" style="height: 50%;background-color:yellow;">
-								<ListCard class="fill-height" title="系统公告" :list="xtgg"></ListCard>
+								<ListCard class="fill-height" title="系统公告" :list="xtgg" moreLink="/xtgg"></ListCard>
 							</div>
 							<hr color="grey">
 							<div class="bg-grey-lighten-4" style="height: 50%;background-color: red;">
@@ -102,7 +102,6 @@ export default {
       }
       getCaptcha(this.loginForm).then(response => {
         if (response.success) {
-          console.log('请求成功:', response);
           this.image = "data:image/png;base64," + response.data;
         } else {
           console.error('请求失败:', response);
@@ -128,7 +127,6 @@ export default {
       }
       //登录请求发送
       userLogin(this.loginForm).then(response => {
-        console.log(response)
         //处理异常信息
         if (!response.success) {//登录失败
           this.$message({
@@ -157,7 +155,6 @@ export default {
     getXtggV(){
       getXtgg().then(response => {
         if (response.success) {
-          console.log('请求成功:', response);
           // 提取数据并格式化后存入 xtgg
           this.xtgg = response.data.records.map(record => ({
             title: record.title,
@@ -165,8 +162,6 @@ export default {
             date: record.createTime,
             url: record.url
           }));
-          console.log(this.xtgg)
-
         } else {
           console.error('请求失败:', response);
         }

@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
+      path: '/xtgg',
+      name: 'Xtgg',
+      component: () => import('@/views/teacher/XtggView.vue'),
+    },
+    {
       path: '/teacher',
       name: 'TeacherMain',
       component: () => import('@/views/layout.vue'),
@@ -21,9 +26,24 @@ const router = createRouter({
         },
         //自主学习
         {
+          path: '/teacher/zzxx/llxx',
+          name: 'T_SJCZ',
+          component: () => import('@/views/teacher/LLXXView.vue')
+        },
+        {
           path: '/teacher/zzxx/sjcz',
           name: 'T_SJCZ',
           component: () => import('@/views/teacher/SJCZView.vue')
+        },
+        {
+          path: '/teacher/zzxx/jdbf',
+          name: 'T_SJCZ',
+          component: () => import('@/views/teacher/JDBFView.vue')
+        },
+        {
+          path: '/teacher/zzxx/zyfw',
+          name: 'T_SJCZ',
+          component: () => import('@/views/teacher/ZYFWView.vue')
         },
         {
           path: '/teacher/zzxx/sjcz/edit/:id?',
