@@ -60,13 +60,13 @@
 						width="100%"
 						height="100%"
 					>
-						<v-tabs v-model="tab">
+						<v-tabs v-model="tab" @click="handleTabChange">
 							<v-tab value="sysAnnouncement">系统公告</v-tab>
 							<v-tab value="learnModel">学习样板</v-tab>
-							<!-- <v-tab value="three">Three</v-tab> -->
 						</v-tabs>
-						<v-tabs-window v-model="tab">
-							<v-tabs-window-item value="sysAnnouncement">
+						<v-window v-model="tab">
+							<!-- 系统公告 -->
+							<v-window-item value="sysAnnouncement">
 								<div class="d-flex justify-space-between align-center mt-4 mb-3">
 									<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
 										<v-icon class="icon-item">mdi-bell-outline</v-icon>
@@ -84,52 +84,34 @@
 										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
 									</v-sheet>
 								</v-list>
-							</v-tabs-window-item>
+							</v-window-item>
 
-							<!-- <v-tabs-window-item value="learnModel">
-								<h1>Two</h1>
-							</v-tabs-window-item>
-							<v-tabs-window-item value="three">
-								<h1>Three</h1>
-							</v-tabs-window-item> -->
-						</v-tabs-window>
+							<!-- 学习样板 -->
+							<v-window-item value="learnModel">
+								<v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: auto; width: 100%;">
+									<v-sheet class="d-flex justify-space-between align-center mt-4 mb-3">
+										<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
+											<v-icon class="icon-item">mdi-file-outline</v-icon>
+											学习样板
+										</h1>
+										<v-sheet class="mr-3">更多></v-sheet>
+									</v-sheet>
+									<v-list lines="one" class="py-0 pl-1">
+										<v-sheet v-for="(item, index) in xxyb" :key="index">
+											<v-list-item  :title="item.title">
+												<template v-slot:append>
+													<v-label class="ml-5" :text="item.date"></v-label>
+												</template>
+											</v-list-item>
+											<v-divider thickness="2" style="border-style: dashed;"></v-divider>
+										</v-sheet>
+									</v-list>
+								</v-sheet>
+							</v-window-item>
+						</v-window>
 					</v-card>
 				</v-col>
 			</v-row>
-			<!-- 这里指明第二个row的高度为70% -->
-			<!-- <v-row style="flex-basis: 0; overflow: visible; height: 65%;" class="d-flex align-start align-stretch justify-space-between">
-			<v-col class="fill-height d-flex flex-column justify-stretch" cols="4" style="height: 100%">
-				<v-card
-				class="mx-auto my-2"
-				elevation="5"
-				width="100%"
-				height="100%"
-				>
-				<v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: auto; width: 100%;">
-					<v-sheet class="d-flex justify-space-between align-center mt-4 mb-3">
-					<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-						<v-icon class="icon-item">mdi-file-outline</v-icon>
-						学习样板
-					</h1>
-					<v-sheet class="mr-3">更多></v-sheet>
-					</v-sheet>
-					<v-list lines="one" class="py-0 pl-1">
-					<v-sheet v-for="(item, index) in xxyb" :key="index">
-						<v-list-item  :title="item.title">
-							<template v-slot:append>
-								<v-label class="ml-5" :text="item.date"></v-label>
-							</template>
-						</v-list-item>
-						<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-					</v-sheet>
-					</v-list>
-				</v-sheet>
-				</v-card>
-			</v-col>
-			
-			<v-col cols="4" class="fill-height d-flex flex-column justify-start">
-			</v-col>
-			</v-row> -->
 
 			<!-- 党委中心 -->
 			<v-row cols="12">
@@ -242,7 +224,11 @@ onMounted(() => {
           date: item.createTime.split(' ')[0],
       }));
   });
-})
+});
+
+function handleTabChange(value) {
+	console.log('选项卡切换到: ' + value);
+}
 
 </script>
 
