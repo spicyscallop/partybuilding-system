@@ -112,7 +112,7 @@ export const getXtgg = () => {
 }
 
 /**
- * 获取自主活动（实践成长）接口
+ * 根据id获取自主活动（实践成长）接口
  * @author 孙普华
  * @argument 
  * @returns
@@ -122,13 +122,33 @@ export const getSelfActivity = () => {
 }
 
 /**
+ * 分页获取自主活动（实践成长）接口
+ * @author 孙普华
+ * @argument {Object} data
+ * @returns
+ */
+export const getSelfActivityPage = (data) => {
+    return axios.post("/self-activity/page", data)
+}
+
+/**
  * 更新自主活动（实践成长）接口
  * @author 孙普华
  * @argument 
  * @returns
  */
+export const updateSelfActivity = (data) => {
+    return axios.post("/self-activity/update", data)
+}
+
+/**
+ * 团委新增支部活动（实践成长）接口
+ * @author 孙普华
+ * @argument 
+ * @returns
+ */
 export const addBranchActivity = (data) => {
-    return axios.get("/self-activity/addBranchActivity", data)
+    return axios.post("/self-activity/add", data)
 }
 
 /**
@@ -138,8 +158,8 @@ export const addBranchActivity = (data) => {
  * @returns
  */
 export const deleteSelfActivity = (id) => {
-    return axios.delete('/self-activity/deleteSelfActivity', {
-        data: id,
+    return axios.get('/self-activity/delete', {
+        params: { id },
     });
 };
 
@@ -181,33 +201,4 @@ export const addStageMember = (data) => {
  */
 export const getBranchOverview = () => {
     return instance.get("/auth/branch/getBranchOverview")
-}
-/**
- * 获取党委概况信息接口
- * @author 安俊霖
- * @argument
- * @returns
- */
-export const getPartyOverview = () => {
-    return instance.get("/auth/branch/getPartyOverview")
-}
-
-/**
- * 获取系統公告信息接口
- * @author 安俊霖
- * @argument 
- * @returns
- */
-export const getXtggInfo = () => {
-    return instance.get("/systemMessages/page")
-}
-
-/**
- * 获取所有支部信息
- * @author 安俊霖
- * @argument 
- * @returns
- */
-export const findAllBranches = () => {
-    return instance.get("/auth/branch/findAllBranches")
 }

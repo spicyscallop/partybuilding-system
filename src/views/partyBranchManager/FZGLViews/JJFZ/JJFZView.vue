@@ -47,7 +47,7 @@
           </v-col>
           <v-col cols="2">
             <AttributeSelection :optionList="colNames" style="display: inline-block;float: right;"
-                                @optionChange=""></AttributeSelection>
+                                @optionChange="changeCheckCols"></AttributeSelection>
           </v-col>
         </div>
       </v-row>
@@ -57,6 +57,7 @@
                     style="border-radius: 15px;background-color: #F7F7F7;"
                     @selection-change="handleSelectionChange" :row-style="rowStyle"
                     :header-cell-style="headerRowStyle"
+                    :key="tableKey"
           >
             <el-table-column type="selection">
             </el-table-column>
@@ -136,7 +137,8 @@ export default {
         { label: '第二党支部', value: '第二党支部' },
         { label: '第三党支部', value: '第三党支部' },
         { label: '第四党支部', value: '第四党支部' }],
-      colNames: ['学工号', '姓名', '入党申请书递交时间', '谈话人', '《入党申请人谈话登记表》提交时间', '团员身份'],
+      colNames: ['学工号', '姓名', '联系培养人','思想汇报提交时间','积极分子确定时间','《入党积极分子-考察登记表》提交时间','党校参与时间'],
+      originColumns:[],
       columns: [
         {
           label: '学工号',
@@ -174,6 +176,7 @@ export default {
       ],
       batchDialogVisible: false,
       selectedRows: [],
+      tableKey:0
     };
   },
   methods: {
@@ -245,6 +248,15 @@ export default {
     closeDialog(){
       this.batchDialogVisible = false;
     },
+    changeCheckCols(indexList){
+      let new_columns = [];
+      for (let i = 0; i < indexList.length; i++) {
+          new_columns.push(this.originColumns[indexList[i]]);
+      }
+      this.columns = new_columns;
+      // 用于更新表格
+      this.tableKey += 1;
+    },
     queryList() {
       this.batchDialogVisible = false;
       const data = {
@@ -285,6 +297,7 @@ export default {
     },
   },
   mounted() {
+    this.originColumns = this.columns;
     this.queryList();
   },
 };
