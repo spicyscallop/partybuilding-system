@@ -61,43 +61,31 @@
 						height="100%"
 					>
 						<v-tabs v-model="tab" @click="handleTabChange">
-							<v-tab value="sysAnnouncement">系统公告</v-tab>
-							<v-tab value="learnModel">学习样板</v-tab>
+							<v-tab value="sysAnnouncement" class="tab-title">系统公告</v-tab>
+							<v-tab value="learnModel" class="tab-title">学习样板</v-tab>
 						</v-tabs>
 						<v-window v-model="tab">
 							<!-- 系统公告 -->
 							<v-window-item value="sysAnnouncement">
-								<div class="d-flex justify-space-between align-center mt-4 mb-3">
-									<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-										<v-icon class="icon-item">mdi-bell-outline</v-icon>
-										系统公告
-									</h1>
-									<RouterLink to="/teacher/xtgg" class="mr-3">更多></RouterLink>
-								</div>
 								<v-list lines="one" class="py-0 pl-1">
-									<v-sheet v-for="(item, index) in xtgg" :key="index">
-										<v-list-item  :title="item.title">
-										<template v-slot:append>
-											<v-label class="ml-5" :text="item.date"></v-label>
-										</template>
+									<v-sheet v-for="(item, index) in xtgg.slice(0, 5)" :key="index">
+										<v-list-item  :title="item.title" @click="goToExternUrl(item.url)">
+											<template v-slot:append>
+												<v-label class="ml-5" :text="item.date"></v-label>
+											</template>
 										</v-list-item>
 										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
 									</v-sheet>
 								</v-list>
+								<div style="float: right; margin-top: 10px;">
+									<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
+								</div>
 							</v-window-item>
 
 							<!-- 学习样板 -->
 							<v-window-item value="learnModel">
-								<v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: auto; width: 100%;">
-									<v-sheet class="d-flex justify-space-between align-center mt-4 mb-3">
-										<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-											<v-icon class="icon-item">mdi-file-outline</v-icon>
-											学习样板
-										</h1>
-										<v-sheet class="mr-3">更多></v-sheet>
-									</v-sheet>
 									<v-list lines="one" class="py-0 pl-1">
-										<v-sheet v-for="(item, index) in xxyb" :key="index">
+										<v-sheet v-for="(item, index) in xxyb.slice(0, 5)" :key="index">
 											<v-list-item  :title="item.title">
 												<template v-slot:append>
 													<v-label class="ml-5" :text="item.date"></v-label>
@@ -106,7 +94,9 @@
 											<v-divider thickness="2" style="border-style: dashed;"></v-divider>
 										</v-sheet>
 									</v-list>
-								</v-sheet>
+									<div style="float: right; margin-top: 10px">
+										<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
+									</div>
 							</v-window-item>
 						</v-window>
 					</v-card>
@@ -129,9 +119,10 @@
 								v-for="(item, index) in dwzx" 
 								:key="index" 
 								class="scrollbar-demo-item"
-								width="25%"
-								height="25%"
+								width="23%"
+								height="23%"
 								hover
+								elevation="5"
 							>
 								<v-sheet rounded="lg">
 									<v-card-title>
@@ -141,7 +132,7 @@
 											<v-label>人</v-label>
 										</div>
 										<div style="font-size: 1rem;">{{ item.title }}</div>
-										<div style="font-size: 1rem; color: lightblue">浙江大学软件学院党支部</div>
+										<div style="font-size: 1rem; color: #469bff">浙江大学软件学院党支部</div>
 									</v-card-title>
 								</v-sheet>
 							</v-card>
@@ -189,6 +180,14 @@ let xxyb = [
     title: "学习样板",
     date: "2024-09"
   },
+  {
+    title: "学习样板",
+    date: "2024-09"
+  },
+  {
+    title: "学习样板",
+    date: "2024-09"
+  },
 ];
 
 let dwry = [
@@ -200,10 +199,6 @@ let dwry = [
     title: "浙江大学xxxxxxx基地",
     date: "2024-09",
   },
-//   {
-//     title: "浙江大学计算机科学与技术学院和软件学院党委",
-//     date: "2024-09"
-//   },
 ];
 
 let dwzx = ref([]);
@@ -228,6 +223,9 @@ onMounted(() => {
 
 function handleTabChange(value) {
 	console.log('选项卡切换到: ' + value);
+}
+function goToExternUrl(url) {
+	window.open(url, "_blank");
 }
 
 </script>
@@ -257,6 +255,12 @@ function handleTabChange(value) {
 a {
   text-decoration: none;
   color: #000;
+}
+
+.tab-title {
+	color: red; 
+	font-weight: bold;
+	font-size: 1.2rem
 }
 
 </style>
