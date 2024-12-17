@@ -97,15 +97,9 @@
             <v-col cols="5" class="d-flex flex-row align-center">
               <span style="color: red;">*</span><span style="margin-right: 10px;">活动时间</span>
               <div>
-                {{form.activityDate}}
-                <el-date-picker v-model="form.activityDate" placeholder="选择日期" value-format="yyyy-MM-dd"
+                <!-- value-format有点奇怪-->
+                <el-date-picker v-model="form.activityDate" placeholder="选择日期" value-format="YYYY-MM-DD"
                                  size="large" style="width: 90%;"/>
-                                 <el-date-picker
-      v-model="value12"
-      type="date"
-      placeholder="选择日期"
-      format="yyyy 年 MM 月 dd 日"
-      value-format="timestamp"/>
               </div>
             </v-col>
             <v-col cols="5" class="d-flex flex-row align-center">
@@ -162,8 +156,9 @@ export default {
       value12: '',
       form: {},
       defaultForm: {
-        // activityGraph: "string",
-        // additionalFile: "string",
+        activityGraph: "string",
+        additionalFile: "string",
+        auditStatus: "已提交"
       },
       placeholder: '请选择',
       levelOptions: [
@@ -270,9 +265,8 @@ export default {
     },
     onSubmit() {
       const submitData = {...this.form};
-      console.log(submitData);
       if (this.isEdit) {
-        this.$axios.post('/stage/update', submitData)
+        this.$axios.post('/self-activity/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
               this.$router.push({name: 'T_SJCZ'});
