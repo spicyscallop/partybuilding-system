@@ -3,7 +3,7 @@
         <v-col class="d-flex fill-height flex-column">
             <v-row style="height: 60px;">
                 <v-col cols="8">
-                <SubpageTitle text="实践成长录入" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+                <SubpageTitle text="实践成长录入" svg="src\img\ZZXX\实践成长.svg" :width=43 :height=43>
                 </SubpageTitle>
                 </v-col>
             </v-row>
