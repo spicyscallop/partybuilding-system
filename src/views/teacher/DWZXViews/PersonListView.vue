@@ -3,11 +3,11 @@
 		<v-col class="d-flex fill-height flex-column">
 			<v-row style="height: 60px;">
 				<v-col cols="8">
-					<SubpageTitle text="人员列表" width=43 height=43>
+					<SubpageTitle text="人员列表">
 					</SubpageTitle>
 				</v-col>
 				<v-col cols="4">
-					<el-select v-model="queryItems.developmentPhase" size="large" style="width: 200px;float: right;" @change="handleOptionChange">
+					<el-select v-model="queryItems.developmentPhase" style="width: 200px;float: right;" @change="handleOptionChange">
 						<el-option label="全部" value="全部"></el-option>
 						<el-option v-for="item in developmentPhaseOptions" :key="item.value" :label="item.label" :value="item.value" />
 					</el-select>
@@ -70,10 +70,8 @@
 						<el-table-column label="操作" align='center' width="200">
 						<template #default="scope">
 							<el-button
-							size="mini"
 							@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 							<el-button
-							size="mini"
 							class="redBtn"
 							@click="handleDelete(scope.$index, scope.row)">删除</el-button>
 						</template>
