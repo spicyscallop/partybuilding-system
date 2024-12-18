@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="ma-0 fill-height bg-grey-lighten-3">
+    <v-container fluid class="ma-0 fill-height">
         <v-col class="d-flex fill-height flex-column">
             <v-row
                 class="flex-shrink-0 flex-grow-0"
@@ -85,8 +85,7 @@
                             <v-row class="mb-0">
                                 <v-col cols="3"></v-col>
                                 <v-col cols="6">
-                                    <v-btn block style="background-color: red; color: white"
-                                    :to=item.viewLink>
+                                    <v-btn block style="background-color: red; color: white" @click="goToRoute(item)">
                                         {{ item.buttonText }}
                                     </v-btn>
                                 </v-col>
@@ -103,7 +102,7 @@
 <script>
 import SubpageTitle from "@/components/SubpageTitle.vue";
 import IconParty from "@/components/icons/IconParty.vue";
-import { getPartyOverview } from "@/http/api"
+import { getPartyOverview } from "@/http/party"
 
 export default {
     components: {
@@ -118,7 +117,8 @@ export default {
                     title: "",
                     subtitle: "",
                     buttonText: "",
-                    viewLink: ""
+                    viewLink: "",
+                    requestParam: "",
                 },
             ],
         };
@@ -126,21 +126,27 @@ export default {
     mounted() {
         getPartyOverview().then(res => {
             this.dwzx = res.data
+            console.log(this.dwzx)
             this.dwzx.forEach(x => {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"
                 x.viewLink = "/teacher/dwzx/personlist"
+                x.phase = x.title.split("数量")[0]
             })
         })
     },
     methods: {
-        goToRoute(link) {
-            console.log(link);
-            this.$router.push(link);
+        goToRoute(item) {
+            this.$router.push({
+                path: item.viewLink,
+                query: {
+                    phase: item.phase,
+                },
+            });
         }
     }
 };
 </script>
 
-<css scoped lang="scss">
-</css>
+<style scoped lang="scss">
+</style>

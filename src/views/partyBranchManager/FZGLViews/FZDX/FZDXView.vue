@@ -267,8 +267,8 @@ export default {
         },
         userNumber: this.queryItems.userId,
         userName: this.queryItems.name,
-        startActivistsSetTime: this.queryItems.applyTime[0] || null,
-        endActivistsSetTime: this.queryItems.applyTime[1] || null,
+        startDevelopmentObjectSetTime: this.queryItems.applyTime[0] || null,
+        endDevelopmentObjectSetTime: this.queryItems.applyTime[1] || null,
         developmentPhase:'发展对象'
       };
 
