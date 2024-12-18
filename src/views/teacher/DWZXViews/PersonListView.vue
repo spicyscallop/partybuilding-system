@@ -333,11 +333,11 @@ export default {
 			this.queryItems.applyTime = "";
 		},
 		handleSizeChange(val) {
-			this.queryItems.pageSize = val;
+			this.queryItems.page.pageSize = val;
 			this.queryList();
 		},
 		handleCurrentChange(val) {
-			this.queryItems.pageIndex = val;
+			this.queryItems.page.pageNumber = val;
 			this.queryList();
 		},
 		rowStyle({ row, rowIndex }) {
