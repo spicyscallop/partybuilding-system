@@ -338,7 +338,7 @@ export default {
 		},
 		handleCurrentChange(val) {
 			this.queryItems.pageIndex = val;
-			queryList();
+			this.queryList();
 		},
 		rowStyle({ row, rowIndex }) {
 			return {
