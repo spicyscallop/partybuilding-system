@@ -9,14 +9,14 @@
             <v-row><h3>支部组织生活</h3></v-row>
 
             <v-row>
-                <v-col cols="6" v-for="branch in data" :key="branch.branchId">
+                <v-col cols="6" v-for="branch in data" :key="branch.branchId" class="mt-5">
                     <v-card width="100%" height="100%" style="background-color: #e9e9e9;">
                         <v-row>
                             <v-col cols="4">
-                                <v-chart :option="getDonutChartOptions(branch)" autoresize style="height: 200px;"></v-chart>
+                                <v-chart :option="getDonutChartOptions(branch)" autoresize style="height: 240px;"></v-chart>
                             </v-col>
-                            <v-col cols="8">
-                                <v-chart :option="getBarChartOptions(branch)" autoresize style="height: 200px;"></v-chart>
+                            <v-col cols="8" class="d-flex flex-column justify-space-around">
+                                <v-chart :option="getBarChartOptions(branch)" autoresize style="height: 270px;"></v-chart>
                             </v-col>
                         </v-row>
                     </v-card>
@@ -43,7 +43,7 @@ onMounted(() => {
 let data = ref([
     {
         branchId: "1",
-        branchName: "第1党支部",
+        branchName: "第一党支部",
         totalMeetings: 18,
         actualMeetings: 17,
         meetingTypeStats: [
@@ -103,7 +103,40 @@ let data = ref([
             {
                 classification: "党小组会",
                 meetingCount: 2,
-                attendanceRate: 0.2
+                attendanceRate: 0.6
+            }
+        ]
+    },
+    {
+        branchId: "9",
+        branchName: "第九党支部",
+        totalMeetings: 18,
+        actualMeetings: 17,
+        meetingTypeStats: [
+            {
+                classification: "党员大会",
+                meetingCount: 3,
+                attendanceRate: 0.8,
+            },
+            {
+                classification: "支部委员会",
+                meetingCount: 5,
+                attendanceRate: 0.5
+            },
+            {
+                classification: "党课",
+                meetingCount: 3,
+                attendanceRate: 0.92
+            },
+            {
+                classification: "主题党日",
+                meetingCount: 4,
+                attendanceRate: 0.3
+            },
+            {
+                classification: "党小组会",
+                meetingCount: 2,
+                attendanceRate: 0.6
             }
         ]
     },
@@ -126,32 +159,32 @@ const getDonutChartOptions = (branch) => {
         },
         graphic: [
             {
-                type: 'group', // 使用 group 来组合圆形和文本
-                left: 'center', // 水平居中
-                top: 'center', // 垂直居中
+                type: 'group',
+                left: 'center',
+                top: 'center',
                 children: [
                 {
-                    type: 'circle', // 绘制圆形
+                    type: 'circle',
                     shape: {    
-                        r: 30 // 圆形的半径
+                        r: 30
                     },
                     style: {
-                        fill: 'none', // 不填充颜色
-                        stroke: 'red', // 边框颜色
-                        lineWidth: 3, // 边框宽度
+                        fill: 'none',
+                        stroke: 'red',
+                        lineWidth: 3,
                     },
                 },
                 {
-                    type: 'text', // 绘制文本
-                    left: "center", // 相对于 group 的中心
-                    top: "center", // 相对于 group 的中心
+                    type: 'text',
+                    left: "center",
+                    top: "center",
                     style: {
-                        text: branch.totalMeetings, // 显示的数字
-                        fontSize: "20", // 字体大小
-                        fontWeight: 'bold', // 字体加粗
-                        fill: 'red', // 字体颜色
-                        textAlign: 'center', // 文本居中
-                        textVerticalAlign: 'middle' // 文本垂直居中
+                        text: branch.totalMeetings,
+                        fontSize: "20",
+                        fontWeight: 'bold',
+                        fill: 'red',
+                        textAlign: 'center',
+                        textVerticalAlign: 'middle'
                     }
                 }
                 ]
@@ -170,12 +203,12 @@ const getDonutChartOptions = (branch) => {
                 ],
                 label: {
                     show: true,
-                    position: 'inside', // 将标签显示在环内
-                    formatter: '{c}', // 只显示数值
-                    fontSize: 14 // 设置字体大小
+                    position: 'inside',
+                    formatter: '{c}',
+                    fontSize: 14
                 },
                 labelLine: {
-                    show: false // 不显示引导线
+                    show: false
                 },
                 emphasis: {
                     label: {
@@ -190,6 +223,7 @@ const getDonutChartOptions = (branch) => {
 };
 
 const getBarChartOptions = (branch) => {
+    const BARWIDTH = 25;
     const meetingType = branch.meetingTypeStats.map(item => item.classification);
     const meetingCount = branch.meetingTypeStats.map(item => item.meetingCount);
     const attendanceRate = branch.meetingTypeStats.map(item => item.attendanceRate);
@@ -202,9 +236,9 @@ const getBarChartOptions = (branch) => {
             },
             formatter: (params) => {
                 console.log(params)
-                const index = params.dataIndex; // 获取当前柱子的索引
-                const count = meetingCount[index]; // 获取当前的 meetingCount
-                const rate = attendanceRate[index]; // 获取当前的 attendanceRate
+                const index = params.dataIndex;
+                const count = meetingCount[index];
+                const rate = attendanceRate[index];
                 const attended = Math.round(count * rate); // 到会人数
                 const notAttended = Math.round(count * (1 - rate)); // 未到会人数
 
@@ -235,44 +269,48 @@ const getBarChartOptions = (branch) => {
                 color: "black",
                 interval: 0,
             },
-            axisTick: { show: false }, // 不显示刻度线
+            axisTick: { show: false },
         },
         yAxis: {
             type: 'value',
-            axisLine: { show: false }, // 不显示坐标轴线
-            axisTick: { show: false }, // 不显示刻度线
-            axisLabel: { show: false }, // 不显示坐标轴标签
-            splitLine: { show: false } // 不显示网格线
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { show: false },
+            splitLine: { show: false }
         },
         series: [
             {
                 name: '到会率',
                 type: 'bar',
                 stack: "total",
-                barWidth: 20,
+                barWidth: BARWIDTH,
                 data: meetingCount.map((count, index) => ({
                     value: count * attendanceRate[index],
                     itemStyle: { color: 'red' }
                 })),
                 label: {
-                    show: false, // 不显示标签
+                    show: true,
+                    position: 'inside',
+                    formatter: (params) => (attendanceRate[params.dataIndex] * 100).toFixed(0) + '%',
+                    color: '#fff',
+                    fontSize: 12
                 },
             },
             {
                 name: '未到会率',
                 type: 'bar',
                 stack: "total",
-                barWidth: 20,
+                barWidth: BARWIDTH,
                 data: meetingCount.map((count, index) => ({
                     value: count * (1 - attendanceRate[index]),
                     itemStyle: { color: '#fff' }
                 })),
                 label: {
                     show: true,
-                    position: 'top', // 标签位置在柱子顶部
-                    formatter: (params) => meetingCount[params.dataIndex], // 显示 meetingCount
-                    color: '#000', // 标签颜色
-                    fontSize: 12 // 标签字体大小
+                    position: 'top',
+                    formatter: (params) => meetingCount[params.dataIndex],
+                    color: '#000',
+                    fontSize: 12
                 },
             },
         ],
