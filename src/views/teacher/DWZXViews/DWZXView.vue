@@ -32,7 +32,7 @@
                                 </v-col>
                                 <v-col>
                                     <h1 class="text-h3 font-weight-bold">
-                                        18<v-label>个</v-label>
+                                        {{ branchCount }}<v-label>个</v-label>
                                     </h1>
                                     <h2 class="text-h6">党支部数量</h2>
                                     <h2 class="text-subtitle-1 text-blue">
@@ -102,7 +102,7 @@
 <script>
 import SubpageTitle from "@/components/SubpageTitle.vue";
 import IconParty from "@/components/icons/IconParty.vue";
-import { getPartyOverview } from "@/http/party"
+import { getPartyOverview, findAllBranches } from "@/http/party.js"
 
 export default {
     components: {
@@ -111,6 +111,7 @@ export default {
     },
     data() {
         return {
+            branchCount: 0,
             dwzx: [
                 {
                     count: 0,
@@ -124,9 +125,11 @@ export default {
         };
     },
     mounted() {
+        findAllBranches().then(res => {
+            this.branchCount = res.data.length
+        })
         getPartyOverview().then(res => {
             this.dwzx = res.data
-            console.log(this.dwzx)
             this.dwzx.forEach(x => {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"

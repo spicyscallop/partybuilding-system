@@ -40,7 +40,7 @@
                         <!-- 表格列定义 -->
                         <el-table-column type="selection" width="55">
                         </el-table-column>
-                        <el-table-column prop="branchName" label="支部名称" align='center'>
+                        <el-table-column prop="branch.branchName" label="支部名称" align='center'>
                         </el-table-column>
                         <el-table-column prop="branchLeaderName" label="支部书记" align='center'>
                         </el-table-column>
@@ -49,12 +49,10 @@
                         <el-table-column label="操作" align='center'>
                         <template #default="scope">
                             <el-button
-                            size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            	@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                             <el-button
-                            size="mini"
-                            class="redBtn"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+								class="redBtn"
+								@click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                         </el-table-column>
                     </el-table>
@@ -107,7 +105,7 @@
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { findAllBranches } from "@/http/party.js"
+import { pageBranches, deleteBranch, deleteBranchByBatch, addBranch } from "@/http/party.js"
 import "@/style/Common.css";
 
 export default {
@@ -132,10 +130,20 @@ export default {
             },
             form: {
                 branchName: "",
-                branchLeaderName: "",
+                branchInfo: "",
             },
             tableData: [
-                { branchName: '第一党支部', branchLeaderName: '张三', partyMemberCount: 30 },
+				{
+					branch: {
+						id: "",
+						branchName: "",
+						parentBranchId: "",
+						branchInfo: "",
+					},
+					children: null,
+					branchLeaderName: "",
+					partyMemberCount: 0,
+				},
             ],
             tableBottom: {
                 totalNum: 0,
@@ -154,14 +162,14 @@ export default {
     },
     methods: {
         queryList() {
-			findAllBranches(this.queryItems).then(res => {
-				// this.tableData = res.data.records;
-				// this.tableBottom.totalNum = res.data.total;
+			pageBranches(this.queryItems).then(res => {
+				this.tableData = res.data.records;
+				this.tableBottom.totalNum = res.data.total;
 			})
 		},
         clearInputMessage() {
             queryItems.branchName = "";
-            queryItems.branchSecretary = "";
+            queryItems.branchLeaderName = "";
         },
         handleSizeChange(val) {
             queryItems.page.pageSize = val;
@@ -186,17 +194,18 @@ export default {
         },
         submit() {
 			if (this.dialogTitle === "添加支部") {
-				// todo:调用添加支部接口
+				addBranch(this.form).then(res => {
+					this.dialogVisible = false;
+					this.queryList();
+				})
 			} else if (this.dialogTitle === "编辑支部") {
 				// todo:调用编辑支部接口
 			}
 		},
 		handleEdit(index, item) {
 			this.dialogTitle = "编辑支部";
-			this.form = {
-				...item
-			}
-
+			this.form.branchName = item.branch.branchName
+			this.form.branchInfo = item.branch.branchInfo
 			this.dialogVisible = true;
 		},
 		handleAdd() {
@@ -217,7 +226,9 @@ export default {
 				confirmButtonClass: 'redBtn',
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
-				// todo:调用删除支部接口
+				deleteBranch(item.id).then(res => {
+					this.queryList();
+				})
 			}).catch(() => {
 				this.$message({
 					type: 'info',
@@ -236,11 +247,13 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning',
 				// center: true,
-				dangerouslyUseHTMLString: true, // 允许使用 HTML
-				confirmButtonClass: 'redBtn', // 自定义确认按钮的类名
-				cancelButtonClass: 'whiteBtn', // 自定义取消按钮的类名
+				dangerouslyUseHTMLString: true,
+				confirmButtonClass: 'redBtn',
+				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
-				// todo:调用批量删除支部接口
+				deleteBranchByBatch(this.selectedIds).then(res => {
+					this.queryList();
+				})
 			}).catch(() => {
 				this.$message({
 					type: 'info',

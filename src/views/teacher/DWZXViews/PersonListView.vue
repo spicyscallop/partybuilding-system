@@ -285,7 +285,9 @@ export default {
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
 				// 根据id请求删除
-				deleteItem(item.id)
+				deleteItem(item.id).then(res => {
+					this.queryList();
+				})
 			}).catch(() => {
 				this.$message({
 					type: 'info',
