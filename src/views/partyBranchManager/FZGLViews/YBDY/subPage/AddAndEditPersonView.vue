@@ -3,12 +3,12 @@
     <v-col class="d-flex fill-height flex-column">
     <v-row style="height: 60px;">
       <v-col cols="8">
-        <SubpageTitle text="录入活动信息" :width=43 :height=43>
+        <SubpageTitle text="预备党员阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
         </SubpageTitle>
       </v-col>
     </v-row>
-    <!-- 选择对话框 -->
-    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参与人员选择" width="850" height="600"
+    <!-- 入党介绍人选择对话框 -->
+    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
                draggable align-center>
       <div style="margin: 0px 20px;">
         <v-row>
@@ -76,53 +76,103 @@
     </el-dialog>
 
     <!-- 表单内容 -->
-    <v-container style="background-color: #f7f7f7; padding: 10px; border-radius: 20px;">
+    <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
+      <v-col cols="4">
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">学工号</span>
+        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
+      </v-col>
+      <v-col cols="4">
+        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">姓名</span>
+        <el-input v-model="form.userName" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
+      </v-col>
+      <v-col cols="4">
+        <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
+        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;height: 40px;" :disabled="isEdit">
+          <el-option v-for="item in leagueOptions" :key="item.value" :label="item.label" :value="item.value"/>
+        </el-select>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col style="background-color: #f7f7f7; height: 90%;padding: 20px;border-radius: 20px;">
+        <!-- 第一行 -->
         <v-row>
-            <v-col cols="5" class="d-flex flex-row align-center">
-                <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">活动名称</span>
-                <el-input v-model="form.activityName" style="width: 200px;height: 40px;"></el-input>
-            </v-col>
-            <v-col cols="1"></v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;">*</span><span style="margin-right: 10px;">活动级别</span>
-              <el-select v-model="form.activityLevel" placeholder="请选择" size="large" style="width: 200px;height: 40px;">
-                <el-option v-for="item in levelOptions" :key="item.value" :label="item.label" :value="item.value"/>
-              </el-select>
-            </v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">主办单位</span>
-              <el-input v-model="form.activitySponsor" style="width: 200px;height: 40px;"></el-input>
-            </v-col>
-            <v-col cols="1"></v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;">*</span><span style="margin-right: 10px;">活动时间</span>
-              <div>
-                <!-- value-format有点奇怪-->
-                <el-date-picker v-model="form.activityDate" placeholder="选择日期" value-format="YYYY-MM-DD"
-                                 size="large" style="width: 90%;"/>
-              </div>
-            </v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">申请学时</span>
-              <el-input v-model="form.appliedStudyHour" style="width: 200px;height: 40px;"></el-input>
-            </v-col>
-            <v-col cols="1"></v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;">*</span><span style="margin-right: 10px;">参与人员</span>
-              <el-input v-model="form.studentList" placeholder="" @click="openDialog" 
-                        style="width: 200px;height: 40px;"></el-input>
-            </v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">活动图谱</span>
-              <v-btn class="ml-3" color="party-1">选取文件</v-btn>
-            </v-col>
-            <v-col cols="1"></v-col>
-            <v-col cols="5" class="d-flex flex-row align-center">
-              <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">附加文件</span>
-              <v-btn class="ml-3" color="party-1">选取文件</v-btn>
-            </v-col>
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>入党介绍人</span></div>
+            <div>
+              <el-input v-model="form.partySponsor" placeholder="" @click="openDialog" 
+              :disabled="isEdit" style="width: 92%;height: 40px;"></el-input>
+            </div>
+          </v-col>
+          <v-col cols="3" style="padding-left: 30px">
+            <div style="margin-bottom: 5px;"><span>支部委员会审查时间</span></div>
+            <div>
+              <el-date-picker v-model="form.investigateTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                              style="width: 90%;"/>
+            </div>
+          </v-col>
+          <v-col cols="3">
+            <div style="margin-bottom: 5px;"><span>上级党委预审时间</span></div>
+            <div>
+              <el-date-picker v-model="form.preliminaryInvestigateTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              :disabled="isEdit" style="width: 90%;" disabled/>
+            </div>
+          </v-col>
         </v-row>
-    </v-container>
+        <!-- 第二行 -->
+        <v-row>
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>预备党员接收时间（支部大会）</span></div>
+            <div>
+              <el-date-picker v-model="form.branchPrepareTime" type="date" placeholder="系统自动接入" size="large"
+              :disabled="isEdit" style="width: 90%;" />
+            </div>
+          </v-col>
+          <v-col cols="6" style="padding-left: 30px">
+            <div style="margin-bottom: 5px;"><span>《中国共产党入党志愿书》提交时间</span></div>
+            <div>
+              <el-date-picker v-model="form.politicalReviewTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                              style="width: 70%;" />
+              <el-button class="fileButton" >查看文件</el-button>
+            </div>
+          </v-col>
+        </v-row>
+        <!-- 第三行 -->
+        <v-row>
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>党校委派谈话时间</span></div>
+            <div>
+              <el-date-picker v-model="form.committeeTalk" type="date" placeholder="系统自动接入" size="large"
+                              style="width: 90%;" />
+            </div>
+          </v-col>
+          <v-col cols="3" style="padding-left: 30px">
+            <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
+            <div>
+              <el-date-picker v-model="form.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large"
+                              style="width: 90%;"/>
+            </div>
+          </v-col>
+          <v-col cols="3">
+            <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
+            <div>
+              <el-date-picker v-model="form.nextReportTime" type="date" placeholder="系统自动接入" size="large"
+              style="width: 90%;" disabled/>
+            </div>
+          </v-col>
+        </v-row>
+        <!-- 第四行 -->
+        <v-row style="width: 100%;margin-top: 30px;">
+          <v-col cols="6">
+            <div style="margin-bottom: 5px;"><span>党委审批时间</span></div>
+            <div>
+              <el-date-picker v-model="form.examineTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                              style="width: 90%;" />
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
 
     <!-- 底部按钮 -->
     <v-row style="height: 20%;width: 100%;">
@@ -144,8 +194,6 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
-import { addBranchActivity, deleteSelfActivity, getSelfActivityPage, updateSelfActivity } from '@/http/api';
-
 export default {
   components: {
     SubpageTitle,
@@ -153,21 +201,14 @@ export default {
   data() {
     return {
       // 表单数据
-      value12: '',
       form: {},
-      defaultForm: {
-        activityGraph: "string",
-        additionalFile: "string",
-        auditStatus: "已提交"
-      },
+      defaultForm: {},
+      // 团员身份选项
+      leagueOptions: [
+        {value: 1, label: '是'},
+        {value: 0, label: '否'},
+      ],
       placeholder: '请选择',
-      levelOptions: [
-                { label: '院级', value: '院级' },
-                { label: '校级', value: '校级' },
-                { label: '市级', value: '市级' },
-                { label: '省级', value: '省级' },
-                { label: '国家级', value: '国家级' }
-            ],
       // 入党介绍人对话框相关数据
       dialogVisible: false,
       userTypes: [
@@ -197,7 +238,7 @@ export default {
     fetchData() {
       const id = this.$route.params.id;
       if (!id) return;
-      this.$axios.get('/self-activity/get', {params: {id}})
+      this.$axios.get('/stage/get', {params: {id}})
           .then(response => {
             this.form = response.data;
           })
@@ -251,10 +292,10 @@ export default {
       this.userTableBottom.currentPage = page;
       this.queryUserList();
     },
-    // 选择用户
+    // 选择入党介绍人
     chooseUsers() {
       if (this.checkedUsers.length > 0) {
-        this.form.studentList = this.checkedUsers.map(user => user.userName).join(', ');
+        this.form.partySponsor = this.checkedUsers.map(user => user.userName).join(', ');
         this.dialogVisible = false;
       } else {
         this.$message({
@@ -265,21 +306,25 @@ export default {
     },
     onSubmit() {
       const submitData = {...this.form};
+
       if (this.isEdit) {
-        this.$axios.post('/self-activity/update', submitData)
+        this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
-              this.$router.push({name: 'T_SJCZ'});
+              this.$router.push({name: 'T_YBDY'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('更新失败!');
               console.error('更新失败:', error);
             });
       } else {
-        addBranchActivity(submitData)
+        this.$axios.post('/stage/add', {
+          ...submitData,
+          developmentPhase: '预备党员'
+        })
             .then(response => {
               this.$message.success('新增成功!');
-              this.$router.push({name: 'T_SJCZ'});
+              this.$router.push({name: 'T_YBDY'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('新增失败!');
@@ -289,6 +334,14 @@ export default {
     },
     onCancel() {
       this.$router.go(-1);
+    },
+    // 格式化日期
+    formatDate(date) {
+      if (!date) return null;
+      const year = date.getFullYear();
+      const month = ('0' + (date.getMonth() + 1)).slice(-2);
+      const day = ('0' + date.getDate()).slice(-2);
+      return `${year}-${month}-${day}`;
     },
     // ...其他方法
   },
@@ -328,6 +381,13 @@ export default {
   /* 外边框样式 */
   border-radius: 2px;
   /* 可选的，添加圆角 */
+}
+
+.fileButton{
+  margin-left: 30px;
+  height: 40px;
+  background-color: #37A0FF;
+  color: #ffffff;
 }
 
 .el-select {

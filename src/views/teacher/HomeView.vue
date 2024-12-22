@@ -9,7 +9,7 @@
 			<!-- 党委简介、党委荣誉、系统公告 -->
 			<v-row style="flex-basis: 0; overflow: visible;">
 				<v-col class="fill-height d-flex flex-column justify-space-between" cols="9">
-					<!-- 党委简介 -->
+						<!-- 党委简介 -->
 						<v-card
 							class="mx-auto my-2"
 							elevation="5"
@@ -26,7 +26,8 @@
 								<p class="ml-5 mb-4 mr-4" style="line-height: 2;">{{ briefIntroduction }}</p>
 							</div>
 						</v-card>
-					<!-- 党委荣誉 -->
+						
+						<!-- 党委荣誉 -->
 						<v-card
 							class="mx-auto my-2"
 							elevation="5"
@@ -60,76 +61,48 @@
 						width="100%"
 						height="100%"
 					>
-						<v-tabs v-model="tab">
-							<v-tab value="sysAnnouncement">系统公告</v-tab>
-							<v-tab value="learnModel">学习样板</v-tab>
-							<!-- <v-tab value="three">Three</v-tab> -->
+						<v-tabs v-model="tab" @click="handleTabChange">
+							<v-tab value="sysAnnouncement" class="tab-title">系统公告</v-tab>
+							<v-tab value="learnModel" class="tab-title">学习样板</v-tab>
 						</v-tabs>
-						<v-tabs-window v-model="tab">
-							<v-tabs-window-item value="sysAnnouncement">
-								<div class="d-flex justify-space-between align-center mt-4 mb-3">
-									<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-										<v-icon class="icon-item">mdi-bell-outline</v-icon>
-										系统公告
-									</h1>
-									<RouterLink to="/teacher/xtgg" class="mr-3">更多></RouterLink>
-								</div>
+						<v-window v-model="tab">
+							<!-- 系统公告 -->
+							<v-window-item value="sysAnnouncement">
 								<v-list lines="one" class="py-0 pl-1">
-									<v-sheet v-for="(item, index) in xtgg" :key="index">
-										<v-list-item  :title="item.title">
-										<template v-slot:append>
-											<v-label class="ml-5" :text="item.date"></v-label>
-										</template>
+									<v-sheet v-for="(item, index) in xtgg.slice(0, 5)" :key="index">
+										<v-list-item  :title="item.title" @click="goToExternUrl(item.url)">
+											<template v-slot:append>
+												<v-label class="ml-5" :text="item.date"></v-label>
+											</template>
 										</v-list-item>
 										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
 									</v-sheet>
 								</v-list>
-							</v-tabs-window-item>
+								<div style="float: right; margin-top: 10px;">
+									<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
+								</div>
+							</v-window-item>
 
-							<!-- <v-tabs-window-item value="learnModel">
-								<h1>Two</h1>
-							</v-tabs-window-item>
-							<v-tabs-window-item value="three">
-								<h1>Three</h1>
-							</v-tabs-window-item> -->
-						</v-tabs-window>
+							<!-- 学习样板 -->
+							<v-window-item value="learnModel">
+									<v-list lines="one" class="py-0 pl-1">
+										<v-sheet v-for="(item, index) in xxyb.slice(0, 5)" :key="index">
+											<v-list-item  :title="item.title">
+												<template v-slot:append>
+													<v-label class="ml-5" :text="item.date"></v-label>
+												</template>
+											</v-list-item>
+											<v-divider thickness="2" style="border-style: dashed;"></v-divider>
+										</v-sheet>
+									</v-list>
+									<div style="float: right; margin-top: 10px">
+										<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
+									</div>
+							</v-window-item>
+						</v-window>
 					</v-card>
 				</v-col>
 			</v-row>
-			<!-- 这里指明第二个row的高度为70% -->
-			<!-- <v-row style="flex-basis: 0; overflow: visible; height: 65%;" class="d-flex align-start align-stretch justify-space-between">
-			<v-col class="fill-height d-flex flex-column justify-stretch" cols="4" style="height: 100%">
-				<v-card
-				class="mx-auto my-2"
-				elevation="5"
-				width="100%"
-				height="100%"
-				>
-				<v-sheet rounded="lg" class="d-flex flex-column pb-5" style="overflow: auto; width: 100%;">
-					<v-sheet class="d-flex justify-space-between align-center mt-4 mb-3">
-					<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-						<v-icon class="icon-item">mdi-file-outline</v-icon>
-						学习样板
-					</h1>
-					<v-sheet class="mr-3">更多></v-sheet>
-					</v-sheet>
-					<v-list lines="one" class="py-0 pl-1">
-					<v-sheet v-for="(item, index) in xxyb" :key="index">
-						<v-list-item  :title="item.title">
-							<template v-slot:append>
-								<v-label class="ml-5" :text="item.date"></v-label>
-							</template>
-						</v-list-item>
-						<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-					</v-sheet>
-					</v-list>
-				</v-sheet>
-				</v-card>
-			</v-col>
-			
-			<v-col cols="4" class="fill-height d-flex flex-column justify-start">
-			</v-col>
-			</v-row> -->
 
 			<!-- 党委中心 -->
 			<v-row cols="12">
@@ -147,9 +120,10 @@
 								v-for="(item, index) in dwzx" 
 								:key="index" 
 								class="scrollbar-demo-item"
-								width="25%"
-								height="25%"
+								width="23%"
+								height="23%"
 								hover
+								elevation="5"
 							>
 								<v-sheet rounded="lg">
 									<v-card-title>
@@ -159,7 +133,7 @@
 											<v-label>人</v-label>
 										</div>
 										<div style="font-size: 1rem;">{{ item.title }}</div>
-										<div style="font-size: 1rem; color: lightblue">浙江大学软件学院党支部</div>
+										<div style="font-size: 1rem; color: #469bff">浙江大学软件学院党支部</div>
 									</v-card-title>
 								</v-sheet>
 							</v-card>
@@ -186,91 +160,106 @@ let briefIntroduction = ref("计算机科学与技术学院和软件学院党委
 let tab = ref(null)
 
 let xtgg = ref([
-{
-    title: "系统公告",
-    url: "",
-    content: "",
-    date: "2024-09"
-  },
+	{
+		title: "系统公告",
+		url: "",
+		content: "",
+		date: "2024-09"
+	},
 ]);
 
 let xxyb = [
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
-  {
-    title: "学习样板",
-    date: "2024-09",
-  },
-  {
-    title: "学习样板",
-    date: "2024-09"
-  },
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09",
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
+	{
+		title: "学习样板",
+		date: "2024-09"
+	},
 ];
 
 let dwry = [
-  {
-    title: "浙江大学计算机科学与技术学院和软件学院党委入选第三批全省高校党建“双创”培育创建对象",
-    date: "2024-09"
-  },
-  {
-    title: "浙江大学xxxxxxx基地",
-    date: "2024-09",
-  },
-//   {
-//     title: "浙江大学计算机科学与技术学院和软件学院党委",
-//     date: "2024-09"
-//   },
+	{
+		title: "浙江大学计算机科学与技术学院和软件学院党委入选第三批全省高校党建“双创”培育创建对象",
+		date: "2024-09"
+	},
+	{
+		title: "浙江大学xxxxxxx基地",
+		date: "2024-09",
+	},
 ];
 
 let dwzx = ref([]);
 
 onMounted(() => {
-  // 获取党委中心人员数量
+  	// 获取党委中心人员数量
 	getPartyOverview().then(res => {
 		dwzx.value = res.data
-    // console.log(res.data)
 	})
 
-  // 获取系统公告信息
-  getXtggInfo().then(res => {
-      xtgg.value = res.data.records.map(item => ({
-          title: item.title,
-          url: item.url,
-          content: item.content,
-          date: item.createTime.split(' ')[0],
-      }));
-  });
-})
+	// 获取系统公告信息
+	getXtggInfo().then(res => {
+		xtgg.value = res.data.records.map(item => ({
+			title: item.title,
+			url: item.url,
+			content: item.content,
+			date: item.createTime.split(' ')[0],
+		}));
+	});
+});
+
+function handleTabChange(value) {
+	console.log('选项卡切换到: ' + value);
+}
+function goToExternUrl(url) {
+	window.open(url, "_blank");
+}
 
 </script>
 
-
 <style scoped>
 .el-scrollbar__wrap {
-  border-bottom: none !important;
+	border-bottom: none !important;
 }
 .scrollbar-demo-item {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  margin: 10px;
-  text-align: start;
-  border-radius: 4px;
-  color: var(--el-color-danger);
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	margin: 10px;
+	text-align: start;
+	border-radius: 4px;
+	color: var(--el-color-danger);
 }
 
 .icon-item {
-  color: grey
+	color: grey
 }
 
 a {
-  text-decoration: none;
-  color: #000;
+	text-decoration: none;
+	color: #000;
+}
+
+.tab-title {
+	color: red; 
+	font-weight: bold;
+	font-size: 1.2rem
 }
 
 </style>

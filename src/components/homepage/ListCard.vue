@@ -2,10 +2,9 @@
     <v-sheet rounded="lg" class="d-flex flex-column pb-5 bg-grey-lighten-4" style="overflow: auto; width: 100%;">
         <div class="d-flex justify-space-between">
             <h1 class="ml-5 mt-4 mb-3 text-h5">{{ title }}</h1>
-            <v-btn class="mr-0 mt-4 justify-end bg-grey-lighten-4" variant="plain" @click="getMoreNotices">
-                更多
-            <v-icon class="mt-1" icon="mdi-greater-than"></v-icon>
-            </v-btn>
+            <div class="list-card">
+                <RouterLink :to="moreLink" class="mr-3">更多 ></RouterLink>
+            </div>
         </div>
         <v-list lines="one" class="py-0 pl-1 bg-grey-lighten-4 flex-grow-1">
             <v-list-item v-for="item in content" :title="item.title" :subtitle="item.subtitle" @click="goToUrl(item.url)">
@@ -23,6 +22,10 @@
 <script>
 export default {
     props: {
+        moreLink: {
+            type: String,
+            default: "/",
+        },
         list: {
             type: Array,
             default: function () {
@@ -47,14 +50,6 @@ export default {
     methods: {
         goToUrl(url) {
             window.open(url, '_blank');
-        },
-        getMoreNotices(){
-            //TODO: 更多
-            this.$message({
-                        message: '相关页面还未开发',
-                        type: 'warning',
-                        duration: 2000
-                      });
         },
         updateContent() {
             const start = this.index * this.pageSize;

@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
+      path: '/xtgg',
+      name: 'Xtgg', // different from XTGG
+      component: () => import('@/views/teacher/XTGGView.vue'),
+    },
+    {
       path: '/teacher',
       name: 'TeacherMain',
       component: () => import('@/views/layout.vue'),
@@ -21,9 +26,24 @@ const router = createRouter({
         },
         //自主学习
         {
+          path: '/teacher/zzxx/llxx',
+          name: 'T_LLXX',
+          component: () => import('@/views/teacher/LLXXView.vue')
+        },
+        {
           path: '/teacher/zzxx/sjcz',
           name: 'T_SJCZ',
           component: () => import('@/views/teacher/SJCZView.vue')
+        },
+        {
+          path: '/teacher/zzxx/jdbf',
+          name: 'T_JDBF',
+          component: () => import('@/views/teacher/JDBFView.vue')
+        },
+        {
+          path: '/teacher/zzxx/zyfw',
+          name: 'T_ZYFW',
+          component: () => import('@/views/teacher/ZYFWView.vue')
         },
         {
           path: '/teacher/zzxx/sjcz/edit/:id?',
@@ -102,6 +122,16 @@ const router = createRouter({
           path: '/teacher/fzdx/edit-person/:id?',
           name: 'EditPersonViewFZDXT',
           component: () => import('@/views/teacher/FZGLViews/FZDX/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: '/teacher/ybdy/edit-person/:id?',
+          name: 'EditPersonViewYBDYT',
+          component: () => import('@/views/teacher/FZGLViews/YBDY/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: '/teacher/zsdy/edit-person/:id?',
+          name: 'EditPersonViewZSDYT',
+          component: () => import('@/views/teacher/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
         },
         {
           path: '/teacher/dwzx/personlist',
@@ -238,6 +268,16 @@ const router = createRouter({
           path: 'partyManager/fzdx/edit-person/:id?',
           name: 'EditPersonViewFZDXP',
           component: () => import('@/views/partyBranchManager/FZGLViews/FZDX/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: 'partyManager/ybdy/edit-person/:id?',
+          name: 'EditPersonViewYBDYP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/YBDY/subPage/AddAndEditPersonView.vue')
+        },
+        {
+          path: 'partyManager/zsdy/edit-person/:id?',
+          name: 'EditPersonViewZSDYP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
         },
       ]
     },

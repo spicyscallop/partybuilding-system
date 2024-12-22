@@ -50,7 +50,7 @@
           >
             <el-table-column type="selection">
             </el-table-column>
-            <el-table-column v-for="item in columns" v-show="false" :prop="item.prop" :label="item.label" :width="item.width || ''" align="center">
+            <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''" align="center">
               <template v-slot="scope" v-if="item.type === 'date'">
                 {{ formatTime(scope.row[item.prop]) }}
               </template>
