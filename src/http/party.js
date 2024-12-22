@@ -79,3 +79,13 @@ export const addItem = (data) => {
 export const updateItem = (data) => {
     return instance.post("/stage/update", data)
 }
+
+/**
+ * 组织会议概况
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const meetingOverview = () => {
+    return instance.get("/meeting/overview")
+}
