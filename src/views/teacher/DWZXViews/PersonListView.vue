@@ -81,7 +81,7 @@
 			</v-row>
 			<v-row style="background-color: #E9E9E9;">
 				<v-col cols="5">  
-					<el-button class="whiteBtn" style="border-color: #A5A5A5;">批量删除</el-button>
+					<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="deleteBatch">批量删除</el-button>
 				</v-col>
 				<v-col cols="7">
 					<div style="display: inline-block;float: right;">
