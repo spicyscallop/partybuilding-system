@@ -140,7 +140,7 @@ export default {
               children: [
                 { title: '党委概况', link: '/teacher/home' },
                 { title: '党委中心', link: '/teacher/dwzx' },
-                { title: '党委风采', link: '/teacher/' } //TODO
+                { title: '党委风采', link: '/teacher/xxx' } //TODO
               ],
             },
             {
@@ -153,35 +153,35 @@ export default {
                 { title: '发展对象阶段', link: '/teacher/fzgl/fzdx' },
                 { title: '预备党员阶段', link: '/teacher/fzgl/ybdy' },
                 { title: '正式党员阶段', link: '/teacher/fzgl/zsdy' },
-                { title: '活动信息管理', link: '/teacher' }, //TODO
-                { title: '文件模板管理', link: '/teacher' } //TODO
+                { title: '活动信息管理', link: '/teacher/fzgl/hdxx' }, //TODO
+                { title: '文件模板管理', link: '/teacher/fzgl/wjmb' } //TODO
               ],
             },
             {
               title: '组织生活',
               icon: 'mdi-calendar-range',
               children: [
-                { title: '三会一课', link: '/teacher' }, //TODO
-                { title: '理论学习与实践', link: '/teacher' } //TODO
+                { title: '三会一课', link: '/teacher/xxx' }, //TODO
+                { title: '理论学习与实践', link: '/teacher/xxx' } //TODO
               ],
             },
             {
               title: '发布管理',
               icon: 'mdi-calendar-range',
               children: [
-                { title: '自主学习', link: '/teacher' }, //TODO
-                { title: '自主活动', link: '/teacher' }, //TODO
+                { title: '自主学习', link: '/teacher/xxx' }, //TODO
+                { title: '自主活动', link: '/teacher/xxx' }, //TODO
               ],
             },
             {
               title: '支部管理',
               icon: 'mdi-home',
               children: [
-                { title: '档案管理', link: '/teacher' }, //TODO
-                { title: '经费管理', link: '/teacher' }, //TODO
-                { title: '结对帮扶录入', link: '/teacher' }, //TODO
-                { title: '志愿服务录入', link: '/teacher' }, //TODO
-                { title: '荣誉风采录入', link: '/teacher' } //TODO
+                { title: '档案管理', link: '/teacher/xxx' }, //TODO
+                { title: '经费管理', link: '/teacher/xxx' }, //TODO
+                { title: '结对帮扶录入', link: '/teacher/xxx' }, //TODO
+                { title: '志愿服务录入', link: '/teacher/xxx' }, //TODO
+                { title: '荣誉风采录入', link: '/teacher/xxx' } //TODO
               ],
             },
           ];
