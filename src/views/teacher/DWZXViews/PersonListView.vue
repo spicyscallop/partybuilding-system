@@ -81,14 +81,14 @@
 			</v-row>
 			<v-row style="background-color: #E9E9E9;">
 				<v-col cols="5">  
-					<el-button class="whiteBtn" style="border-color: #A5A5A5;">批量删除</el-button>
+					<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="deleteBatch">批量删除</el-button>
 				</v-col>
 				<v-col cols="7">
 					<div style="display: inline-block;float: right;">
 						<div style="display: inline-block;">
 							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-								:current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList" background
-								:page-size="queryItems.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
+								:current-page="queryItems.page.pageNumber" :page-sizes="tableBottom.pageSizeList" background
+								:page-size="queryItems.page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
 							</el-pagination>
 						</div>
 					</div>
@@ -285,7 +285,9 @@ export default {
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
 				// 根据id请求删除
-				deleteItem(item.id)
+				deleteItem(item.id).then(res => {
+					this.queryList();
+				})
 			}).catch(() => {
 				this.$message({
 					type: 'info',
