@@ -161,7 +161,7 @@ export default {
               title: '组织生活',
               icon: 'mdi-calendar-range',
               children: [
-                { title: '三会一课', link: '/teacher/xxx' }, //TODO
+                { title: '三会一课', link: '/teacher/zzsh/shyk' },
                 { title: '理论学习与实践', link: '/teacher/xxx' } //TODO
               ],
             },

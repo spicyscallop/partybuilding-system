@@ -52,7 +52,6 @@
   
   
   <script>
-  import { useRouter } from 'vue-router';
   import SubpageTitle from '@/components/SubpageTitle.vue';
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
