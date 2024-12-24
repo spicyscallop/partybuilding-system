@@ -3,7 +3,7 @@
         <v-col class="d-flex fill-height flex-column">
             <v-row class="d-flex align-center">
                 <v-col cols="12">
-                    <SubpageTitle text="系统公告" width="43" height=43>
+                    <SubpageTitle text="系统公告" :width="43" :height="43">
                     </SubpageTitle>
                 </v-col>
             </v-row>

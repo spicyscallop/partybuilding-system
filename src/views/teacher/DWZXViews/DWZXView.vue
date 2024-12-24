@@ -8,8 +8,8 @@
                 <v-col>
                     <SubpageTitle
                         text="党委中心"
-                        width="43"
-                        height="43"
+                        :width="43"
+                        :height="43"
                     ></SubpageTitle>
                 </v-col>
             </v-row>
