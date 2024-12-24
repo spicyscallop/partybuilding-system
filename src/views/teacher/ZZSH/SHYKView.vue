@@ -309,7 +309,8 @@ const getBarChartOptions = (branch) => {
                     show: true,
                     position: 'top',
                     formatter: (params) => meetingCount[params.dataIndex],
-                    color: '#000',
+                    color: 'red',
+                    fontWeight: "bold",
                     fontSize: 12
                 },
             },
