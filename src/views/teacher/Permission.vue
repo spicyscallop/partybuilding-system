@@ -246,7 +246,7 @@
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue';
   import { getPersonAccessList, updatePersonAccess, deleteItem, addItem, deleteByBatch, downloadTemplate, importUsers } from "@/http/permission.js"
-  import "@/style/Common.css"
+  import "@/style/Common.css";
   
   export default {
 	components: {

@@ -143,6 +143,12 @@ const router = createRouter({
           path: '/teacher/permission',
           name: 'Permission',
           component: () => import('@/views/teacher/Permission.vue')
+        },
+        // 组织生活
+        {
+          path: '/teacher/zzsh/shyk',
+          name: 'SHYK',
+          component: () => import('@/views/teacher/ZZSH/SHYKView.vue')
         }
       ]
     },

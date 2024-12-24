@@ -31,6 +31,46 @@ export const findAllBranches = () => {
 }
 
 /**
+ * 获取所有支部信息（分页）
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const pageBranches = (queryItems) => {
+    return instance.post("/auth/branch/page", queryItems);
+}
+
+/**
+ * 创建新的支部
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addBranch = (data) => {
+    return instance.get("/auth/branch/addBranch", data);
+}
+
+/**
+ * 删除支部
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteBranch = (branchId) => {
+    return instance.delete("/auth/branch/deleteBranch", branchId);
+}
+
+/**
+ * 批量删除支部
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteBranchByBatch = (ids) => {
+    return instance.post("/auth/branch/deleteBranches", ids);
+}
+
+/**
  * 根据发展阶段查询
  * @author 安俊霖
  * @argument 
@@ -78,4 +118,14 @@ export const addItem = (data) => {
  */
 export const updateItem = (data) => {
     return instance.post("/stage/update", data)
+}
+
+/**
+ * 组织会议概况
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const meetingOverview = () => {
+    return instance.get("/meeting/overview")
 }
