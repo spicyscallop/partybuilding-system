@@ -3,7 +3,7 @@
         <v-col class="d-flex flex-column">
             <v-row class="flex-shrink-0 flex-grow-0" style="flex-basis: 0; overflow: visible;">
                 <v-col>
-                    <SubpageTitle text="组织生活" svg="/src/img/风采记录/record.png" width="43" height="43"></SubpageTitle>
+                    <SubpageTitle text="组织生活" svg="/src/img/风采记录/record.png" :width="43" :height="43"></SubpageTitle>
                 </v-col>
             </v-row>
             <v-row><h3>支部组织生活</h3></v-row>
