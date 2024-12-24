@@ -145,7 +145,7 @@
         columns: [
           {
             label: '活动编号',
-            prop: 'id',
+            prop: 'activityNumber',
           },
           {
             label: '活动名称',
@@ -153,11 +153,11 @@
           },
           {
             label: '发展阶段',
-            prop: 'cultivateContacts',
+            prop: 'developmentPhase',
           },
           {
             label: '主办单位',
-            prop: 'thoughtReport',
+            prop: 'activitySponsor',
           },
           {
             label: '活动时间',
@@ -166,7 +166,7 @@
           },
           {
             label: '活动类型',
-            prop: 'talkActivistTime',
+            prop: 'activityType',
           },
           {
             label: '提交文件/申请学时',
@@ -175,7 +175,7 @@
           },
           {
             label: '状态',
-            prop: 'auditStatus',
+            prop: 'state',
           },
           {
             label: '通知内容',
@@ -271,9 +271,10 @@
           developmentPhase:'积极分子'
         };
   
-        this.$axios.get('/auth/branch/getPartyOverview')
+        this.$axios.get('/activities/')
             .then(response => {
-              console.log(response.data);
+              this.tableData = response.data.activities;
+              this.tableBottom.totalNum = response.data.total;
             })
             .catch(error => {
               console.error('请求失败:', error);

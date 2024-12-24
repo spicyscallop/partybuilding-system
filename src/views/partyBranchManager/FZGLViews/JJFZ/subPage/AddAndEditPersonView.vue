@@ -258,6 +258,7 @@ export default {
         },
         userNumber: this.queryItems.userNumber,
         userName: this.queryItems.userName,
+        needTalkActivistPersonName:true
       };
       // 发送请求获取阶段信息列表
       this.$axios.post('/stage/page', data)
@@ -290,10 +291,12 @@ export default {
       this.userTableBottom.currentPage = page;
       this.queryUserList();
     },
-    // 选择入党介绍人
+    // 选择联系培养人
     chooseUsers() {
       if (this.checkedUsers.length > 0) {
         this.form.cultivateContacts = this.checkedUsers.map(user => user.userName).join(', ');
+        this.form.talkActivistPersonId = this.checkedUsers.map(user => user.id);
+        this.form.talkActivistPersonId = JSON.stringify(this.form.talkActivistPersonId)
         this.dialogVisible = false;
       } else {
         this.$message({
@@ -303,6 +306,7 @@ export default {
       }
     },
     onSubmit() {
+      this.form.needTalkActivistPersonName = true
       const submitData = {...this.form};
 
       if (this.isEdit) {
