@@ -269,7 +269,8 @@ export default {
         userName: this.queryItems.name,
         startActivistsSetTime: this.queryItems.applyTime[0] || null,
         endActivistsSetTime: this.queryItems.applyTime[1] || null,
-        developmentPhase:'积极分子'
+        developmentPhase:'积极分子',
+        needTalkActivistPersonName:true
       };
 
       this.$axios.post('/stage/page', data)

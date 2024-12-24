@@ -250,6 +250,7 @@ export default {
         userName: this.queryItems.name,
         startActivistsSetTime: this.queryItems.applyTime[0] || null,
         endActivistsSetTime: this.queryItems.applyTime[1] || null,
+        needTalkActivistPersonName:true,
         developmentPhase:'积极分子'
       };
 
