@@ -378,7 +378,7 @@ export default {
 						type: '批量导入人员表格模板'
 					} 
 				})
-				const blob = new Blob([response.data])
+				const blob = new Blob([response]);
 				const downloadUrl = window.URL.createObjectURL(blob)
 				const link = document.createElement('a')
 				link.href = downloadUrl
