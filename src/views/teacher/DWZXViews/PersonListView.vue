@@ -240,7 +240,6 @@
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
-import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { findByPhase, deleteItem, deleteByBatch, addItem, updateItem } from "@/http/party"
 import "@/style/Common.css"
@@ -249,7 +248,6 @@ export default {
 	components: {
 		SubpageTitle,
 		DropDownBox,
-		AttributeSelection,
 		ArrowDown,
 	},
 	mounted() {
@@ -378,7 +376,7 @@ export default {
 						type: '批量导入人员表格模板'
 					} 
 				})
-				const blob = new Blob([response]);
+				const blob = new Blob([response])
 				const downloadUrl = window.URL.createObjectURL(blob)
 				const link = document.createElement('a')
 				link.href = downloadUrl
