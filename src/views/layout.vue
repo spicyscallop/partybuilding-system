@@ -184,6 +184,11 @@ export default {
                 { title: '荣誉风采录入', link: '/teacher/xxx' } //TODO
               ],
             },
+            {
+              title: '约束告警',
+              icon: 'mdi-calendar',
+              link: '/teacher/reminder/index'
+            }
           ];
       } else {
         // 未知角色，跳转到登录页面

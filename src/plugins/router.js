@@ -149,6 +149,11 @@ const router = createRouter({
           path: '/teacher/zzsh/shyk',
           name: 'SHYK',
           component: () => import('@/views/teacher/ZZSH/SHYKView.vue')
+        },
+        {
+          path: '/teacher/reminder/index',
+          name: 'reminder',
+          component: () => import('@/views/partyBranchManager/Reminder/index.vue')
         }
       ]
     },
@@ -280,6 +285,7 @@ const router = createRouter({
           name: 'EditPersonViewZSDYP',
           component: () => import('@/views/partyBranchManager/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
         },
+
       ]
     },
   ]
