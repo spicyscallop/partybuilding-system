@@ -133,11 +133,6 @@ const router = createRouter({
           name: 'PersonList',
           component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
         },
-        {
-          path: '/teacher/xtgg',
-          name: 'XTGG',
-          component: () => import('@/views/teacher/XTGGView.vue')
-        },
         // 权限管理
         {
           path: '/teacher/permission',
@@ -149,6 +144,12 @@ const router = createRouter({
           path: '/teacher/zzsh/shyk',
           name: 'SHYK',
           component: () => import('@/views/teacher/ZZSH/SHYKView.vue')
+        },
+        // 发布管理
+        {
+          path: '/teacher/xtgg',
+          name: 'XTGG',
+          component: () => import('@/views/teacher/FBGL/XTGGView.vue')
         },
         {
           path: '/teacher/reminder/index',

@@ -169,8 +169,8 @@ export default {
               title: '发布管理',
               icon: 'mdi-calendar-range',
               children: [
-                { title: '自主学习', link: '/teacher/xxx' }, //TODO
-                { title: '自主活动', link: '/teacher/xxx' }, //TODO
+                { title: '系统公告', link: '/teacher/xtgg' },
+                { title: '学习样板', link: '/teacher/xxx' }, //TODO
               ],
             },
             {
