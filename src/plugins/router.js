@@ -109,6 +109,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
         {
+          path: '/teacher/rdsq/edit-person/:id?',
+          name: 'EditPersonViewRDSQT',
+          component: () => import('@/views/teacher/FZGLViews/RDSQ/subPage/AddAndEditPersonView.vue')
+        },
+        {
           path: '/teacher/jjfz/edit-person/:id?',
           name: 'EditPersonViewJJFZT',
           component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
