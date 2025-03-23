@@ -10,11 +10,6 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
-      path: '/xtgg',
-      name: 'Xtgg', // different from XTGG
-      component: () => import('@/views/teacher/XTGGView.vue'),
-    },
-    {
       path: '/teacher',
       name: 'TeacherMain',
       component: () => import('@/views/layout.vue'),
