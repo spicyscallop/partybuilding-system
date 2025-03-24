@@ -159,8 +159,13 @@ const router = createRouter({
         {
           path: '/teacher/reminder/index',
           name: 'reminder',
-          component: () => import('@/views/partyBranchManager/Reminder/index.vue')
-        }
+          component: () => import('@/views/teacher/Reminder/index.vue')
+        },
+        {
+          path: '/teacher/partyMemberRules/index',
+          name: 'partyMemberRules',
+          component: () => import('@/views/teacher/PartyMemberRules/index.vue')
+        },
       ]
     },
     {
