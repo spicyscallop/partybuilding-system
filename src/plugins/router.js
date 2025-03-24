@@ -154,8 +154,13 @@ const router = createRouter({
         {
           path: '/teacher/reminder/index',
           name: 'reminder',
-          component: () => import('@/views/partyBranchManager/Reminder/index.vue')
-        }
+          component: () => import('@/views/teacher/Reminder/index.vue')
+        },
+        {
+          path: '/teacher/partyMemberRules/index',
+          name: 'partyMemberRules',
+          component: () => import('@/views/teacher/PartyMemberRules/index.vue')
+        },
       ]
     },
     {
@@ -265,6 +270,11 @@ const router = createRouter({
           path: '/teacher/message',
           name: 'P_Message',
           component: () => import('@/views/common/MessageView.vue')
+        },
+        {
+          path: '/partyManager/rdsq/edit-person/:id?',
+          name: 'EditPersonViewRDSQP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddAndEditPersonView.vue')
         },
         {
           path: 'partyManager/jjfz/edit-person/:id?',
