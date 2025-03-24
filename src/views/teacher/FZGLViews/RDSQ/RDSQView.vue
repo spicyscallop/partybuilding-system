@@ -148,7 +148,8 @@
           {
             label: '《入党申请人谈话登记表》提交时间',
             prop: 'talkApplicantTime',
-            type: 'date'
+            type: 'date',
+            width: '300'
           },
           {
             label: '团员身份',

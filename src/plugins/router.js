@@ -277,6 +277,11 @@ const router = createRouter({
           component: () => import('@/views/common/MessageView.vue')
         },
         {
+          path: '/partyManager/rdsq/edit-person/:id?',
+          name: 'EditPersonViewRDSQP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddAndEditPersonView.vue')
+        },
+        {
           path: 'partyManager/jjfz/edit-person/:id?',
           name: 'EditPersonViewJJFZP',
           component: () => import('@/views/partyBranchManager/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
