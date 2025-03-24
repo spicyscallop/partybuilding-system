@@ -8,7 +8,7 @@
 			</v-row>
 			<!-- 党委简介、党委荣誉、系统公告 -->
 			<v-row style="flex-basis: 0; overflow: visible;">
-				<v-col class="fill-height d-flex flex-column justify-space-between" cols="9">
+				<v-col class="fill-height d-flex flex-column justify-space-between" cols="12">
 						<!-- 党委简介 -->
 						<v-card
 							class="mx-auto my-2"
@@ -52,55 +52,6 @@
 								</v-sheet>
 							</v-list>
 						</v-card>
-				</v-col>
-				<!-- 系统公告 -->
-				<v-col cols="3" class="fill-height d-flex flex-column justify-space-between" >
-					<v-card
-						class="mx-auto my-2"
-						elevation="5"
-						width="100%"
-						height="100%"
-					>
-						<v-tabs v-model="tab" @click="handleTabChange">
-							<v-tab value="sysAnnouncement" class="tab-title">系统公告</v-tab>
-							<v-tab value="learnModel" class="tab-title">学习样板</v-tab>
-						</v-tabs>
-						<v-window v-model="tab">
-							<!-- 系统公告 -->
-							<v-window-item value="sysAnnouncement">
-								<v-list lines="one" class="py-0 pl-1">
-									<v-sheet v-for="(item, index) in xtgg.slice(0, 5)" :key="index">
-										<v-list-item  :title="item.title" @click="goToExternUrl(item.url)">
-											<template v-slot:append>
-												<v-label class="ml-5" :text="item.date"></v-label>
-											</template>
-										</v-list-item>
-										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-									</v-sheet>
-								</v-list>
-								<div style="float: right; margin-top: 10px;">
-									<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
-								</div>
-							</v-window-item>
-
-							<!-- 学习样板 -->
-							<v-window-item value="learnModel">
-									<v-list lines="one" class="py-0 pl-1">
-										<v-sheet v-for="(item, index) in xxyb.slice(0, 5)" :key="index">
-											<v-list-item  :title="item.title">
-												<template v-slot:append>
-													<v-label class="ml-5" :text="item.date"></v-label>
-												</template>
-											</v-list-item>
-											<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-										</v-sheet>
-									</v-list>
-									<div style="float: right; margin-top: 10px">
-										<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
-									</div>
-							</v-window-item>
-						</v-window>
-					</v-card>
 				</v-col>
 			</v-row>
 
@@ -151,45 +102,9 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import IconParty from '@/components/icons/IconParty.vue';
 import { RouterLink } from "vue-router";
 import { getPartyOverview } from "@/http/party"
-import { getXtggInfo } from "@/http/party"
-
 defineEmits(['drawerToggle']);
 
 let briefIntroduction = ref("计算机科学与技术学院和软件学院党委坚持以习近平新时代中国特色社会主义思想为指导，紧紧围绕立德树人根本任务，在“四个更加”的战略导向下，秉承着“人为本，和为贵，变则通”的学院文化理念，构建完善“开放、开环、联动、包容、共享”的学院治理体系，为建设世界一流的计算机科学与技术学院和软件学院提供坚强的政治保证和组织保证。");
-
-let tab = ref(null)
-
-let xtgg = ref([
-	{
-		title: "系统公告",
-		url: "",
-		content: "",
-		date: "2024-09"
-	},
-]);
-
-let xxyb = [
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09",
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-];
 
 let dwry = [
 	{
@@ -209,24 +124,7 @@ onMounted(() => {
 	getPartyOverview().then(res => {
 		dwzx.value = res.data
 	})
-
-	// 获取系统公告信息
-	getXtggInfo().then(res => {
-		xtgg.value = res.data.records.map(item => ({
-			title: item.title,
-			url: item.url,
-			content: item.content,
-			date: item.createTime.split(' ')[0],
-		}));
-	});
 });
-
-function handleTabChange(value) {
-	console.log('选项卡切换到: ' + value);
-}
-function goToExternUrl(url) {
-	window.open(url, "_blank");
-}
 
 </script>
 
