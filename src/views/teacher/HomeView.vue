@@ -1,108 +1,62 @@
 <template>
 	<v-container fluid class="ma-0">
 		<v-col style="height: 100%" class="d-flex flex-column justify-start">
-			<v-row class="flex-shrink-0 flex-grow-0" style="flex-basis: 0; overflow: visible;">
-				<v-col>
-					<SubpageTitle text="党委概况" icon="mdi-home" @drawerToggle="$emit('drawerToggle')"></SubpageTitle>
-				</v-col>
-			</v-row>
-			<!-- 党委简介、党委荣誉、系统公告 -->
-			<v-row style="flex-basis: 0; overflow: visible;">
-				<v-col class="fill-height d-flex flex-column justify-space-between" cols="9">
-						<!-- 党委简介 -->
-						<v-card
-							class="mx-auto my-2"
-							elevation="5"
-							width="100%"
-							height="100%"
-							>
-							<div class="d-flex">
-								<h1 class="ml-5 mt-4 mb-3 text-h5" style="color: red; font-weight:bold;">
-									<v-icon class="icon-item">mdi-text-box-check-outline</v-icon>
-									党委简介
-								</h1>
-							</div>
-							<div class="d-flex">
-								<p class="ml-5 mb-4 mr-4" style="line-height: 2;">{{ briefIntroduction }}</p>
-							</div>
-						</v-card>
-						
-						<!-- 党委荣誉 -->
-						<v-card
-							class="mx-auto my-2"
-							elevation="5"
-							width="100%"
-							height="100%"
-							>
-							<div class="d-flex justify-space-between align-center mt-4 mb-3">
-								<h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
-									<v-icon class="icon-item">mdi-seal-variant</v-icon>
-									党委荣誉
-								</h1>
-								<div class="mr-3">更多></div>
-							</div>
-							<v-list lines="one" class="py-0 pl-1">
-								<v-sheet v-for="(item, index) in dwry" :key="index">
-									<v-list-item  :title="item.title">
-										<template v-slot:append>
-											<v-label class="ml-5" :text="item.date"></v-label>
-										</template>
-									</v-list-item>
-									<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-								</v-sheet>
-							</v-list>
-						</v-card>
-				</v-col>
-				<!-- 系统公告 -->
-				<v-col cols="3" class="fill-height d-flex flex-column justify-space-between" >
-					<v-card
-						class="mx-auto my-2"
-						elevation="5"
-						width="100%"
-						height="100%"
-					>
-						<v-tabs v-model="tab" @click="handleTabChange">
-							<v-tab value="sysAnnouncement" class="tab-title">系统公告</v-tab>
-							<v-tab value="learnModel" class="tab-title">学习样板</v-tab>
-						</v-tabs>
-						<v-window v-model="tab">
-							<!-- 系统公告 -->
-							<v-window-item value="sysAnnouncement">
-								<v-list lines="one" class="py-0 pl-1">
-									<v-sheet v-for="(item, index) in xtgg.slice(0, 5)" :key="index">
-										<v-list-item  :title="item.title" @click="goToExternUrl(item.url)">
-											<template v-slot:append>
-												<v-label class="ml-5" :text="item.date"></v-label>
-											</template>
-										</v-list-item>
-										<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-									</v-sheet>
-								</v-list>
-								<div style="float: right; margin-top: 10px;">
-									<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
-								</div>
-							</v-window-item>
+<v-row class="flex-shrink-0 flex-grow-0" style="flex-basis: 0; overflow: visible;">
+  <v-col class="d-flex justify-space-between align-center">
+    <SubpageTitle text="党委概况" icon="mdi-home" @drawerToggle="$emit('drawerToggle')"></SubpageTitle>
+    <RouterLink to="/teacher/edit-overview" class="edit-link mr-5">
+      <v-icon small class="mr-1">mdi-pencil</v-icon>
+      编辑党委概况
+    </RouterLink>
+  </v-col>
+</v-row>
 
-							<!-- 学习样板 -->
-							<v-window-item value="learnModel">
-									<v-list lines="one" class="py-0 pl-1">
-										<v-sheet v-for="(item, index) in xxyb.slice(0, 5)" :key="index">
-											<v-list-item  :title="item.title">
-												<template v-slot:append>
-													<v-label class="ml-5" :text="item.date"></v-label>
-												</template>
-											</v-list-item>
-											<v-divider thickness="2" style="border-style: dashed;"></v-divider>
-										</v-sheet>
-									</v-list>
-									<div style="float: right; margin-top: 10px">
-										<RouterLink to="/teacher/xtgg" class="mr-3">查看更多></RouterLink>
-									</div>
-							</v-window-item>
-						</v-window>
-					</v-card>
-				</v-col>
-			</v-row>
+<!-- 党委简介、党委荣誉、系统公告 -->
+<v-row style="flex-basis: 0; overflow: visible;">
+  <v-col class="fill-height d-flex flex-column justify-space-between" cols="12">
+    <!-- 党委简介 -->
+    <v-card
+      class="mx-auto my-2"
+      elevation="5"
+      width="100%"
+    >
+      <div class="d-flex">
+        <h1 class="ml-5 mt-4 mb-3 text-h5" style="color: red; font-weight:bold;">
+          <v-icon class="icon-item">mdi-text-box-check-outline</v-icon>
+          党委简介
+        </h1>
+      </div>
+      <div class="d-flex">
+        <p class="ml-5 mb-4 mr-4" style="line-height: 2;">{{ briefIntroduction }}</p>
+      </div>
+    </v-card>
+    
+    <!-- 党委荣誉 -->
+    <v-card
+      class="mx-auto my-2"
+      elevation="5"
+      width="100%"
+    >
+      <div class="d-flex justify-space-between align-center mt-4 mb-3">
+        <h1 class="ml-5 text-h5" style="color: red; font-weight:bold;">
+          <v-icon class="icon-item">mdi-seal-variant</v-icon>
+          党委荣誉
+        </h1>
+        <div class="mr-3">更多></div>
+      </div>
+      <v-list lines="one" class="py-0 pl-1">
+        <v-sheet v-for="(item, index) in dwry" :key="index">
+          <v-list-item :title="item.title">
+            <template v-slot:append>
+              <v-label class="ml-5" :text="item.date"></v-label>
+            </template>
+          </v-list-item>
+          <v-divider thickness="2" style="border-style: dashed;"></v-divider>
+        </v-sheet>
+      </v-list>
+    </v-card>
+  </v-col>
+</v-row>
 
 			<!-- 党委中心 -->
 			<v-row cols="12">

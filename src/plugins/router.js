@@ -24,6 +24,12 @@ const router = createRouter({
           name: 'TeacherHome',
           component: () => import('@/views/teacher/HomeView.vue')
         },
+        // 编辑党委概况 
+        {
+          path: '/teacher/edit-overview',
+          name: 'EditOverview',
+          component: () => import('@/views/teacher/EditOverview.vue')
+        },
         //自主学习
         {
           path: '/teacher/zzxx/llxx',
@@ -50,6 +56,7 @@ const router = createRouter({
           name: 'EditSJCZT',
           component: () => import('@/views/teacher/AddAndEditActivityView.vue')
         },
+        
         // 发展阶段
         {
           path: '/teacher/fzgl/rdsq',
@@ -107,6 +114,12 @@ const router = createRouter({
           path: '/teacher/dwzx/branchlist',
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
+        },
+        // 党委中心
+        {
+          path: '/teacher/dwfc',
+          name: 'DWFC',
+          component: () => import('@/views/teacher/DWFCViews/DWFCView.vue')
         },
         {
           path: '/teacher/jjfz/edit-person/:id?',

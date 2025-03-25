@@ -140,7 +140,7 @@ export default {
               children: [
                 { title: '党委概况', link: '/teacher/home' },
                 { title: '党委中心', link: '/teacher/dwzx' },
-                { title: '党委风采', link: '/teacher/xxx' } //TODO
+                { title: '党委风采', link: '/teacher/dwfc' } //TODO
               ],
             },
             {
