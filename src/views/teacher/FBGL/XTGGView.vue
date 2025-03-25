@@ -242,8 +242,8 @@
             addAndEditDialogVisible: false,
             watchDialogVisible: false,
             tableKey: 0,
-            isEdit: false, // 新增还是编辑的标识
-            currentRowId: null, // 当前编辑行的 ID
+            isEdit: false,
+            currentRowId: "",
             tableBottom: {
                 totalNum: 0,
                 pageSizeList: [5, 10, 20, 30, 40]
@@ -257,6 +257,7 @@
                 page: {
                     pageNumber: 1,
                     pageSize: 10,
+                    searchCount: true
                 }
             },
             xtgg: [],
@@ -325,8 +326,6 @@
                 if (newVal && newVal.length === 2) {
                     this.queryItems.startCreateTime = this.formatDateToYMD(newVal[0]);
                     this.queryItems.endCreateTime = this.formatDateToYMD(newVal[1]);
-                    // console.log('开始日期:', this.queryItems.startCreateTime);
-                    // console.log('结束日期:', this.queryItems.endCreateTime);
                 } else {
                     this.queryItems.startCreateTime = '';
                     this.queryItems.endCreateTime = '';
@@ -408,7 +407,7 @@
             this.form.institution = "";
             this.form.content = "";
             this.form.url = "";
-            this.currentRowId = null;
+            this.currentRowId = "";
             this.isEdit = false;
         },
         // 点击新增按钮
