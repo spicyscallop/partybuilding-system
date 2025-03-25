@@ -87,7 +87,7 @@
 					<div style="display: inline-block;float: right;">
 						<div style="display: inline-block;">
 							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-								:current-page="tableBottom.currentPage" :page-sizes="tableBottom.pageSizeList" background
+								:current-page="queryItems.page.pageNumber" :page-sizes="tableBottom.pageSizeList" background
 								:page-size="queryItems.page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableBottom.totalNum">
 							</el-pagination>
 						</div>
@@ -274,7 +274,7 @@
 				role: "",
 				userNumber: "",
 				page: {
-					pageNumber: 0,
+					pageNumber: 1,
 					pageSize: 10,
 				}
 			},

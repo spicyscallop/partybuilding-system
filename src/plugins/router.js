@@ -10,11 +10,6 @@ const router = createRouter({
       component: () => import('@/views/common/LoginView/LoginView.vue')
     },
     {
-      path: '/xtgg',
-      name: 'Xtgg', // different from XTGG
-      component: () => import('@/views/teacher/XTGGView.vue'),
-    },
-    {
       path: '/teacher',
       name: 'TeacherMain',
       component: () => import('@/views/layout.vue'),
@@ -122,6 +117,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/DWFCViews/DWFCView.vue')
         },
         {
+          path: '/teacher/rdsq/edit-person/:id?',
+          name: 'EditPersonViewRDSQT',
+          component: () => import('@/views/teacher/FZGLViews/RDSQ/subPage/AddAndEditPersonView.vue')
+        },
+        {
           path: '/teacher/jjfz/edit-person/:id?',
           name: 'EditPersonViewJJFZT',
           component: () => import('@/views/teacher/FZGLViews/JJFZ/subPage/AddAndEditPersonView.vue')
@@ -167,8 +167,13 @@ const router = createRouter({
         {
           path: '/teacher/reminder/index',
           name: 'reminder',
-          component: () => import('@/views/partyBranchManager/Reminder/index.vue')
-        }
+          component: () => import('@/views/teacher/Reminder/index.vue')
+        },
+        {
+          path: '/teacher/partyMemberRules/index',
+          name: 'partyMemberRules',
+          component: () => import('@/views/teacher/PartyMemberRules/index.vue')
+        },
       ]
     },
     {
@@ -278,6 +283,11 @@ const router = createRouter({
           path: '/teacher/message',
           name: 'P_Message',
           component: () => import('@/views/common/MessageView.vue')
+        },
+        {
+          path: '/partyManager/rdsq/edit-person/:id?',
+          name: 'EditPersonViewRDSQP',
+          component: () => import('@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddAndEditPersonView.vue')
         },
         {
           path: 'partyManager/jjfz/edit-person/:id?',

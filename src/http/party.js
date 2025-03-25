@@ -16,8 +16,42 @@ export const getPartyOverview = () => {
  * @argument 
  * @returns
  */
-export const getXtggInfo = () => {
-    return instance.get("/systemMessages/page")
+export const getXtggInfo = (queryItems) => {
+    return instance.post("/systemMessages/page", queryItems)
+}
+
+/**
+ * 添加系统公告
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addXtggItem = (xtggItem) => {
+    return instance.post("/systemMessages/add", xtggItem)
+}
+
+/**
+ * 删除系统公告
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteXtggItem = (idList) => {
+    return instance.delete("/systemMessages/", {
+        params: {
+            idList
+        }
+    })
+}
+
+/**
+ * 修改系统公告
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const editXtggItem = (xtggItem) => {
+    return instance.put("/systemMessages/", xtggItem)
 }
 
 /**

@@ -188,7 +188,12 @@ export default {
               title: '约束告警',
               icon: 'mdi-calendar',
               link: '/teacher/reminder/index'
-            }
+            },
+            {
+              title: '系统设置',
+              icon: 'mdi-calendar',
+              link: '/teacher/partyMemberRules/index'
+            },
           ];
       } else {
         // 未知角色，跳转到登录页面

@@ -3,23 +3,11 @@
     <v-col class="d-flex fill-height flex-column">
     <v-row style="height: 60px;">
       <v-col cols="8">
-        <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+        <SubpageTitle text="入党申请人阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
         </SubpageTitle>
       </v-col>
-      <v-col cols="4">
-          <el-select placeholder="支部选择" size="large" disabled
-              style="width: 200px;float: right;">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-          <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
-                  style="">支部选择</span>
-          </div>
-          <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
-              style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
-      </v-col>
     </v-row>
-    <!-- 入党介绍人选择对话框 -->
-    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;培养联系人选择" width="850" height="600"
+    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;谈话人选择" width="850" height="600"
                draggable align-center>
       <div style="margin: 0px 20px;">
         <v-row>
@@ -109,58 +97,28 @@
         <!-- 第一行 -->
         <v-row>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
+            <div style="margin-bottom: 5px;"><span>谈话人</span></div>
             <div>
-              <el-date-picker v-model="form.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
+              <el-input v-model="form.talker" placeholder="" @click="openDialog" 
+              :disabled="isEdit" style="width: 92%;height: 40px;"></el-input>
             </div>
           </v-col>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
+            <div style="margin-bottom: 5px;"><span>《入党申请书》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
+              <el-date-picker v-model="form.partyApplicationTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                              style="width: 70%;"/>
+              <el-button class="fileButton" >查看文件</el-button>
             </div>
           </v-col>
         </v-row>
         <!-- 第二行 -->
         <v-row>
           <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子确认时间</span></div>
+            <div style="margin-bottom: 5px;"><span>《入党申请人谈话登记表》提交时间</span></div>
             <div>
-              <el-date-picker v-model="form.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+              <el-date-picker v-model="form.talkApplicantTime" type="date" placeholder="yyyy-mm-dd" size="large"
                               style="width: 90%;" />
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
-            <div>
-              <el-date-picker v-model="form.activistPartyTraining" type="date" placeholder="系统自动接入" size="large"
-                              style="width: 90%;" />
-            </div>
-          </v-col>
-        </v-row>
-        <!-- 第三行 -->
-        <v-row style="width: 100%;margin-top: 30px;">
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
-            <div>
-              <el-input v-model="form.cultivateContacts" placeholder="" @click="openDialog" 
-                        style="width: 92%;height: 40px;"></el-input>
-            </div>
-          </v-col>
-          <v-col cols="3" style="padding-left: 30px">
-            <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
-            <div>
-              <el-date-picker v-model="form.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
-            </div>
-          </v-col>
-          <v-col cols="3">
-            <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
-            <div>
-              <el-date-picker v-model="form.nextReportTime" type="date" placeholder="系统自动接入" size="large"
-                              style="width: 90%;" disabled/>
             </div>
           </v-col>
         </v-row>
@@ -179,6 +137,14 @@
                    @click="onSubmit">
           {{ isEdit ? '保存' : '新增' }}
         </el-button>
+        <el-select size="large" disabled v-model="selectedStage" placeholder="更改发展阶段" style="width: 200px;margin-left: 20px; height: 36px;float: right;">
+          <el-option
+            v-for="item in stageOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </v-col>
     </v-row>
     </v-col>
@@ -201,11 +167,6 @@ export default {
         {value: 1, label: '是'},
         {value: 0, label: '否'},
       ],
-      options:[
-        { label: '第一党支部', value: '第一党支部' },
-        { label: '第二党支部', value: '第二党支部' },
-        { label: '第三党支部', value: '第三党支部' },
-        { label: '第四党支部', value: '第四党支部' }],
       placeholder: '请选择',
       // 入党介绍人对话框相关数据
       dialogVisible: false,
@@ -226,6 +187,14 @@ export default {
       },
       checkedUsers: [],
       isEdit: false,
+      stageOptions: [
+        { value: '入党申请人', label: '入党申请人' },
+        { value: '入党积极分子', label: '入党积极分子' },
+        { value: '发展对象', label: '发展对象' },
+        { value: '预备党员', label: '预备党员' },
+        { value: '正式党员', label: '正式党员' }
+      ],
+      selectedStage: '',
     };
   },
   methods: {
@@ -308,12 +277,14 @@ export default {
     onSubmit() {
       this.form.needTalkActivistPersonName = true
       const submitData = {...this.form};
-
+      if (this.selectedStage){
+        this.form.developmentPhase = this.selectedStage
+      }
       if (this.isEdit) {
         this.$axios.post('/stage/update', submitData)
             .then(response => {
               this.$message.success('更新成功!');
-              this.$router.push({name: 'P_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'T_RDSQ'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('更新失败!');
@@ -322,11 +293,11 @@ export default {
       } else {
         this.$axios.post('/stage/add', {
           ...submitData,
-          developmentPhase: '积极分子'
+          developmentPhase: '入党申请人'
         })
             .then(response => {
               this.$message.success('新增成功!');
-              this.$router.push({name: 'P_JJFZ'}); // 替换为您的列表页面路由名称
+              this.$router.push({name: 'T_RDSQ'}); // 替换为您的列表页面路由名称
             })
             .catch(error => {
               this.$message.error('新增失败!');
@@ -383,6 +354,13 @@ export default {
   /* 外边框样式 */
   border-radius: 2px;
   /* 可选的，添加圆角 */
+}
+
+.fileButton{
+  margin-left: 30px;
+  height: 40px;
+  background-color: #37A0FF;
+  color: #ffffff;
 }
 
 .el-select {

@@ -105,45 +105,9 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import IconParty from '@/components/icons/IconParty.vue';
 import { RouterLink } from "vue-router";
 import { getPartyOverview } from "@/http/party"
-import { getXtggInfo } from "@/http/party"
-
 defineEmits(['drawerToggle']);
 
 let briefIntroduction = ref("计算机科学与技术学院和软件学院党委坚持以习近平新时代中国特色社会主义思想为指导，紧紧围绕立德树人根本任务，在“四个更加”的战略导向下，秉承着“人为本，和为贵，变则通”的学院文化理念，构建完善“开放、开环、联动、包容、共享”的学院治理体系，为建设世界一流的计算机科学与技术学院和软件学院提供坚强的政治保证和组织保证。");
-
-let tab = ref(null)
-
-let xtgg = ref([
-	{
-		title: "系统公告",
-		url: "",
-		content: "",
-		date: "2024-09"
-	},
-]);
-
-let xxyb = [
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09",
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-	{
-		title: "学习样板",
-		date: "2024-09"
-	},
-];
 
 let dwry = [
 	{
@@ -163,24 +127,7 @@ onMounted(() => {
 	getPartyOverview().then(res => {
 		dwzx.value = res.data
 	})
-
-	// 获取系统公告信息
-	getXtggInfo().then(res => {
-		xtgg.value = res.data.records.map(item => ({
-			title: item.title,
-			url: item.url,
-			content: item.content,
-			date: item.createTime.split(' ')[0],
-		}));
-	});
 });
-
-function handleTabChange(value) {
-	console.log('选项卡切换到: ' + value);
-}
-function goToExternUrl(url) {
-	window.open(url, "_blank");
-}
 
 </script>
 
