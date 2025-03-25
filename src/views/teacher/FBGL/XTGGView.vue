@@ -103,7 +103,7 @@
                 <el-table-column label="操作" width="150">
                     <template #default="{ row }">
                     <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-                    <el-button type="text" style="color: red;" @click="handleDelete(row)">删除</el-button>
+                    <el-button type="text" style="color: red;" @click="handleDelete(row.id)">删除</el-button>
                     </template>
                 </el-table-column>
                 </el-table>
@@ -459,7 +459,7 @@
                 }
             });
         },
-        handleDelete(val) {
+        handleDelete(id) {
             this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -469,7 +469,13 @@
 				confirmButtonClass: 'redBtn',
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
-				deleteXtggItem([val.id])
+				deleteXtggItem(id).then(res => {
+                    this.queryList();
+                    this.$message.success("删除成功")
+                }).catch(err => {
+                    this.$message.error("删除失败")
+                    console.log(err)
+                })
 			}).catch(() => {
 				this.$message({
 					type: 'info',
@@ -483,21 +489,51 @@
                 return;
             }
             this.$confirm('此操作将永久删除这些记录, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning',
-				// center: true,
-				dangerouslyUseHTMLString: true,
-				confirmButtonClass: 'redBtn',
-				cancelButtonClass: 'whiteBtn',
-			}).then(() => {
-				deleteXtggItem(this.selectedIds)
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				});
-			});
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                confirmButtonClass: 'redBtn',
+                cancelButtonClass: 'whiteBtn',
+            }).then(() => {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '正在删除，请稍候...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                });
+
+                const deletePromises = this.selectedIds.map(id =>
+                    deleteXtggItem(id).catch(err => {
+                        return { id, error: err };
+                    })
+                );
+
+                Promise.all(deletePromises).then(results => {
+                    loading.close();
+                    const failedResults = results.filter(result => result && result.error);
+                    const successCount = this.selectedIds.length - failedResults.length;
+                    const failedCount = failedResults.length;
+
+                    this.queryList();
+                    this.selectedIds = [];
+
+                    if (failedCount === 0) {
+                        this.$message.success(`成功删除 ${successCount} 条记录`);
+                    } else {
+                        this.$message.warning(`成功删除 ${successCount} 条记录，失败 ${failedCount} 条`);
+                        console.error("删除失败的记录:", failedResults);
+                    }
+                    }).catch(err => {
+                        loading.close();
+                        this.$message.error("删除过程中发生错误，请稍后重试");
+                        console.error(err);
+                    });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除',
+                });
+            });
         }
     },
   }

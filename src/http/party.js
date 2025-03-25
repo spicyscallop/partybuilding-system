@@ -37,11 +37,15 @@ export const addXtggItem = (xtggItem) => {
  * @returns
  */
 export const deleteXtggItem = (idList) => {
-    return instance.delete("/systemMessages/", idList)
+    return instance.delete("/systemMessages/", {
+        params: {
+            idList
+        }
+    })
 }
 
 /**
- * 修改一条系统公告
+ * 修改系统公告
  * @author 安俊霖
  * @argument 
  * @returns
