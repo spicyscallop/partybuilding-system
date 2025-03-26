@@ -123,12 +123,12 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-row v-if="goTo.visiblePersonView" class="fill-height">
+            <!-- <v-row v-if="goTo.visiblePersonView" class="fill-height">
                 <AddPersonView v-if="goTo.subPage==0" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </AddPersonView>
                 <EditPersonView v-if="goTo.subPage==1" @backMainPage="backMainPage" :pageType="goTo.pageType" :formData="goTo.data">
                 </EditPersonView>
-            </v-row>
+            </v-row> -->
         </v-col>
     </v-container>
 </template>
@@ -137,8 +137,8 @@
 import { ref } from 'vue';
 import SubpageTitle from '@/components/SubpageTitle.vue'
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
-import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddPersonView.vue'
-import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
+// import AddPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/AddPersonView.vue'
+// import EditPersonView from '@/views/partyBranchManager/FZGLViews/RDSQ/subPage/EditPersonView.vue'
 import { ElMessage } from 'element-plus'
 
 //页面显示变量
@@ -302,19 +302,19 @@ const showAllPersonView = () => {
     alert('To be implemented.')
 }
 
-const goToAddPersonView = () => {
-    goTo.value.pageType = "Add"
-    goTo.value.data = {
-        userId: '',
-        name: '',
-        isParty: '',
-        talkerName: '',
-        applyTime: '',
-        submitTime: ''
-    }
-    goTo.value.subPage = 0
-    goTo.value.visiblePersonView = true;
-};
+// const goToAddPersonView = () => {
+//     goTo.value.pageType = "Add"
+//     goTo.value.data = {
+//         userId: '',
+//         name: '',
+//         isParty: '',
+//         talkerName: '',
+//         applyTime: '',
+//         submitTime: ''
+//     }
+//     goTo.value.subPage = 0
+//     goTo.value.visiblePersonView = true;
+// };
 
 const goToEditPage = () => {
     if (selectStus.value.length != 1) {
