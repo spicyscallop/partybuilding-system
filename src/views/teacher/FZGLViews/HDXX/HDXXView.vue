@@ -70,13 +70,19 @@
           </v-col>
         </v-row>
       </v-col>
-      <BatchManagePhaseDialog
+      <AddActivitiyDialog
           v-model="batchDialogVisible"
           :value="batchDialogVisible"
           developmentPhase="积极分子"
           @refreshList="queryList"
-          @cancalList="closeDialog">
-      </BatchManagePhaseDialog>
+          @cancalList="closeDialog"
+          @changeDialog="changeDialog">
+      </AddActivitiyDialog>
+      <NoticeEditDialog
+          v-model="noticeDialogVisible"
+          :value="noticeDialogVisible"
+          @changeDialog="changeDialog">
+      </NoticeEditDialog>
     </v-container>
   </template>
   
@@ -84,14 +90,16 @@
   import SubpageTitle from '@/components/SubpageTitle.vue';
   import DropDownBox from '@/components/dropDown/DropDownBox.vue';
   import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
-  import BatchManagePhaseDialog from '@/components/dialog/BatchManagePhaseDialog.vue';
+  import AddActivitiyDialog from '@/components/dialog/AddActivitiyDialog.vue';
+  import NoticeEditDialog from '@/components/dialog/NoticeEditDialog.vue';
   
   export default {
     components: {
       SubpageTitle,
       DropDownBox,
       AttributeSelection,
-      BatchManagePhaseDialog
+      AddActivitiyDialog,
+      NoticeEditDialog
     },
     data() {
       return {
@@ -187,6 +195,7 @@
           },
         ],
         batchDialogVisible: false,
+        noticeDialogVisible: false,
         selectedRows: [],
       };
     },
@@ -297,6 +306,10 @@
         this.tableBottom.currentPage = page;
         this.queryList();
       },
+      changeDialog(){
+        this.batchDialogVisible = !this.batchDialogVisible
+        this.noticeDialogVisible = !this.batchDialogVisible
+      }
     },
     mounted() {
       this.queryList();
