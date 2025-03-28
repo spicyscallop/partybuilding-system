@@ -340,11 +340,19 @@ export default {
 		submit() {
 			if (this.dialogTitle === "添加人员信息") {
 				addItem(this.form).then(res => {
-					
+					if(res.code == 200){
+						this.$message.success("添加成功")
+						this.dialogVisible = false
+						this.queryList()
+					}
 				})
 			} else if (this.dialogTitle === "编辑人员信息") {
 				updateItem(this.form).then(res => {
-					console.log("update ", this.form);
+					if(res.code == 200){
+						this.$message.success("添加成功")
+						this.dialogVisible = false
+						this.queryList()
+					}
 				})
 			}
 		},
@@ -360,7 +368,7 @@ export default {
 			this.dialogTitle = "添加人员信息";
 			Object.keys(this.form).forEach(key => { this.form[key] = "" })
 			this.form.developmentPhase = this.queryItems.developmentPhase;
-
+	
 			this.dialogVisible = true;
 		},
 		batchInput() {
