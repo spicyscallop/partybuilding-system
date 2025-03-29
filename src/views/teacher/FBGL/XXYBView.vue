@@ -242,7 +242,8 @@
                     pageNumber: 1,
                     pageSize: 10,
                     searchCount: true
-                }
+                },
+                isStudyExample: true,
             },
             xtgg: [],
             form: {
@@ -251,6 +252,7 @@
                 type: "",
                 content: "",
                 url: "",
+                isStudyExample: true,
             },
             currentContent: "",
             rules: {
@@ -264,10 +266,8 @@
                 { label: '支部书记', value: '支部书记' },
             ],
             typeOptions: [
-                { label: '推优活动', value: '推优活动' },
-                { label: '思想汇报', value: '思想汇报' },
-                { label: '培训活动', value: '培训活动' },
-                { label: '其他活动', value: '其他活动' },
+                { label: '优秀事迹', value: '优秀事迹' },
+                { label: '先进支部建设', value: '先进支部建设' },
             ],
             pickerOptions: {
                 shortcuts: [{
