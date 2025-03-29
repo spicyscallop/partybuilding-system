@@ -64,7 +64,8 @@
 import ListCard from '@/components/homepage/ListCard.vue';
 import ShowCase from '@/components/homepage/ShowCase.vue';
 import ImageCode from '@/components/ImageCode.vue';
-import { userLogin,getCaptcha,getXtgg } from '@/http/api';
+import { userLogin,getCaptcha } from '@/http/api';
+import { getXtggInfo } from "@/http/party"
 import { login } from '@/utils/auth';
 export default {
   components: {
@@ -153,7 +154,13 @@ export default {
       })
     },
     getXtggV(){
-      getXtgg().then(response => {
+      getXtggInfo(
+        {
+          page: {
+            searchCount: true
+          }
+        }
+      ).then(response => {
         if (response.success) {
           // 提取数据并格式化后存入 xtgg
           this.xtgg = response.data.records.map(record => ({
