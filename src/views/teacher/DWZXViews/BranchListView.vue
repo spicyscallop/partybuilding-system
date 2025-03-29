@@ -32,10 +32,14 @@
             <v-row class="d-flex flex-column h-100">
                 <!-- 设置一个占满剩余空间的 div -->
                 <div class="flex-grow-1 overflow-auto">
-                    <el-table ref="multipleTable" :data="tableData" max-height="80vh"
+                    <el-table 
+						ref="multipleTable" 
+						:data="tableData" 
+						max-height="80vh"
                         @selection-change="handleSelectionChange"
                         style="border-radius: 15px;background-color: #F7F7F7;"
-                        :header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle">
+                        :header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle"
+					>
                         <!-- 表格列定义 -->
                         <el-table-column type="selection" width="55">
                         </el-table-column>
@@ -74,7 +78,7 @@
             </v-row>
         </v-col>
         <el-dialog
-			:title="dialogTitle"
+			:title="isEdit ? '编辑支部' : '添加支部'"
 			v-model="dialogVisible"
 			width="50%">
 			<el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
@@ -94,7 +98,7 @@
 				</el-row>
 			</el-form>
 			<template #footer>
-				<el-button type="primary" @click="submit()" class="redBtn">确 定</el-button>
+				<el-button @click="submit" class="redBtn">确 定</el-button>
 				<el-button @click="dialogVisible = false">取 消</el-button>
 			</template>
 		</el-dialog>
@@ -104,7 +108,7 @@
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { pageBranches, deleteBranch, deleteBranchByBatch, addBranch } from "@/http/party.js"
+import { pageBranches, deleteBranch, deleteBranchByBatch, addBranch, editBranch } from "@/http/party.js"
 import "@/style/Common.css";
 
 export default {
@@ -117,19 +121,20 @@ export default {
     },
     data() {
         return {
-            dialogTitle: "",
+			currentRowId: "",
+			isEdit: false,
 			dialogVisible: false,
             queryItems: {
                 branchName: "",
                 branchLeaderName: "",
                 page: {
-					pageNumber: 0,
+					pageNumber: 1,
 					pageSize: 10,
                 }
             },
             form: {
                 branchName: "",
-                branchInfo: "",
+                branchLeaderName: "",
             },
             tableData: [
 				{
@@ -146,7 +151,7 @@ export default {
             ],
             tableBottom: {
                 totalNum: 0,
-                pageSizeList: [10, 20, 30, 40]
+                pageSizeList: [5, 10, 20, 30, 40]
             },
             rules: {
 				branchName: [
@@ -167,15 +172,15 @@ export default {
 			})
 		},
         clearInputMessage() {
-            queryItems.branchName = "";
-            queryItems.branchLeaderName = "";
+            this.queryItems.branchName = "";
+            this.queryItems.branchLeaderName = "";
         },
         handleSizeChange(val) {
-            queryItems.page.pageSize = val;
+            this.queryItems.page.pageSize = val;
             this.queryList();
         },
         handleCurrentChange(val) {
-            queryItems.page.pageNumber = val;
+            this.queryItems.page.pageNumber = val;
             this.queryList();
         },
         rowStyle({ row, rowIndex }) {
@@ -185,36 +190,55 @@ export default {
                 border: '#2E2E2E'
             };
         },
-        headerRowStyle() {
+		headerRowStyle() {
             return {
                 backgroundColor: '#F7F7F7',
                 color: '#3E3E3E',
             }
         },
         submit() {
-			if (this.dialogTitle === "添加支部") {
+			if (!this.isEdit) {
 				addBranch(this.form).then(res => {
-					this.dialogVisible = false;
+					this.$message.success("添加支部成功")
+					this.dialogVisible = false
+					this.clearAddForm()
 					this.queryList();
-				})
-			} else if (this.dialogTitle === "编辑支部") {
-				// todo:调用编辑支部接口
+				}).catch(err => {
+					this.$message.error("添加支部失败")
+					console.log(err);
+				});
+			} else {
+				// TODO: 还需要和后端沟通（resp msg: 对应的父支部Id不存在）
+				const editData = { ...this.form, id: this.currentRowId };
+				editBranch(editData).then(res => {
+					this.$message.success("编辑支部成功")
+					this.dialogVisible = false
+					this.clearAddForm()
+					this.queryList();
+				}).catch(err => {
+					this.$message.error("编辑支部失败")
+					console.log(err);
+				});
 			}
 		},
 		handleEdit(index, item) {
-			this.dialogTitle = "编辑支部";
+			this.isEdit = true
+			this.currentRowId = item.branch.id || ""
 			this.form.branchName = item.branch.branchName
-			this.form.branchInfo = item.branch.branchInfo
+			this.form.branchLeaderName = item.branchLeaderName
 			this.dialogVisible = true;
 		},
-		handleAdd() {
-			this.dialogTitle = "添加支部";
+		clearAddForm() {
 			Object.keys(this.form).forEach(key => { this.form[key] = "" })
-			this.form.developmentPhase = this.queryItems.developmentPhase;
-
+			this.currentRowId = ""
+        },
+		handleAdd() {
+			this.isEdit = false
+			this.clearAddForm();
 			this.dialogVisible = true;
 		},
 		// 删除
+		// TODO: 后端目前删除单条支部的接口还有问题
 		handleDelete(i, item) {
 			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
 				confirmButtonText: '确定',
@@ -225,7 +249,8 @@ export default {
 				confirmButtonClass: 'redBtn',
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
-				deleteBranch(item.id).then(res => {
+				deleteBranch(item.branch.id).then(res => {
+					this.$message.success("删除支部成功")
 					this.queryList();
 				})
 			}).catch(() => {
@@ -235,7 +260,7 @@ export default {
 				});
 			});
 		},
-
+		// 批量删除
 		deleteBatch() {
 			if (this.selectedIds.length === 0) {
 				this.$message.info("还未选择记录")
@@ -251,6 +276,7 @@ export default {
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
 				deleteBranchByBatch(this.selectedIds).then(res => {
+					this.$message.success("批量删除支部成功")
 					this.queryList();
 				})
 			}).catch(() => {
@@ -261,7 +287,7 @@ export default {
 			});
 		},
         handleSelectionChange(vals) {
-			this.selectedIds = vals.map(item => item.id)
+			this.selectedIds = vals.map(item => String(item.branch.id))
 		},
     }
 };

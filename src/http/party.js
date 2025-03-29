@@ -81,7 +81,17 @@ export const pageBranches = (queryItems) => {
  * @returns
  */
 export const addBranch = (data) => {
-    return instance.get("/auth/branch/addBranch", data);
+    return instance.post("/auth/branch/addBranch", data);
+}
+
+/**
+ * 编辑支部信息
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const editBranch = (data) => {
+    return instance.put("/auth/branch/updateBranch", data);
 }
 
 /**
@@ -91,7 +101,11 @@ export const addBranch = (data) => {
  * @returns
  */
 export const deleteBranch = (branchId) => {
-    return instance.delete("/auth/branch/deleteBranch", branchId);
+    return instance.delete("/auth/branch/deleteBranch", {
+        data: {
+            branchId
+        }
+    });
 }
 
 /**
@@ -101,7 +115,9 @@ export const deleteBranch = (branchId) => {
  * @returns
  */
 export const deleteBranchByBatch = (ids) => {
-    return instance.post("/auth/branch/deleteBranches", ids);
+    return instance.delete("/auth/branch/deleteBranches", {
+        data: ids
+    });
 }
 
 /**
