@@ -165,6 +165,11 @@ const router = createRouter({
           component: () => import('@/views/teacher/FBGL/XTGGView.vue')
         },
         {
+          path: '/teacher/xxyb',
+          name: 'XXYB',
+          component: () => import('@/views/teacher/FBGL/XXYBView.vue')
+        },
+        {
           path: '/teacher/reminder/index',
           name: 'reminder',
           component: () => import('@/views/teacher/Reminder/index.vue')

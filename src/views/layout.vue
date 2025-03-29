@@ -170,7 +170,7 @@ export default {
               icon: 'mdi-calendar-range',
               children: [
                 { title: '系统公告', link: '/teacher/xtgg' },
-                { title: '学习样板', link: '/teacher/xxx' }, //TODO
+                { title: '学习样板', link: '/teacher/xxyb' },
               ],
             },
             {
