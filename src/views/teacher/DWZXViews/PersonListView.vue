@@ -412,7 +412,10 @@ export default {
 			}).then(() => {
 				// 根据id请求删除
 				deleteItem(item.id).then(res => {
-					this.queryList();
+					if(res.code == "200"){
+						this.$message.success("删除成功")
+						this.queryList();
+					}
 				})
 			}).catch(() => {
 				this.$message({

@@ -137,7 +137,7 @@ export const findByPhase = (queryItems) => {
  * @returns
  */
 export const deleteItem = (id) => {
-    return instance.post("/stage/delete", id);
+    return instance.post(`/stage/delete?id=${id}`);
 }
 
 /**
