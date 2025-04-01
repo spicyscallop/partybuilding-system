@@ -33,7 +33,7 @@
 												<v-text-field color="party-2" label="账号" variant="underlined"
 													v-model="loginForm.userNumber" :rules="rules.idRules"
 													type="text"></v-text-field>
-												<v-text-field color="party-2" label="密码" variant="underlined"
+												<v-text-field color="party-2" label="默认密码为学号" variant="underlined" 
 													v-model="loginForm.pwd" :rules="rules.passwordRules"
 													type="password"></v-text-field>
 												<div ref="verifyForm" style="display: flex; align-items: center;">
@@ -64,8 +64,7 @@
 import ListCard from '@/components/homepage/ListCard.vue';
 import ShowCase from '@/components/homepage/ShowCase.vue';
 import ImageCode from '@/components/ImageCode.vue';
-import { userLogin,getCaptcha } from '@/http/api';
-import { getXtggInfo } from "@/http/party"
+import { userLogin,getCaptcha,getXtgg } from '@/http/api';
 import { login } from '@/utils/auth';
 export default {
   components: {
@@ -154,13 +153,7 @@ export default {
       })
     },
     getXtggV(){
-      getXtggInfo(
-        {
-          page: {
-            searchCount: true
-          }
-        }
-      ).then(response => {
+      getXtgg().then(response => {
         if (response.success) {
           // 提取数据并格式化后存入 xtgg
           this.xtgg = response.data.records.map(record => ({
