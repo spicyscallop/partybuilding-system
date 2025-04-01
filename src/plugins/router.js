@@ -255,6 +255,11 @@ const router = createRouter({
           component: () => import('@/views/partyBranchManager/FZGLViews/ZSDY/ZSDYView.vue')
         },
         {
+          path: '/partyManager/fzgl/hdxx',
+          name: 'P_HDXX',
+          component: () => import('@/views/partyBranchManager/FZGLViews/HDXX/HDXXView.vue')
+        },
+        {
           path: '/partyManager/zzsh',
           name: 'P_ZZSH',
           component: () => import('@/views/partyBranchManager/ZZSH/ZZSHView.vue')

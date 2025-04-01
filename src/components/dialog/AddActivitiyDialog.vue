@@ -149,8 +149,8 @@
           { value: '正式党员', label: '正式党员' }
         ],
         activityTypeOptions: [
-          { value: 'type1', label: '类型1' },
-          { value: 'type2', label: '类型2' }
+          { value: 'type1', label: '推优活动' },
+          { value: 'type2', label: '其他活动' }
         ]
       }
     },
@@ -169,7 +169,21 @@
       },
       handleSubmit() {
         // TODO: 实现提交逻辑
-        this.$message.success('提交成功');
+        const submitData = {
+          activityName: this.form.activityName,
+          // activityNumber: this.form.activityNumber,
+          // developmentPhase: this.form.developmentPhase,
+          // activityDate: this.form.activityDate,
+          // activitySponsor: this.form.activitySponsor,
+          // activityType: this.form.activityType,
+          // activityType: this.form.activityType,
+          // remarks: this.form.remarks
+        }
+        console.log(submitData);
+        this.$axios.post('/activities/',submitData).then(res=>{
+          console.log(res);
+
+        })
         this.dialogVisible = false;
         this.$emit('refreshList');
       },
