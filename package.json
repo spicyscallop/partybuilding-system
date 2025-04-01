@@ -15,6 +15,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.7",
     "@vueup/vue-quill": "^1.2.0",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
     "echarts": "^5.5.1",
