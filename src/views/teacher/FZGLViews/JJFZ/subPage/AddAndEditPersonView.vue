@@ -1,174 +1,174 @@
 <template>
   <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
     <v-col class="d-flex fill-height flex-column">
-    <v-row style="height: 60px;">
-      <v-col cols="8">
-        <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
-        </SubpageTitle>
-      </v-col>
-    </v-row>
-    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;培养联系人选择" width="850" height="600"
-               draggable align-center>
-      <div style="margin: 0px 20px;">
-        <v-row>
-          <!-- 左侧表格 -->
-          <v-col cols="9" style="background-color: white;">
-            <div class="flex-grow-1 overflow-auto">
-              <!-- 查询条件 -->
-              <div
-                  style="background-color: #F35339; border-radius: 10px; height: 50px; display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="color: #ffffff;margin: 0 20px;font-size: 16px;">查询条件</span>
-                <el-input v-model="queryItems.userNumber" placeholder="请输入学工号" size="normal"
-                          style="width: 200px;margin: 0 10px;"></el-input>
-                <el-input v-model="queryItems.userName" placeholder="请输入姓名" size="normal"
-                          style="width: 200px;margin: 0 10px;"></el-input>
-                <el-button class="redBtn" size="normal" type="primary" style="margin-left: 30px" @click="queryUserList">
-                  查询
-                </el-button>
-                <el-button class="whiteBtn" size="normal" @click="clearUserQuery">清除</el-button>
+      <v-row style="height: 60px;">
+        <v-col cols="8">
+          <SubpageTitle text="积极分子阶段" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+          </SubpageTitle>
+        </v-col>
+      </v-row>
+      <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;培养联系人选择" width="850" height="600"
+                 draggable align-center>
+        <div style="margin: 0px 20px;">
+          <v-row>
+            <!-- 左侧表格 -->
+            <v-col cols="9" style="background-color: white;">
+              <div class="flex-grow-1 overflow-auto">
+                <!-- 查询条件 -->
+                <div
+                    style="background-color: #F35339; border-radius: 10px; height: 50px; display: flex; align-items: center; margin-bottom: 10px;">
+                  <span style="color: #ffffff;margin: 0 20px;font-size: 16px;">查询条件</span>
+                  <el-input v-model="queryItems.userNumber" placeholder="请输入学工号" size="normal"
+                            style="width: 200px;margin: 0 10px;"></el-input>
+                  <el-input v-model="queryItems.userName" placeholder="请输入姓名" size="normal"
+                            style="width: 200px;margin: 0 10px;"></el-input>
+                  <el-button class="redBtn" size="normal" type="primary" style="margin-left: 30px" @click="queryUserList">
+                    查询
+                  </el-button>
+                  <el-button class="whiteBtn" size="normal" @click="clearUserQuery">清除</el-button>
+                </div>
+                <!-- 用户列表表格 -->
+                <el-table ref="multipleTable" :data="userTableData" max-height="400" :key="tableKey"
+                          style="border-radius: 15px;background-color: #F7F7F7;"
+                          @selection-change="handleUserSelectionChange">
+                  <el-table-column type="selection">
+                  </el-table-column>
+                  <el-table-column prop="userNumber" label="学工号" align='center'>
+                  </el-table-column>
+                  <el-table-column prop="userName" label="姓名" align='center'>
+                  </el-table-column>
+                  <!-- 如果有其他字段，可以在此添加 -->
+                </el-table>
+                <!-- 分页 -->
+                <div style="display: inline-block;margin-top: 10px;">
+                  <el-pagination @size-change="handleUserSizeChange" @current-change="handleUserCurrentChange"
+                                 :current-page="userTableBottom.currentPage" :page-sizes="userTableBottom.pageSizeList"
+                                 background
+                                 :page-size="queryItems.pageSize" small :pager-count="3"
+                                 layout="total, sizes, prev, pager, next, jumper" :total="userTableBottom.totalNum">
+                  </el-pagination>
+                </div>
               </div>
-              <!-- 用户列表表格 -->
-              <el-table ref="multipleTable" :data="userTableData" max-height="400" :key="tableKey"
-                        style="border-radius: 15px;background-color: #F7F7F7;"
-                        @selection-change="handleUserSelectionChange">
-                <el-table-column type="selection">
-                </el-table-column>
-                <el-table-column prop="userNumber" label="学工号" align='center'>
-                </el-table-column>
-                <el-table-column prop="userName" label="姓名" align='center'>
-                </el-table-column>
-                <!-- 如果有其他字段，可以在此添加 -->
-              </el-table>
-              <!-- 分页 -->
-              <div style="display: inline-block;margin-top: 10px;">
-                <el-pagination @size-change="handleUserSizeChange" @current-change="handleUserCurrentChange"
-                               :current-page="userTableBottom.currentPage" :page-sizes="userTableBottom.pageSizeList"
-                               background
-                               :page-size="queryItems.pageSize" small :pager-count="3"
-                               layout="total, sizes, prev, pager, next, jumper" :total="userTableBottom.totalNum">
-                </el-pagination>
-              </div>
-            </div>
-          </v-col>
-          <!-- 右侧已选人员 -->
-          <v-col cols="3" style="background-color: white;">
-            <v-row style="margin-top: 20px;margin-left: 3px;">
-              <span>已选人员(</span>
-              <span style="color: #2B99FF;">{{ checkedUsers.length }}</span>
-              <span>)</span>
-            </v-row>
-            <v-row>
-              <el-table :data="checkedUsers" style="width: 100%" max-height="250">
-                <el-table-column prop="userName" label="姓名"/>
-                <el-table-column prop="phoneNumber" label="手机号码" width="120"/>
-              </el-table>
-            </v-row>
-          </v-col>
-        </v-row>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button class="redBtn" type="primary" @click="chooseUsers">提交</el-button>
-          <el-button class="whiteBtn" @click="dialogVisible = false">取消</el-button>
+            </v-col>
+            <!-- 右侧已选人员 -->
+            <v-col cols="3" style="background-color: white;">
+              <v-row style="margin-top: 20px;margin-left: 3px;">
+                <span>已选人员(</span>
+                <span style="color: #2B99FF;">{{ checkedUsers.length }}</span>
+                <span>)</span>
+              </v-row>
+              <v-row>
+                <el-table :data="checkedUsers" style="width: 100%" max-height="250">
+                  <el-table-column prop="userName" label="姓名"/>
+                  <el-table-column prop="phoneNumber" label="手机号码" width="120"/>
+                </el-table>
+              </v-row>
+            </v-col>
+          </v-row>
         </div>
-      </template>
-    </el-dialog>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button class="redBtn" type="primary" @click="chooseUsers">提交</el-button>
+            <el-button class="whiteBtn" @click="dialogVisible = false">取消</el-button>
+          </div>
+        </template>
+      </el-dialog>
 
-    <!-- 表单内容 -->
-    <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
-      <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">学工号</span>
-        <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
-      </v-col>
-      <v-col cols="4">
-        <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">姓名</span>
-        <el-input v-model="form.userName" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
-      </v-col>
-      <v-col cols="4">
-        <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
-        <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;height: 40px;" :disabled="isEdit">
-          <el-option v-for="item in leagueOptions" :key="item.value" :label="item.label" :value="item.value"/>
-        </el-select>
-      </v-col>
-    </v-row>
+      <!-- 表单内容 -->
+      <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
+        <v-col cols="4">
+          <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">学工号</span>
+          <el-input v-model="form.userNumber" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
+        </v-col>
+        <v-col cols="4">
+          <span style="color: red;margin-left: 30px;">*</span><span style="margin-right: 10px;">姓名</span>
+          <el-input v-model="form.userName" :disabled="isEdit" style="width: 200px;height: 40px;"></el-input>
+        </v-col>
+        <v-col cols="4">
+          <span style="color: red;">*</span><span style="margin-right: 10px;">团员身份</span>
+          <el-select v-model="form.isLeague" placeholder="请选择" size="large" style="width: 200px;height: 40px;" :disabled="isEdit">
+            <el-option v-for="item in leagueOptions" :key="item.value" :label="item.label" :value="item.value"/>
+          </el-select>
+        </v-col>
+      </v-row>
 
-    <v-row>
-      <v-col style="background-color: #f7f7f7; height: 90%;padding: 20px;border-radius: 20px;">
-        <!-- 第一行 -->
-        <v-row>
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
-            <div>
-              <el-date-picker v-model="form.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
-            <div>
-              <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
-            </div>
-          </v-col>
-        </v-row>
-        <!-- 第二行 -->
-        <v-row>
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子确认时间</span></div>
-            <div>
-              <el-date-picker v-model="form.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;" />
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
-            <div>
-              <el-date-picker v-model="form.activistPartyTraining" type="date" placeholder="系统自动接入" size="large"
-                              style="width: 90%;" />
-            </div>
-          </v-col>
-        </v-row>
-        <!-- 第三行 -->
-        <v-row style="width: 100%;margin-top: 30px;">
-          <v-col cols="6">
-            <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
-            <div>
-              <el-input v-model="form.cultivateContacts" placeholder="" @click="openDialog" 
-                        style="width: 92%;height: 40px;"></el-input>
-            </div>
-          </v-col>
-          <v-col cols="3" style="padding-left: 30px">
-            <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
-            <div>
-              <el-date-picker v-model="form.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large"
-                              style="width: 90%;"/>
-            </div>
-          </v-col>
-          <v-col cols="3">
-            <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
-            <div>
-              <el-date-picker v-model="form.nextReportTime" type="date" placeholder="系统自动接入" size="large"
-                              style="width: 90%;" disabled/>
-            </div>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+      <v-row>
+        <v-col style="background-color: #f7f7f7; height: 90%;padding: 20px;border-radius: 20px;">
+          <!-- 第一行 -->
+          <v-row>
+            <v-col cols="6">
+              <div style="margin-bottom: 5px;"><span>积极分子推优时间</span></div>
+              <div>
+                <el-date-picker v-model="form.promoteTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                                style="width: 90%;"/>
+              </div>
+            </v-col>
+            <v-col cols="6">
+              <div style="margin-bottom: 5px;"><span>《入党积极分子培养教育考察登记表》提交时间</span></div>
+              <div>
+                <el-date-picker v-model="form.talkActivistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                                style="width: 90%;"/>
+              </div>
+            </v-col>
+          </v-row>
+          <!-- 第二行 -->
+          <v-row>
+            <v-col cols="6">
+              <div style="margin-bottom: 5px;"><span>积极分子确认时间</span></div>
+              <div>
+                <el-date-picker v-model="form.activistTime" type="date" placeholder="yyyy-mm-dd" size="large"
+                                style="width: 90%;" />
+              </div>
+            </v-col>
+            <v-col cols="6">
+              <div style="margin-bottom: 5px;"><span>积极分子培训班参与时间</span></div>
+              <div>
+                <el-date-picker v-model="form.activistPartyTraining" type="date" placeholder="系统自动接入" size="large"
+                                style="width: 90%;" />
+              </div>
+            </v-col>
+          </v-row>
+          <!-- 第三行 -->
+          <v-row style="width: 100%;margin-top: 30px;">
+            <v-col cols="6">
+              <div style="margin-bottom: 5px;"><span>培养联系人</span></div>
+              <div>
+                <el-input v-model="form.cultivateContacts" placeholder="" @click="openDialog"
+                          style="width: 92%;height: 40px;"></el-input>
+              </div>
+            </v-col>
+            <v-col cols="3" style="padding-left: 30px">
+              <div style="margin-bottom: 5px;"><span>思想汇报提交时间</span></div>
+              <div>
+                <el-date-picker v-model="form.thoughtReport" type="date" placeholder="yyyy-mm-dd" size="large"
+                                style="width: 90%;"/>
+              </div>
+            </v-col>
+            <v-col cols="3">
+              <div style="margin-bottom: 5px;"><span>下次应提交时间</span></div>
+              <div>
+                <el-date-picker v-model="form.nextReportTime" type="date" placeholder="系统自动接入" size="large"
+                                style="width: 90%;" disabled/>
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
 
-    <!-- 底部按钮 -->
-    <v-row style="height: 20%;width: 100%;">
-      <v-col cols="7">
-      </v-col>
-      <v-col cols="5">
-        <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;"
-                   @click="onCancel">取消
-        </el-button>
-        <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;"
-                   @click="onSubmit">
-          {{ isEdit ? '保存' : '新增' }}
-        </el-button>
-      </v-col>
-    </v-row>
+      <!-- 底部按钮 -->
+      <v-row style="height: 20%;width: 100%;">
+        <v-col cols="7">
+        </v-col>
+        <v-col cols="5">
+          <el-button class="whiteBtn" type="primary" style="margin-left: 20px; height: 36px; float: right;"
+                     @click="onCancel">取消
+          </el-button>
+          <el-button class="redBtn" type="primary" style="margin-left: 20px; height: 36px;float: right;"
+                     @click="onSubmit">
+            {{ isEdit ? '保存' : '新增' }}
+          </el-button>
+        </v-col>
+      </v-row>
     </v-col>
   </v-container>
 </template>
@@ -182,8 +182,13 @@ export default {
   data() {
     return {
       // 表单数据
-      form: {},
-      defaultForm: {},
+      form: {
+
+      },
+      defaultForm: {
+        userNumber: '',
+        userName: '',
+      },
       // 团员身份选项
       leagueOptions: [
         {value: 1, label: '是'},
@@ -202,6 +207,7 @@ export default {
         pageSize: 10,
       },
       userTableData: [],
+      userBranchTableData: [],
       userTableBottom: {
         currentPage: 1,
         pageSizeList: [10, 20, 30, 50],
@@ -221,19 +227,58 @@ export default {
       if (!id) return;
       this.$axios.get('/stage/get', {params: {id}})
           .then(response => {
-            this.form = response.data;
+            this.userBranchTableData = response.data;
+            console.log(this.userBranchTableData)
           })
           .catch(error => {
             console.error('获取数据失败:', error);
           });
     },
     openDialog() {
-      this.dialogVisible = true;
-      this.queryUserList();
+      if(this.form.userNumber=="")
+      {
+        alert("未输入学工号，无法确定该生党支部，因此无法获取培养联系人")
+      }
+      else
+      {
+        const data = {
+          "developmentPhase":"积极分子",
+          page: {
+            pageNumber: this.userTableBottom.currentPage,
+            pageSize: this.queryItems.pageSize,
+            searchCount: true,
+          },
+          userNumber: this.form.userNumber,
+          userName: this.form.userName
+          //needTalkActivistPersonName: true
+        };
+        this.$axios.post('/stage/page', data)
+            .then(response => {
+              this.dialogVisible = true;
+              this.userTableData = response.data.records;
+              this.userTableBottom.totalNum = response.data.total;
+              //console.log(response.data.total)
+              if(response.data.total==0){
+                alert("输入的学工号对应的学生不存在")
+              }
+              else
+              {
+                //console.log(response.data.records[0].partyBranchId)
+                this.queryUserList(response.data.records[0].partyBranchId);
+              }
+
+            })
+            .catch(error => {
+              console.error('请求失败:', error);
+            });
+
+      }
+
     },
     // 查询用户列表
-    queryUserList() {
+    queryUserList(partyBranchId) {
       const data = {
+        "developmentPhase":"正式党员",
         page: {
           pageNumber: this.userTableBottom.currentPage,
           pageSize: this.queryItems.pageSize,
@@ -241,7 +286,8 @@ export default {
         },
         userNumber: this.queryItems.userNumber,
         userName: this.queryItems.userName,
-        needTalkActivistPersonName:true
+        partyBranchId: partyBranchId
+        //needTalkActivistPersonName: true
       };
       // 发送请求获取阶段信息列表
       this.$axios.post('/stage/page', data)
@@ -398,7 +444,7 @@ input {
   text-indent: 5px;
 }
 
-.v-row{
+.v-row {
   margin: -16px;
 }
 </style>
