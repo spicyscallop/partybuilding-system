@@ -112,6 +112,7 @@ export default {
                 { title: '发展对象阶段', link: '/partyManager/fzgl/fzdx' },
                 { title: '预备党员阶段', link: '/partyManager/fzgl/ybdy' },
                 { title: '正式党员阶段', link: '/partyManager/fzgl/zsdy' },
+                { title: '活动信息管理', link: '/partyManager/fzgl/hdxx' }, 
               ],
             },
             { title: '组织生活', icon: 'mdi-notebook-edit', link: '/partyManager/zzsh' },
@@ -153,7 +154,7 @@ export default {
                 { title: '发展对象阶段', link: '/teacher/fzgl/fzdx' },
                 { title: '预备党员阶段', link: '/teacher/fzgl/ybdy' },
                 { title: '正式党员阶段', link: '/teacher/fzgl/zsdy' },
-                { title: '活动信息管理', link: '/teacher/fzgl/hdxx' }, //TODO
+                { title: '活动信息管理', link: '/teacher/fzgl/hdxx' }, 
                 { title: '文件模板管理', link: '/teacher/fzgl/wjmb' } //TODO
               ],
             },

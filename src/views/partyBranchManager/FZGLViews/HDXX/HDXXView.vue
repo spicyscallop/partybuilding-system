@@ -2,9 +2,20 @@
     <v-container fluid class="ma-0 fill-height" style="background-color: #ffffff;">
       <v-col class="d-flex fill-height flex-column">
         <v-row style="height: 60px;">
-          <v-col cols="8">
-            <SubpageTitle text="活动信息管理" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
-            </SubpageTitle>
+            <v-col cols="8">
+              <SubpageTitle text="活动信息管理" svg="/src/img/FZJD/发展党员.svg" :width=43 :height=43>
+              </SubpageTitle>
+            </v-col>
+            <v-col cols="4">
+              <el-select  placeholder="支部选择" size="large" disabled
+                  style="width: 200px;float: right;">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+              <div style="display: inline-block; float:right; margin-top: 5px;margin-right: 10px;"><span
+                      style="">支部选择</span>
+              </div>
+              <img src="/src/img/FZJD/支部选择.png" alt="支部选择"
+                  style=" margin-top: 6px;margin-left:0px;width:23px;height:23px; float:right;">
           </v-col>
         </v-row>
         <v-row style="height: 80px;">
@@ -148,6 +159,11 @@
           backgroundColor: '#F7F7F7',
           border: '#2E2E2E'
         },
+        options:[
+        { label: '第一党支部', value: '第一党支部' },
+        { label: '第二党支部', value: '第二党支部' },
+        { label: '第三党支部', value: '第三党支部' },
+        { label: '第四党支部', value: '第四党支部' }],
         colNames: ['活动编号', '活动名称', '发展阶段','主办单位','活动时间','活动类型','提交文件/申请学时','状态','通知内容','操作'],
         columns: [
           {

@@ -25,57 +25,22 @@
         </div>
   
         <!-- 富文本编辑器 -->
-        <div class="editor-wrapper">
-          <div class="editor-label">通知编辑栏</div>
-          <div class="editor-toolbar">
-            <el-button-group>
-              <el-button type="default" icon="Upload">
-                <el-icon><Upload /></el-icon>
-              </el-button>
-              <el-button type="default" icon="RefreshLeft">
-                <el-icon><RefreshLeft /></el-icon>
-              </el-button>
-              <el-button type="default" icon="RefreshRight">
-                <el-icon><RefreshRight /></el-icon>
-              </el-button>
-            </el-button-group>
-            <el-divider direction="vertical" />
-            <el-button-group>
-              <el-button type="default" icon="Bold">B</el-button>
-              <el-button type="default" icon="Italic">I</el-button>
-              <el-button type="default" icon="Underline">U</el-button>
-              <el-button type="default">S</el-button>
-            </el-button-group>
-            <el-divider direction="vertical" />
-            <el-button-group>
-              <el-button type="default" icon="List">
-                <el-icon><List /></el-icon>
-              </el-button>
-              <el-button type="default" icon="OrderedList">
-                <el-icon><Operation /></el-icon>
-              </el-button>
-            </el-button-group>
-            <el-divider direction="vertical" />
-            <el-button-group>
-              <el-button type="default" icon="Link">
-                <el-icon><Link /></el-icon>
-              </el-button>
-              <el-button type="default" icon="Picture">
-                <el-icon><Picture /></el-icon>
-              </el-button>
-              <el-button type="default" icon="Operation">Σ</el-button>
-            </el-button-group>
-          </div>
-          <el-input
-            v-model="form.content"
-            type="textarea"
-            :rows="12"
-            placeholder="请输入通知内容"
-            show-word-limit
-            :maxlength="500"
-          />
+        <div style="border: 1px solid #ccc;">
+            <Toolbar
+                style="border-bottom: 1px solid #ccc"
+                :editor="editor"
+                :defaultConfig="toolbarConfig"
+                :mode="mode"
+            />
+            <Editor
+                style="height: 500px; overflow-y: hidden;"
+                v-model="html"
+                :defaultConfig="editorConfig"
+                :mode="mode"
+                @onCreated="onCreated"
+            />
         </div>
-  
+
         <!-- 文件上传 -->
         <div class="upload-section">
           <span class="upload-label">通知附加文件</span>
@@ -108,8 +73,12 @@
   </template>
   
   <script>
+  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+  import '@wangeditor/editor/dist/css/style.css'
+
   export default {
     name: 'PublishNoticeDialog',
+    components: { Editor, Toolbar },
     data() {
       return {
         dialogVisible: false,
@@ -118,10 +87,18 @@
           needUpload: false,
           content: ''
         },
-        fileList: []
+        fileList: [],
+        editor: null,
+        html: '',
+        toolbarConfig: {},
+        editorConfig: { placeholder: '请输入内容...' },
+        mode: 'default', 
       }
     },
     methods: {
+      onCreated(editor) {
+        this.editor = Object.seal(editor)
+      },
       handleUploadSuccess(response, file, fileList) {
         this.$message.success('文件上传成功');
         this.fileList = fileList;
@@ -159,7 +136,12 @@
         this.dialogVisible = false;
         this.$emit('changeDialog');
       }
-    }
+    },
+    beforeDestroy() {
+      const editor = this.editor
+      if (editor == null) return
+      editor.destroy() // 组件销毁时，及时销毁编辑器
+    },
   }
   </script>
   
