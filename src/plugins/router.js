@@ -25,6 +25,12 @@ const router = createRouter({
           name: 'EditOverview',
           component: () => import('@/views/teacher/EditOverview.vue')
         },
+        // 编辑支委概况 
+        {
+          path: '/partyBranchManager/edit-overview',
+          name: 'EditOverview',
+          component: () => import('@/views/partyBranchManager/EditOverview.vue')
+        },
         //自主学习
         {
           path: '/teacher/zzxx/llxx',
