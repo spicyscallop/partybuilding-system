@@ -1,0 +1,408 @@
+<template>
+  <div class="reminder-page">
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>人员管理</span>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center;">
+          <el-form-item label="学号">
+            <el-input v-model="searchForm.userNumber" placeholder="请输入学号"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="发展阶段">
+            <el-select
+                v-model="searchForm.developmentPhase"
+                placeholder="请选择"
+                @change="search"
+                style="width:250px">
+              <el-option label="共青团员" value="共青团员"></el-option>
+              <el-option label="入党申请人" value="入党申请人"></el-option>
+              <el-option label="积极分子" value="积极分子"></el-option>
+              <el-option label="发展对象" value="发展对象"></el-option>
+              <el-option label="预备党员" value="预备党员"></el-option>
+              <el-option label="正式党员" value="正式党员"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="search">搜索</el-button>
+            <el-button @click="resetSearch">重置</el-button>
+          </el-form-item>
+          <div style="margin-left: auto; display: flex; gap: 10px;">
+            <el-button class="bottom-button" type="primary" @click="$refs.importStudentListDialog.openDialog()" style="width:140px;">
+              <span class="text">导入学生名单</span>
+            </el-button>
+            <el-button type="primary" @click="dialogVisible = true" style="width:100px;">
+              添加列
+            </el-button>
+          </div>
+        </el-form>
+        <import-student-list-dialog
+            ref="importStudentListDialog"
+            @fetchStudents="fetchStudents"
+        />
+      </div>
+      <el-table :data="tableData" stripe border style="width: 100%">
+        <!-- 固定左侧列：学工号和用户姓名（不可取消） -->
+        <el-table-column prop="userNumber" label="学工号" fixed="left" :formatter="renderCell"></el-table-column>
+        <el-table-column prop="userName" label="用户姓名" fixed="left" :formatter="renderCell"></el-table-column>
+        <!-- 动态添加的列 -->
+        <el-table-column
+            v-for="(col, index) in extraColumns"
+            :key="index"
+            :prop="col.prop"
+            :label="col.label"
+            :formatter="renderCell">
+        </el-table-column>
+        <!-- 固定右侧操作列 -->
+        <el-table-column label="操作" width="180" fixed="right">
+          <template v-slot="scope">
+            <!-- 外层包裹div增加居中样式 -->
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <el-button size="mini" type="primary" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="deleteRow(scope.row)" style="color:#fff;">删除</el-button>
+              <el-dropdown trigger="click" @command="handleCommand(scope.row, $event)">
+                <span style="display: flex; align-items: center;">
+                  <el-icon class="el-icon--right">
+                    <More />
+                  </el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="resetPassword">重置密码</el-dropdown-item>
+                    <el-dropdown-item command="changeRole">更改角色</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="margin-top: 20px; text-align: right;">
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :current-page="pageDTO.pageNumber"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageDTO.pageSize"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
+        </el-pagination>
+      </div>
+      <el-dialog title="选择要显示的列" v-model="dialogVisible">
+        <div v-for="(fields, category) in availableColumns" :key="category" class="column-category">
+          <div class="category-title">
+            <!-- 类别复选框用于整类全选 -->
+            <el-checkbox
+                :indeterminate="isCategoryIndeterminate(category)"
+                :model-value="isCategorySelected(category)"
+                @change="handleCategoryChange(category, $event)">
+              {{ categoryTitle(category) }}（全选）
+            </el-checkbox>
+          </div>
+          <el-checkbox-group v-model="selectedColumnProps">
+            <el-checkbox v-for="item in fields" :label="item.prop" :key="item.prop">
+              {{ item.label }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleDialogConfirm">确 定</el-button>
+        </span>
+      </el-dialog>
+    </el-card>
+  </div>
+</template>
+
+<script>
+import { More } from '@element-plus/icons-vue';
+import ImportStudentListDialog from './ImportStudentListDialog.vue';
+export default {
+  name: "StageTable",
+  components: {
+    More,
+    ImportStudentListDialog
+  },
+  data() {
+    return {
+      tableData: [],
+      // 默认展示的动态列
+      extraColumns: [
+        { label: "性别", prop: "sex" },
+        { label: "角色", prop: "role" },
+        { label: "发展阶段", prop: "developmentPhase" }
+      ],
+      total: 0,
+      pageDTO: {
+        pageSize: 10,
+        pageNumber: 1,
+        searchCount: true
+      },
+      searchForm: {
+        userNumber: '',
+        userName: '',
+        developmentPhase: ''
+      },
+      dialogVisible: false,
+      selectedColumnProps: [],
+      // 分组展示可选字段（不含固定的学工号和用户姓名）
+      availableColumns: {
+        basic: [
+          { label: "用户ID", prop: "id" },
+          { label: "密码", prop: "pwd" },
+          { label: "生日", prop: "birthday" },
+          { label: "民族", prop: "nationality" },
+          { label: "家庭住址", prop: "address" },
+          { label: "身份证号", prop: "identityId" },
+          { label: "学历", prop: "qualification" },
+          { label: "在读状态", prop: "readingStatus" },
+          { label: "所在党支部Id", prop: "partyBranchId" },
+          { label: "团员编号", prop: "leagueNum" },
+          { label: "入团时间", prop: "leagueJoinTime" },
+          { label: "电话号码", prop: "phone" },
+          { label: "电子邮箱", prop: "email" },
+          { label: "入党时间", prop: "partyJoinTime" },
+          { label: "党支部名称", prop: "partyBranchName" }
+        ],
+        application: [
+          { label: "入党申请书递交时间", prop: "deliveryTime" },
+          { label: "入党申请人谈话登记表文件Id", prop: "talkRegistrationFileId" },
+          { label: "谈话人（申请阶段）", prop: "talkApplicantPersonId" },
+          { label: "《入党申请人-谈话登记表》提交时间", prop: "talkApplicantTime" }
+        ],
+        activist: [
+          { label: "谈话人（积极阶段）", prop: "talkActivistPersonId" },
+          { label: "资格审查时间间隔", prop: "qualificationInterval" },
+          { label: "是否满足推优条件", prop: "isPromote" },
+          { label: "推优时间", prop: "promoteTime" },
+          { label: "确定为积极分子时间", prop: "activistTime" },
+          { label: "思想汇报提交时间", prop: "thoughtReport" },
+          { label: "培养教育考察登记表提交时间", prop: "educationalVisit" },
+          { label: "党校培训班参与时间（积极阶段）", prop: "activistPartyTraining" },
+          { label: "培养联系人", prop: "cultivateContacts" },
+          { label: "《入党积极分子-考察登记表》提交时间", prop: "talkActivistTime" }
+        ],
+        development: [
+          { label: "群众意见调查表提交时间", prop: "developmentPublicTime" },
+          { label: "班主任导师意见征求表提交时间", prop: "teacherTime" },
+          { label: "确定为发展对象时间", prop: "confirmTime" },
+          { label: "发展对象备案时间", prop: "recordTime" },
+          { label: "入党介绍人", prop: "partySponsor" },
+          { label: "政治审查表提交时间", prop: "politicalReviewTime" },
+          { label: "党校培训班参与时间（发展阶段）", prop: "developPartyTraining" },
+          { label: "审查时间", prop: "investigateTime" },
+          { label: "预审时间", prop: "preliminaryInvestigateTime" },
+          { label: "入党志愿书提交时间", prop: "partyApplicationTime" }
+        ],
+        probationary: [
+          { label: "预备党员被接受时间", prop: "branchPrepareTime" },
+          { label: "党委派人谈话时间", prop: "committeeTalk" },
+          { label: "党委审批时间", prop: "examineTime" },
+          { label: "预备党员思想汇报提交时间", prop: "prepareThoughtReport" },
+          { label: "预备党员党校培训班参与时间", prop: "preparePartyTraining" }
+        ],
+        fullMember: [
+          { label: "提出转正申请时间", prop: "applyFullTime" },
+          { label: "群众意见调查表（转正前）提交时间", prop: "probationaryPublicTime" },
+          { label: "支部大会(转正)时间", prop: "branchFullTime" },
+          { label: "党委转正审批时间", prop: "committeeFullTime" }
+        ],
+        system: [
+          { label: "阶段状态", prop: "state" },
+          { label: "创建时间", prop: "createTime" },
+          { label: "更新时间", prop: "updateTime" },
+          { label: "是否删除", prop: "isDeleted" }
+        ]
+      }
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    categoryTitle(category) {
+      const titles = {
+        basic: "用户基础数据",
+        application: "入党申请阶段",
+        activist: "积极分子阶段",
+        development: "发展对象阶段",
+        probationary: "预备党员阶段",
+        fullMember: "转正阶段",
+        system: "系统信息"
+      };
+      return titles[category] || category;
+    },
+    formatSex(row, column, cellValue) {
+      if (cellValue === 1) return "男";
+      if (cellValue === 2) return "女";
+      return "未知";
+    },
+    renderCell(row, column, cellValue) {
+      if (cellValue === null || cellValue === undefined || cellValue === '') {
+        return "无";
+      }
+      if (column.property === "isLeague") {
+        return (cellValue === 1 || cellValue === '1' || cellValue === true) ? "是" : "否";
+      }
+      const valueStr = String(cellValue).trim();
+      if (/^\d+$/.test(valueStr)) {
+        if (valueStr.length === 10 || valueStr.length === 13) {
+          let timestamp = Number(cellValue);
+          if (valueStr.length === 10) {
+            timestamp = timestamp * 1000;
+          }
+          const date = new Date(timestamp);
+          if (!isNaN(date.getTime())) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          }
+        }
+      }
+      return cellValue;
+    },
+    fetchData() {
+      const params = {
+        page: this.pageDTO,
+        userNumber: this.searchForm.userNumber,
+        userName: this.searchForm.userName,
+        developmentPhase: this.searchForm.developmentPhase
+      };
+      this.$axios.post('stage/page', params)
+          .then(response => {
+            const resData = response.data;
+            this.tableData = resData.records;
+            this.total = resData.total;
+          })
+          .catch(error => {
+            console.error("数据获取失败：", error);
+          });
+    },
+    search() {
+      this.pageDTO.pageNumber = 1;
+      this.fetchData();
+    },
+    resetSearch() {
+      this.searchForm.userNumber = '';
+      this.searchForm.userName = '';
+      this.searchForm.developmentPhase = '';
+      this.search();
+    },
+    edit(row) {
+      console.log("编辑：", row);
+    },
+    deleteRow(row) {
+      this.$axios.post('stage/delete?id=' + row.id)
+          .then(response => {
+            this.$message.success("删除成功");
+            this.fetchData();
+          })
+          .catch(error => {
+            this.$message.error("删除失败");
+            console.error("删除失败：", error);
+          });
+    },
+    handleCommand(row, command) {
+      if (command === "resetPassword") {
+        this.resetPassword(row);
+      } else if (command === "changeRole") {
+        this.changeRole(row);
+      }
+    },
+    resetPassword(row) {
+      // 注意添加前导斜杠以确保请求正确的接口地址
+      this.$axios.get('/stage/resetPassword?id=' + row.id)
+          .then(response => {
+            this.$message.success("重置成功");
+          })
+          .catch(error => {
+            this.$message.error("重置失败");
+            console.error("重置失败：", error);
+          });
+    },
+    changeRole(row) {
+      console.log("更改角色：", row);
+      this.$message.info("更改角色功能待实现");
+    },
+    handleDialogConfirm() {
+      let allColumns = [];
+      for (const category in this.availableColumns) {
+        allColumns = allColumns.concat(this.availableColumns[category]);
+      }
+      this.extraColumns = allColumns.filter(item => this.selectedColumnProps.includes(item.prop));
+      this.dialogVisible = false;
+    },
+    handleSizeChange(newSize) {
+      this.pageDTO.pageSize = newSize;
+      this.pageDTO.pageNumber = 1;
+      this.fetchData();
+    },
+    handleCurrentChange(newPage) {
+      this.pageDTO.pageNumber = newPage;
+      this.fetchData();
+    },
+    fetchStudents() {
+      this.fetchData();
+    },
+    // 判断某一类别是否所有字段均已选中
+    isCategorySelected(category) {
+      const categoryProps = this.availableColumns[category].map(item => item.prop);
+      return categoryProps.every(prop => this.selectedColumnProps.includes(prop));
+    },
+    // 判断某一类别是否处于部分选中状态
+    isCategoryIndeterminate(category) {
+      const categoryProps = this.availableColumns[category].map(item => item.prop);
+      const selectedCount = categoryProps.filter(prop => this.selectedColumnProps.includes(prop)).length;
+      return selectedCount > 0 && selectedCount < categoryProps.length;
+    },
+    // 处理类别复选框的选中或取消选中事件
+    handleCategoryChange(category, checked) {
+      const categoryProps = this.availableColumns[category].map(item => item.prop);
+      if (checked) {
+        // 选中时，将该类别下所有字段加入已选项中（去重处理）
+        this.selectedColumnProps = Array.from(new Set([...this.selectedColumnProps, ...categoryProps]));
+      } else {
+        // 取消选中时，将该类别下的所有字段从已选项中移除
+        this.selectedColumnProps = this.selectedColumnProps.filter(prop => !categoryProps.includes(prop));
+      }
+    }
+  }
+};
+</script>
+
+<style scoped>
+.reminder-page {
+  padding: 20px;
+}
+.el-table th {
+  background-color: #fafafa;
+}
+.el-button--primary {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+  color: #fff !important;
+}
+.el-button--danger {
+  background-color: #ff4d4f !important;
+  border-color: #ff4d4f !important;
+  color: #fff !important;
+}
+.bottom-button .text {
+  color: #fff !important;
+}
+.column-category {
+  margin-bottom: 15px;
+}
+.category-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+</style>
