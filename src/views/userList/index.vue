@@ -26,6 +26,18 @@
               <el-option label="正式党员" value="正式党员"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="角色">
+            <el-select
+                v-model="searchForm.role"
+                placeholder="请选择"
+                @change="search"
+                style="width:150px">
+              <el-option label="学生" value="学生"></el-option>
+              <el-option label="支部书记" value="支部书记"></el-option>
+              <el-option label="学校党委" value="学校党委"></el-option>
+              <el-option label="系统管理员" value="系统管理员"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="search">搜索</el-button>
             <el-button @click="resetSearch">重置</el-button>
@@ -59,7 +71,6 @@
         <!-- 固定右侧操作列 -->
         <el-table-column label="操作" width="180" fixed="right">
           <template v-slot="scope">
-            <!-- 外层包裹div增加居中样式 -->
             <div style="display: flex; justify-content: center; align-items: center;">
               <el-button size="mini" type="primary" @click="edit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" @click="deleteRow(scope.row)" style="color:#fff;">删除</el-button>
@@ -94,15 +105,14 @@
       </div>
       <el-dialog title="选择要显示的列" v-model="dialogVisible">
         <div v-for="(fields, category) in availableColumns" :key="category" class="column-category">
-          <div class="category-title">
-            <!-- 类别复选框用于整类全选 -->
-            <el-checkbox
-                :indeterminate="isCategoryIndeterminate(category)"
-                :model-value="isCategorySelected(category)"
-                @change="handleCategoryChange(category, $event)">
+          <el-checkbox
+              :indeterminate="isCategoryIndeterminate(category)"
+              :model-value="isCategorySelected(category)"
+              @change="handleCategoryChange(category, $event)">
+            <div class="category-title category-title-highlight">
               {{ categoryTitle(category) }}（全选）
-            </el-checkbox>
-          </div>
+            </div>
+          </el-checkbox>
           <el-checkbox-group v-model="selectedColumnProps">
             <el-checkbox v-for="item in fields" :label="item.prop" :key="item.prop">
               {{ item.label }}
@@ -145,7 +155,8 @@ export default {
       searchForm: {
         userNumber: '',
         userName: '',
-        developmentPhase: ''
+        developmentPhase: '',
+        role: ''
       },
       dialogVisible: false,
       selectedColumnProps: [],
@@ -224,19 +235,9 @@ export default {
     this.fetchData();
   },
   methods: {
-    categoryTitle(category) {
-      const titles = {
-        basic: "用户基础数据",
-        application: "入党申请阶段",
-        activist: "积极分子阶段",
-        development: "发展对象阶段",
-        probationary: "预备党员阶段",
-        fullMember: "转正阶段",
-        system: "系统信息"
-      };
-      return titles[category] || category;
-    },
+    // 使用传入的formatSex代码
     formatSex(row, column, cellValue) {
+      if (cellValue === 0) return "未知";
       if (cellValue === 1) return "男";
       if (cellValue === 2) return "女";
       return "未知";
@@ -247,6 +248,9 @@ export default {
       }
       if (column.property === "isLeague") {
         return (cellValue === 1 || cellValue === '1' || cellValue === true) ? "是" : "否";
+      }
+      if (column.property === "sex") {
+        return this.formatSex(row, column, cellValue);
       }
       const valueStr = String(cellValue).trim();
       if (/^\d+$/.test(valueStr)) {
@@ -274,7 +278,8 @@ export default {
         page: this.pageDTO,
         userNumber: this.searchForm.userNumber,
         userName: this.searchForm.userName,
-        developmentPhase: this.searchForm.developmentPhase
+        developmentPhase: this.searchForm.developmentPhase,
+        role: this.searchForm.role
       };
       this.$axios.post('stage/page', params)
           .then(response => {
@@ -294,6 +299,7 @@ export default {
       this.searchForm.userNumber = '';
       this.searchForm.userName = '';
       this.searchForm.developmentPhase = '';
+      this.searchForm.role = '';
       this.search();
     },
     edit(row) {
@@ -318,7 +324,6 @@ export default {
       }
     },
     resetPassword(row) {
-      // 注意添加前导斜杠以确保请求正确的接口地址
       this.$axios.get('/stage/resetPassword?id=' + row.id)
           .then(response => {
             this.$message.success("重置成功");
@@ -352,25 +357,20 @@ export default {
     fetchStudents() {
       this.fetchData();
     },
-    // 判断某一类别是否所有字段均已选中
     isCategorySelected(category) {
       const categoryProps = this.availableColumns[category].map(item => item.prop);
       return categoryProps.every(prop => this.selectedColumnProps.includes(prop));
     },
-    // 判断某一类别是否处于部分选中状态
     isCategoryIndeterminate(category) {
       const categoryProps = this.availableColumns[category].map(item => item.prop);
       const selectedCount = categoryProps.filter(prop => this.selectedColumnProps.includes(prop)).length;
       return selectedCount > 0 && selectedCount < categoryProps.length;
     },
-    // 处理类别复选框的选中或取消选中事件
     handleCategoryChange(category, checked) {
       const categoryProps = this.availableColumns[category].map(item => item.prop);
       if (checked) {
-        // 选中时，将该类别下所有字段加入已选项中（去重处理）
         this.selectedColumnProps = Array.from(new Set([...this.selectedColumnProps, ...categoryProps]));
       } else {
-        // 取消选中时，将该类别下的所有字段从已选项中移除
         this.selectedColumnProps = this.selectedColumnProps.filter(prop => !categoryProps.includes(prop));
       }
     }
@@ -402,7 +402,10 @@ export default {
   margin-bottom: 15px;
 }
 .category-title {
-  font-weight: bold;
   margin-bottom: 5px;
+}
+.category-title-highlight {
+  font-weight: bold;
+  color: #1677ff;
 }
 </style>
