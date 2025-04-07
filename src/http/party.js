@@ -75,6 +75,16 @@ export const pageBranches = (queryItems) => {
 }
 
 /**
+ * 获取所有支部书记
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const findAllBranchLeader = () => {
+    return instance.get("/auth/branch/findAllBranchLeader");
+}
+
+/**
  * 创建新的支部
  * @author 安俊霖
  * @argument 
