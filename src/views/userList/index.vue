@@ -5,19 +5,19 @@
         <span>人员管理</span>
       </div>
       <div style="margin-bottom: 20px;">
-        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center;">
+        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center;flex-wrap: wrap;align-items: center">
           <el-form-item label="学号">
-            <el-input v-model="searchForm.userNumber" placeholder="请输入学号"></el-input>
+            <el-input v-model="searchForm.userNumber" placeholder="请输入学号" style="width:150px"></el-input>
           </el-form-item>
           <el-form-item label="姓名">
-            <el-input v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
+            <el-input v-model="searchForm.userName" placeholder="请输入姓名" style="width:150px"></el-input>
           </el-form-item>
           <el-form-item label="发展阶段">
             <el-select
                 v-model="searchForm.developmentPhase"
                 placeholder="请选择"
                 @change="search"
-                style="width:250px">
+                style="width:150px">
               <el-option label="共青团员" value="共青团员"></el-option>
               <el-option label="入党申请人" value="入党申请人"></el-option>
               <el-option label="积极分子" value="积极分子"></el-option>
