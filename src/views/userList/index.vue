@@ -58,13 +58,13 @@
             <el-button @click="resetSearch">重置</el-button>
           </el-form-item>
           <div style="margin-left: auto; display: flex; gap: 10px;align-items: center">
-            <el-tooltip placement="top" content="单个人员新增">
+            <el-tooltip placement="top" content="单个人员新增" v-if="isDangWei">
               <el-icon class="el-icon--right" @click="$router.push({name : 'addUserWithUserList'})">
-                <Plus />
+                <Plus/>
               </el-icon>
             </el-tooltip>
 
-            <el-button class="bottom-button" type="primary" @click="$refs.importStudentListDialog.openDialog()"
+            <el-button v-if="isDangWei" class="bottom-button" type="primary" @click="$refs.importStudentListDialog.openDialog()"
                        style="width:140px;">
               <span class="text">导入学生名单</span>
             </el-button>
@@ -113,7 +113,7 @@
             <div style="display: flex; justify-content: center; align-items: center;">
               <el-button size="mini" type="primary" @click="edit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" @click="deleteRow(scope.row)" style="color:#fff;">删除</el-button>
-              <el-dropdown trigger="click" @command="handleCommand(scope.row, $event)">
+              <el-dropdown trigger="click" @command="handleCommand(scope.row, $event)" v-if="isDangWei">
                 <span style="display: flex; align-items: center;">
                   <el-icon class="el-icon--right">
                     <More/>
@@ -170,9 +170,11 @@
 </template>
 
 <script>
-import { More, Plus } from '@element-plus/icons-vue';
+import {More, Plus} from '@element-plus/icons-vue';
 import ImportStudentListDialog from './ImportStudentListDialog.vue';
 import ChangeSecretaryDialog from './ChangeSecretaryDialog.vue';
+import {getCurrentUser} from "@/utils/auth";
+
 export default {
   name: "StageTable",
   components: {
@@ -183,6 +185,7 @@ export default {
   },
   data() {
     return {
+      isDangWei: true,
       tableData: [],
       // 默认展示的动态列
       extraColumns: [
@@ -289,6 +292,9 @@ export default {
     };
   },
   created() {
+    let user = getCurrentUser();
+    this.isDangWei = user && user?.role === '学校党委';
+
     this.fetchData();
     this.fetchSearchBranches();
   },
@@ -425,13 +431,18 @@ export default {
       this.search();
     },
     edit(row) {
-      console.log("编辑：", row);
+      if (!this.isDangWei) {
+        return this.$message.warning("无权限")
+      }
       this.$router.push({
         name: 'editUserWithUserList',
         query: {id: row.id}
       });
     },
     deleteRow(row) {
+      if (!this.isDangWei) {
+        return this.$message.warning("无权限")
+      }
       this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

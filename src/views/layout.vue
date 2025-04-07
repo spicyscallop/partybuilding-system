@@ -127,6 +127,11 @@ export default {
             { title: '风采记录', icon: 'mdi-folder-multiple-image', link: '/partyManager/album' },
             { title: '荣誉奖项', icon: 'mdi-medal', link: '/partyManager/award' },
             { title: '档案管理', icon: 'mdi-file-cog', link: '/partyManager/file' },
+            {
+              title: '人员管理',
+              icon: 'mdi-calendar',
+              link: '/teacher/userList/index'
+            },
           ];
       } else if (this.userRole === '学校党委' || this.userRole === '系统管理员') {
           this.menuLinks = {
