@@ -195,6 +195,11 @@ export default {
               icon: 'mdi-calendar',
               link: '/teacher/partyMemberRules/index'
             },
+            {
+              title: '人员管理',
+              icon: 'mdi-calendar',
+              link: '/teacher/userList/index'
+            },
           ];
       } else {
         // 未知角色，跳转到登录页面
