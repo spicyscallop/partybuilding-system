@@ -27,12 +27,18 @@
 					<v-col cols="10">
 						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="handleAdd">添加支部</el-button>
 					</v-col>
+					<v-col cols="2">
+                        <!-- 属性筛选 -->
+                        <AttributeSelection :optionList=colNames style="display: inline-block;float: right;"
+                            @optionChange="changeCheckCols"></AttributeSelection>
+                    </v-col>
 				</div>
 			</v-row>
             <v-row class="d-flex flex-column h-100">
                 <!-- 设置一个占满剩余空间的 div -->
                 <div class="flex-grow-1 overflow-auto">
-                    <el-table 
+                    <el-table
+						:key="tableKey"
 						ref="multipleTable" 
 						:data="tableData" 
 						max-height="80vh"
@@ -40,15 +46,23 @@
                         style="border-radius: 15px;background-color: #F7F7F7;"
                         :header-row-style="headerRowStyle" :row-style="rowStyle" :header-cell-style="headerRowStyle"
 					>
-                        <!-- 表格列定义 -->
-                        <el-table-column type="selection" width="55">
+                        <el-table-column type="selection" width="40">
                         </el-table-column>
-                        <el-table-column prop="branch.branchName" label="支部名称" align='center'>
+                        <el-table-column v-if="visList[0]" prop="branch.branchName" label="支部名称" align='center'>
                         </el-table-column>
-                        <el-table-column prop="branchLeaderName" label="支部书记" align='center'>
+                        <el-table-column v-if="visList[1]" prop="branchLeaderName" label="支部书记" align='center'>
                         </el-table-column>
-                        <el-table-column prop="partyMemberCount" label="党员数量" align='center'>
+                        <el-table-column v-if="visList[2]" prop="partyMemberCount" label="党员数量" align='center' width="100">
                         </el-table-column>
+						<el-table-column v-if="visList[3]" prop="preparatoryPartyMemberCount" label="预备党员数量" align='center' width="110">
+                        </el-table-column>
+						<el-table-column v-if="visList[4]" prop="activeMemberCount" label="积极分子数量" align='center' width="110">
+                        </el-table-column>
+						<el-table-column v-if="visList[5]" prop="developmentObjectCount" label="发展对象数量" align='center' width="110">
+                        </el-table-column>
+						<el-table-column v-if="visList[6]" prop="partyApplicantCount" label="团员数量" align='center' width="100">
+                        </el-table-column>
+
                         <el-table-column label="操作" align='center'>
                         <template #default="scope">
                             <el-button
@@ -85,14 +99,21 @@
 				<el-row :gutter="10">
 					<el-col :span="12">
 						<el-form-item label="支部名称" prop="branchName">
-							<el-input v-model="form.branchName"></el-input>
+							<el-input v-model="form.branch.branchName"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="10">
 					<el-col :span="12">
-						<el-form-item label="支部书记" prop="branchLeaderName">
-							<el-input v-model="form.branchLeaderName"></el-input>
+						 <el-form-item label="支部书记" prop="branchSecretaryId" required>
+							<el-select v-model="form.branchSecretaryId" placeholder="请选择" style="width: 100%;">
+								<el-option
+									v-for="branchLeader in branchLeaderList"
+									:key="branchLeader.id"
+									:label="branchLeader.name"
+									:value="branchLeader.id">
+								</el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -107,20 +128,33 @@
 
 <script>
 import SubpageTitle from '@/components/SubpageTitle.vue';
+import AttributeSelection from '@/components/dropDown/AttributeSelection.vue'
 import { ArrowDown } from '@element-plus/icons-vue';
-import { pageBranches, deleteBranch, deleteBranchByBatch, addBranch, editBranch } from "@/http/party.js"
+import { findAllBranchLeader, pageBranches, deleteBranch, deleteBranchByBatch, addBranch, editBranch } from "@/http/party.js"
 import "@/style/Common.css";
 
 export default {
     components: {
       SubpageTitle,
+	  AttributeSelection,
       ArrowDown
     },
     mounted() {
         this.queryList();
+		findAllBranchLeader().then(res => {
+			if (res.data.length <= 0) this.branchLeaderList = [{ id: "", name: "" }]
+			this.branchLeaderList = res.data.map(item => ({
+				id: item.id,
+				name: item.userName,
+			}))
+			// console.log(this.branchLeaderList)
+		}).catch(err => {
+			this.$message.error("支部书记列表请求出错")
+		})
     },
     data() {
         return {
+			tableKey: 0,
 			currentRowId: "",
 			isEdit: false,
 			dialogVisible: false,
@@ -133,20 +167,26 @@ export default {
                 }
             },
             form: {
-                branchName: "",
-                branchLeaderName: "",
+                branch: {
+					branchName: "",
+				},
+				branchSecretaryId: "",
             },
             tableData: [
 				{
 					branch: {
 						id: "",
 						branchName: "",
-						parentBranchId: "",
 						branchInfo: "",
 					},
 					children: null,
 					branchLeaderName: "",
+					branchSecretaryId: "",
 					partyMemberCount: 0,
+					activeMemberCount: 0,
+					developmentObjectCount: 0,
+					preparatoryPartyMemberCount: 0,
+					partyApplicantCount: 0
 				},
             ],
             tableBottom: {
@@ -162,6 +202,26 @@ export default {
 				],
 			},
             selectedIds: [],
+			branchLeaderList: [],
+			checkedCols: [
+				'支部名称',
+				'支部书记',
+				'党员数量',
+				'预备党员数量',
+				'积极分子数量',
+				'发展对象数量',
+				'共青团员数量',
+			],
+			colNames: [
+				'支部名称',
+				'支部书记',
+				'党员数量',
+				'预备党员数量',
+				'积极分子数量',
+				'发展对象数量',
+				'共青团员数量',
+			],
+			visList: [true, true, true, true, true, true, true],
         }
     },
     methods: {
@@ -208,8 +268,8 @@ export default {
 					console.log(err);
 				});
 			} else {
-				// TODO: 还需要和后端沟通（resp msg: 对应的父支部Id不存在）
-				const editData = { ...this.form, id: this.currentRowId };
+				let editData = { ...this.form};
+				editData.branch.id = this.currentRowId
 				editBranch(editData).then(res => {
 					this.$message.success("编辑支部成功")
 					this.dialogVisible = false
@@ -224,12 +284,15 @@ export default {
 		handleEdit(index, item) {
 			this.isEdit = true
 			this.currentRowId = item.branch.id || ""
-			this.form.branchName = item.branch.branchName
-			this.form.branchLeaderName = item.branchLeaderName
+			this.form.branch.branchName = item.branch.branchName
+			this.form.branchSecretaryId = item.branchSecretaryId
 			this.dialogVisible = true;
 		},
 		clearAddForm() {
-			Object.keys(this.form).forEach(key => { this.form[key] = "" })
+			this.form.branch = {
+				branchName: "",
+			};
+			this.form.branchSecretaryId = ""
 			this.currentRowId = ""
         },
 		handleAdd() {
@@ -238,7 +301,6 @@ export default {
 			this.dialogVisible = true;
 		},
 		// 删除
-		// TODO: 后端目前删除单条支部的接口还有问题
 		handleDelete(i, item) {
 			this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
 				confirmButtonText: '确定',
@@ -289,6 +351,30 @@ export default {
         handleSelectionChange(vals) {
 			this.selectedIds = vals.map(item => String(item.branch.id))
 		},
+		handleCheckChange() {
+			for (let i = 0; i < this.colNames.length; i++) {
+				this.visList[i] = true
+			}
+			for (let i = 0; i < this.colNames.length; i++) {
+				let flag = false;
+				for (let j = 0; j < this.checkedCols.length; j++) {
+					if (this.colNames[i] === this.checkedCols[j]) {
+						flag = true;
+						break;
+					}
+				}
+				this.visList[i] = flag;
+				this.tableKey += 1;
+			}
+		},
+		changeCheckCols(indexList) {
+			let new_checkedCols = [];
+			for (let i = 0; i < indexList.length; i++) {
+				new_checkedCols.push(this.colNames[indexList[i]]);
+			}
+			this.checkedCols = new_checkedCols;
+			this.handleCheckChange();
+		}
     }
 };
 </script>

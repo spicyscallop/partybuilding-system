@@ -185,6 +185,21 @@ const router = createRouter({
           name: 'partyMemberRules',
           component: () => import('@/views/teacher/PartyMemberRules/index.vue')
         },
+        {
+          path: '/teacher/userList/index',
+          name: 'userList',
+          component: () => import('@/views/userList/index.vue')
+        },
+        {
+          path: '/teacher/userList/edit',
+          name: 'editUserWithUserList',
+          component: () => import('@/views/userList/edit.vue')
+        },
+        {
+          path: '/teacher/userList/add',
+          name: 'addUserWithUserList',
+          component: () => import('@/views/userList/add.vue')
+        },
       ]
     },
     {
