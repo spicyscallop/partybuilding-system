@@ -82,7 +82,7 @@
         <div class="form-item-vertical">
           <span class="label" style="width: 10%;text-align: right;">备注</span>
           <el-input
-            v-model="form.remarks"
+            v-model="form.remark"
             type="textarea"
             :rows="6"
             placeholder="请输入备注信息"
@@ -121,26 +121,38 @@
         type: Boolean,
         default: false
       },
+      myEdit: {
+        type: Boolean,
+        default: false
+      },
       developmentPhase: {
         type: String,
         default: ''
+      },
+      formData: {
+        type: Object,
+        default: {
+          title: 'dsdas',
+        }
       }
     },
     emits: ['update:modelValue', 'refreshList', 'cancalList'],
     data() {
       return {
         dialogVisible: false,
+        isEdit: false,
         form: {
-          activityName: '',
-          activityNumber: '',
-          developmentPhase: '',
-          activityDate: '',
-          activitySponsor: '',
-          activityType: '',
-          fileCount: '0/20',
-          participants: '',
-          remarks: ''
+            activityName: '',
+            activityNumber: '',
+            developmentPhase: '',
+            activityDate: '',
+            activitySponsor: '',
+            activityType: '',
+            fileCount: '0/20',
+            participants: '',
+            remark: ''
         },
+        
         stageOptions: [
           { value: '入党申请人', label: '入党申请人' },
           { value: '积极分子', label: '积极分子' },
@@ -158,7 +170,18 @@
       modelValue(val) {
         this.dialogVisible = val;
       },
+      myEdit(val) {
+        this.isEdit = val;
+      },
       dialogVisible(val) {
+        if(val == true){
+          if(this.isEdit){
+            this.form = this.formData 
+          }else{
+            this.form = {}
+          }
+          
+        }
         this.$emit('update:modelValue', val);
       }
     },
@@ -172,12 +195,11 @@
         const submitData = {
           activityName: this.form.activityName,
           // activityNumber: this.form.activityNumber,
-          // developmentPhase: this.form.developmentPhase,
-          // activityDate: this.form.activityDate,
-          // activitySponsor: this.form.activitySponsor,
-          // activityType: this.form.activityType,
-          // activityType: this.form.activityType,
-          // remarks: this.form.remarks
+          developmentPhase: this.form.developmentPhase,
+          activityDate: this.form.activityDate,
+          activitySponsor: this.form.activitySponsor,
+          activityType: this.form.activityType,
+          remark: this.form.remark
         }
         console.log(submitData);
         this.$axios.post('/activities/',submitData).then(res=>{
@@ -190,7 +212,7 @@
       addNotice(){
         this.$emit('changeDialog');
       }
-    }
+    },
   }
   </script>
   
