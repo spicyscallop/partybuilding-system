@@ -242,7 +242,7 @@ export default {
       else
       {
         const data = {
-          "developmentPhase":"积极分子",
+          "developmentPhase":"入党申请人",
           page: {
             pageNumber: this.userTableBottom.currentPage,
             pageSize: this.queryItems.pageSize,
