@@ -33,7 +33,7 @@
           <div style="padding-top: 20px;padding-bottom: 10px;display: flex; width: 100%;">
             <v-col cols="12">
               <el-button class="whiteBtn" style="border-color: #A5A5A5;display: inline-block;float: right;margin-left: 25px;" @click="deleteRow()">删除活动信息</el-button>
-              <el-button class="redBtn" style="display: inline-block;float: right" @click="batchDialogVisible = true">添加活动信息</el-button>
+              <el-button class="redBtn" style="display: inline-block;float: right" @click="addActivity">添加活动信息</el-button>
             </v-col>
           </div>
         </v-row>
@@ -49,6 +49,15 @@
               <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''" align="center">
                 <template v-slot="scope" v-if="item.type === 'date'">
                   {{ formatTime(scope.row[item.prop]) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align='center' width="200">
+                <template #default="scope">
+                  <el-button
+                  @click="handleEdit(scope.$index, scope.row)">管理</el-button>
+                  <el-button
+                  class="redBtn"
+                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -73,6 +82,8 @@
       <AddActivitiyDialog
           v-model="batchDialogVisible"
           :value="batchDialogVisible"
+          :myEdit="isEdit"
+          :form-data="parentForm"
           @refreshList="queryList"
           @cancalList="closeDialog"
           @changeDialog="changeDialog">
@@ -134,6 +145,7 @@
           pageSize: 10,
         },
         tableData: [],
+        parentForm:[],
         tableBottom: {
           currentPage: 1,
           pageSizeList: [10, 20, 30, 50],
@@ -148,7 +160,7 @@
           backgroundColor: '#F7F7F7',
           border: '#2E2E2E'
         },
-        colNames: ['活动编号', '活动名称', '发展阶段','主办单位','活动时间','活动类型','提交文件/申请学时','状态','通知内容','操作'],
+        colNames: ['活动编号', '活动名称', '发展阶段','主办单位','活动时间','活动类型','提交文件/申请学时','状态','通知内容'],
         columns: [
           {
             label: '活动编号',
@@ -186,15 +198,12 @@
           },
           {
             label: '通知内容',
-            prop: 'activistPartyTraining',
-          },
-          {
-            label: '操作',
-            width: 200
-          },
+            prop: 'remark',
+          }
         ],
         batchDialogVisible: false,
         noticeDialogVisible: false,
+        isEdit: false,
         selectedRows: [],
       };
     },
@@ -227,7 +236,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post('/activity/deleteByBatch', ids )
+          this.$axios.post('/activities/deleteByBatch', ids )
               .then(response => {
                 this.$message({
                   type: 'success',
@@ -295,6 +304,16 @@
       changeDialog(){
         this.batchDialogVisible = !this.batchDialogVisible
         this.noticeDialogVisible = !this.batchDialogVisible
+      },
+      handleEdit(index, item){
+        this.parentForm = {...item}
+        this.isEdit = true
+        this.batchDialogVisible = true
+      },
+      addActivity(){
+        this.parentForm = {}
+        this.isEdit = false
+        this.batchDialogVisible = true
       }
     },
     mounted() {
