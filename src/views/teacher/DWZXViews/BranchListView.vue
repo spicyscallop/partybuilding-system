@@ -268,7 +268,8 @@ export default {
 					console.log(err);
 				});
 			} else {
-				const editData = { ...this.form, id: this.currentRowId };
+				let editData = { ...this.form};
+				editData.branch.id = this.currentRowId
 				editBranch(editData).then(res => {
 					this.$message.success("编辑支部成功")
 					this.dialogVisible = false
