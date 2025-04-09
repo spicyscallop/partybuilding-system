@@ -19,9 +19,9 @@ export default defineConfig({
     //自定义代理规则
     proxy: {
       '/api': { // 匹配所有以 '/api'开头的请求路径
-        // target: 'http://localhost:8004/', // 初始本地后端接口路径
+        target: 'http://localhost:8004/', // 初始本地后端接口路径
         // target: 'http://localhost:9221', // 初始本地后端接口路径
-        target: 'http://49.232.10.48:8004/', // 服务器上后端接口路径
+        // target: 'http://49.232.10.48:8004/', // 服务器上后端接口路径
         // target: 'http://192.168.1.102:8080/',
         rewrite: (path) => path.replace(/^\/api/, ''),
       }

@@ -7,7 +7,7 @@
         </div>
       </template>
       <el-form :model="form" label-width="220px">
-        <el-form-item label="积极分子组织谈话与推优间隔(月)">
+        <el-form-item label="入党申请书落款时间与推优时间间隔(月)">
           <el-input-number v-model="form.talkToRecommendationInterval " :min="1"></el-input-number>
         </el-form-item>
 
