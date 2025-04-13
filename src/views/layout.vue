@@ -187,7 +187,7 @@ export default {
                 { title: '经费管理', link: '/teacher/xxx' }, //TODO
                 { title: '结对帮扶录入', link: '/teacher/xxx' }, //TODO
                 { title: '志愿服务录入', link: '/teacher/xxx' }, //TODO
-                { title: '荣誉风采录入', link: '/teacher/xxx' } //TODO
+                { title: '荣誉风采录入', link: '/teacher/zbgl/ryfc' }
               ],
             },
             {

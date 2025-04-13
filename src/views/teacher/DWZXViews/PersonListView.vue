@@ -207,7 +207,7 @@
 							<span class="file-name">{{ currentFile.name }}</span>
 							<span class="file-size">({{ formatFileSize(currentFile.size) }})</span>
 						</div>
-						<el-button type="text" @click="currentFile = null">移除</el-button>
+						<el-button link @click="currentFile = null">移除</el-button>
 					</div>
 				</div>
 				 <!-- 隐藏的文件输入 -->
