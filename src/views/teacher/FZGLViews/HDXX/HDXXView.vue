@@ -49,6 +49,9 @@
                 <template v-slot="scope" v-if="item.type === 'date'">
                   {{ formatTime(scope.row[item.prop]) }}
                 </template>
+                <template v-slot="scope" v-if="item.type === 'array'">
+                  {{ formatArray(scope.row[item.prop]) }}
+                </template>
               </el-table-column>
               <el-table-column label="操作" align='center' width="200">
                 <template #default="scope">
@@ -174,6 +177,8 @@
           {
             label: '发展阶段',
             prop: 'developmentPhases',
+            type: 'array',
+            width:200
           },
           {
             label: '主办单位',
@@ -260,6 +265,10 @@
           // 用户取消删除操作
         });
       },
+      formatArray(arr) {
+        const phasesArray = JSON.parse(arr);
+        return phasesArray.join('、');  
+      },
       formatTime(timestamp) {
         if (!timestamp) {
           return '未设置';
@@ -315,6 +324,32 @@
         this.parentForm = {...item}
         this.isEdit = true
         this.batchDialogVisible = true
+      },
+      handleDelete(index, item){
+        const ids = [item.id]
+        this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post('/activities/deleteByBatch', ids )
+              .then(response => {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.queryList();
+              })
+              .catch(error => {
+                this.$message({
+                  type: 'error',
+                  message: '删除失败!'
+                });
+                console.error('删除失败:', error);
+              });
+        }).catch(() => {
+          // 用户取消删除操作
+        });
       },
       addActivity(){
         this.parentForm = {}

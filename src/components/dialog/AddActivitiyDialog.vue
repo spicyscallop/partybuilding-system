@@ -22,7 +22,7 @@
         <div class="form-item">
           <span class="required">*</span>
           <span class="label">发展阶段</span>
-          <el-select v-model="form.developmentPhase" placeholder="请选择发展阶段">
+          <el-select v-model="form.developmentPhasesArray" multiple placeholder="请选择发展阶段">
             <el-option
               v-for="item in stageOptions"
               :key="item.value"
@@ -31,37 +31,34 @@
             />
           </el-select>
           <span class="required" style="margin-left: 30px;">*</span>
-          <span class="label">活动时间</span>
-          <el-date-picker
-            v-model="form.activityDate"
-            type="datetime"
-            placeholder="请选择活动时间"
-          />
+          <span class="label">主办单位</span>
+          <el-input v-model="form.activitySponsor" placeholder="请输入主办单位" />
         </div>
   
         <!-- 第三行 -->
         <div class="form-item">
-          <span class="required">*</span>
-          <span class="label">主办单位</span>
-          <el-input v-model="form.activitySponsor" placeholder="请输入主办单位" />
-          <span class="required" style="margin-left: 30px;">*</span>
-          <span class="label">活动类型</span>
-          <el-select v-model="form.activityType" placeholder="请选择">
-            <el-option
-              v-for="item in activityTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <span class="required" style="margin-left:-28px;">*</span>
+          <span class="label">活动开始时间</span>
+          <el-date-picker
+            v-model="form.activityStartDate"
+            type="date"
+            placeholder="请选择活动开始时间"
+          />
+          <span class="required" >*</span>
+          <span class="label">活动结束时间</span>
+          <el-date-picker
+            v-model="form.activityEndDate"
+            type="date"
+            placeholder="请选择活动结束时间"
+          />
         </div>
   
         <!-- 第四行 -->
         <div class="form-item">
-          <span class="required">*</span>
+          <span class="required"> </span>
           <span class="label">提交文件</span>
           <el-input v-model="form.fileCount" disabled placeholder="0/20" style="width: 120px;" />
-          <span class="required" style="margin-left: 30px;">*</span>
+          <span class="required" style="margin-left: 30px;"> </span>
           <span class="label">参与人员</span>
           <el-select v-model="form.participants" placeholder="请选择参与人员" />
         </div>
@@ -72,10 +69,16 @@
             <span class="label" style="margin-left: 11px;">通知内容</span>
             <el-button class="fileButton" @click="addNotice" >添加通知</el-button>
           </div>
-          <div style="width: 50%;display: flex;">
-            <span class="label" style="margin-left: 11px;">已提交人员</span>
-            <el-select v-model="form.submitpeople" placeholder="请选择已提交人员" />
-          </div>
+          <span class="required" style="margin-left: 11px;">*</span>
+          <span class="label">活动类型</span>
+          <el-select v-model="form.activityType" placeholder="请选择">
+            <el-option
+              v-for="item in activityTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </div>
   
         <!-- 备注 -->
@@ -142,10 +145,11 @@
         dialogVisible: false,
         isEdit: false,
         form: {
-            activityName: '',
+            activityStartDate: '',
+            activityEndDate:'',
             activityNumber: '',
-            developmentPhase: '',
-            activityDate: '',
+            developmentPhasesArray:[],
+            activityName: '',
             activitySponsor: '',
             activityType: '',
             fileCount: '0/20',
@@ -161,8 +165,8 @@
           { value: '正式党员', label: '正式党员' }
         ],
         activityTypeOptions: [
-          { value: 'type1', label: '推优活动' },
-          { value: 'type2', label: '其他活动' }
+          { value: '推优活动', label: '推优活动' },
+          { value: '其他活动', label: '其他活动' }
         ]
       }
     },
@@ -186,28 +190,80 @@
       }
     },
     methods: {
+      generateActivityNumber(){
+        // 获取当前日期
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需+1
+        const day = String(now.getDate()).padStart(2, '0');
+
+        // 拼接年月日（前8位）
+        const datePart = `${year}${month}${day}`; // 例如 20250415
+
+        // 获取时间戳的后两位
+        const timestamp = now.getTime();
+        const timePart = String(timestamp).slice(-2); // 取时间戳最后两位
+
+        // 拼接活动编号
+        const activityId = datePart + timePart;
+        return activityId;
+      },
       handleClose() {
         this.dialogVisible = false;
         this.$emit('cancalList');
       },
       handleSubmit() {
-        // TODO: 实现提交逻辑
         const submitData = {
           activityName: this.form.activityName,
-          // activityNumber: this.form.activityNumber,
-          developmentPhase: this.form.developmentPhase,
-          activityDate: this.form.activityDate,
+          activityNumber: this.form.activityNumber,
+          developmentPhases: JSON.stringify(this.form.developmentPhasesArray),
+          activityStartDate: this.form.activityStartDate,
+          activityEndDate: this.form.activityEndDate,
           activitySponsor: this.form.activitySponsor,
           activityType: this.form.activityType,
-          remark: this.form.remark
+          remark: this.form.remark,
+          state:'未审核'
         }
-        console.log(submitData);
-        this.$axios.post('/activities/',submitData).then(res=>{
-          console.log(res);
-
-        })
+        if(this.isEdit){
+          if(this.form.developmentPhasesArray.length == 0){
+            this.$message.error("更新失败：发展阶段不能为空！")
+            this.dialogVisible = false;
+            this.$emit('refreshList');
+            return
+          }
+          submitData.id = this.formData.id
+          this.$axios.post('/activities/update',submitData).then(res=>{
+            console.log(res);
+            if(res.code == "200"){
+              this.$message.success("更新成功！")
+              this.$emit('refreshList');
+            }else{
+              this.$message.error(`更新失败：${res.msg}`)
+            }
+          }).catch(error => {
+            this.$message.error(`请求失败：${error}`);
+          });
+        }else{
+          if(this.form.developmentPhasesArray.length == 0){
+            this.$message.error("添加失败：发展阶段不能为空！")
+            this.dialogVisible = false;
+            this.$emit('refreshList');
+            return
+          }
+          submitData.activityNumber = this.generateActivityNumber()
+          this.$axios.post('/activities/add',submitData).then(res=>{
+            console.log(res);
+            if(res.code == "200"){
+              this.$message.success("添加成功！")
+              this.$emit('refreshList');
+            }else{
+              this.$message.error(`添加失败：${res.msg}`)
+            }
+          }).catch(error => {
+            this.$message.error(`请求失败：${error}`);
+          });
+        }
         this.dialogVisible = false;
-        this.$emit('refreshList');
       },
       addNotice(){
         this.$emit('changeDialog');
