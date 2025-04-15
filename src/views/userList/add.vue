@@ -130,7 +130,22 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="谈话人（申请阶段）">
-              <el-input v-model="form.talkApplicantPersonId" placeholder="请输入谈话人"></el-input>
+              <el-select
+                  v-model="talkApplicantPersonIdArr"
+                  multiple
+                  filterable
+                  remote
+                  clearable
+                  allow-create
+                  :remote-method="remoteSearchUser"
+                  placeholder="请输入用户名">
+                <el-option
+                    v-for="item in remoteUserOptions"
+                    :key="item.id"
+                    :label="item.userName"
+                    :value="item.userName">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -153,8 +168,22 @@
         <el-divider content-position="left">积极分子阶段</el-divider>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="谈话人（积极阶段）">
-              <el-input v-model="form.talkActivistPersonId" placeholder="请输入谈话人"></el-input>
+            <el-form-item label="谈话人（积极分子阶段）">
+              <el-select
+                  v-model="talkActivistPersonIdArr"
+                  multiple
+                  filterable
+                  remote
+                  clearable
+                  :remote-method="remoteSearchUser"
+                  placeholder="请输入用户名">
+                <el-option
+                    v-for="item in remoteUserOptions"
+                    :key="item.id"
+                    :label="item.userName"
+                    :value="item.userName">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="资格审查时间间隔(天)">
               <el-input-number v-model="form.qualificationInterval" :min="0" placeholder="请输入天数"></el-input-number>
@@ -213,7 +242,21 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="培养联系人">
-              <el-input v-model="form.cultivateContacts" placeholder="请输入联系人"></el-input>
+              <el-select
+                  v-model="cultivateContactsArr"
+                  multiple
+                  filterable
+                  remote
+                  clearable
+                  :remote-method="remoteSearchUser"
+                  placeholder="请输入用户名">
+                <el-option
+                    v-for="item in remoteUserOptions"
+                    :key="item.id"
+                    :label="item.userName"
+                    :value="item.userName">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="《入党积极分子-考察登记表》提交时间">
               <el-date-picker
@@ -259,7 +302,21 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="入党介绍人">
-              <el-input v-model="form.partySponsor" placeholder="请输入入党介绍人"></el-input>
+              <el-select
+                  v-model="partySponsorArr"
+                  multiple
+                  filterable
+                  remote
+                  clearable
+                  :remote-method="remoteSearchUser"
+                  placeholder="请输入用户名">
+                <el-option
+                    v-for="item in remoteUserOptions"
+                    :key="item.id"
+                    :label="item.userName"
+                    :value="item.userName">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -525,6 +582,11 @@ export default {
         talkActivistTime: '',
         formalMemberConfirmationTime: ''
       },
+      talkApplicantPersonIdArr: [],
+      talkActivistPersonIdArr: [],
+      cultivateContactsArr: [],
+      partySponsorArr: [],
+      remoteUserOptions: [],
       // 用于存放党支部列表
       branchOptions: [],
       // 表单校验规则
@@ -551,6 +613,21 @@ export default {
     this.fetchBranches();
   },
   methods: {
+    remoteSearchUser(query) {
+      if (query !== '') {
+        this.$axios.get(`/stage/searchUser?username=${query}`)
+            .then(response => {
+              // 假设返回值为 [{ id: 1, username: '张三' }, { id: 2, username: '李四' }, ...]
+              this.remoteUserOptions = response.data;
+            })
+            .catch(error => {
+              this.$message.error("搜索用户失败");
+              console.error(error);
+            });
+      } else {
+        this.remoteUserOptions = [];
+      }
+    },
     fetchBranches() {
       this.$axios.get('/auth/branch/findAllBranches')
           .then(response => {
@@ -564,6 +641,10 @@ export default {
     submitForm() {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
+          this.form.talkApplicantPersonId = this.talkApplicantPersonIdArr.join(',');
+          this.form.talkActivistPersonId = this.talkActivistPersonIdArr.join(',');
+          this.form.cultivateContacts = this.cultivateContactsArr.join(',');
+          this.form.partySponsor = this.partySponsorArr.join(',');
           this.$axios.post('/stage/add', this.form)
               .then(response => {
                 this.$message.success("新增成功");
