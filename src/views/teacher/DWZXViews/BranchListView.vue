@@ -100,14 +100,15 @@
 			<el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
 				<el-row :gutter="10">
 					<el-col :span="12">
-						<el-form-item label="支部名称" prop="branchName">
+						<!-- 由于branchName嵌套在form下的branch对象中，所以这里prop也要嵌套 -->
+						<el-form-item label="支部名称" prop="branch.branchName">
 							<el-input v-model="form.branch.branchName"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="10">
 					<el-col :span="12">
-						 <el-form-item label="支部书记" prop="branchSecretaryId" required>
+						<el-form-item label="支部书记" prop="branchSecretaryId">
 							<el-select v-model="form.branchSecretaryId" placeholder="请选择" style="width: 100%;">
 								<el-option
 									v-for="branchLeader in branchLeaderList"
@@ -199,9 +200,9 @@ export default {
 				branchName: [
 					{ required: true, message: '请输入支部名称', trigger: 'blur' },
 				],
-				branchSecretaryId: [
-					{ required: true, message: '请选择支部书记', trigger: 'blur' },
-				],
+				// branchSecretaryId: [
+				// 	{ required: true, message: '请选择支部书记', trigger: 'change' },
+				// ],
 			},
             selectedIds: [],
 			branchLeaderList: [],
