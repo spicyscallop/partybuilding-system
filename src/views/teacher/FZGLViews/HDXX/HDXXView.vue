@@ -11,16 +11,15 @@
           <div
               style="background-color: #F35339; height: 100%;width: 100%;border-radius: 20px;padding-top: 10px;display: flex;">
             <v-col cols="10">
-              <span style="margin-left: 30px;">发展阶段</span>
-              <el-select v-model="form.stage" placeholder="请选择" style=" margin-left:10px;height: 30px;font-size: 12px; width: 20%;">
-                <el-option v-for="item in stageOptions" :key="item.value" :label="item.label" :value="item.value"/>
-              </el-select>
+              <span style="margin-left: 30px;">活动名称</span>
+              <input placeholder="    请输入活动名称" v-model="queryItems.activityName"
+                     style=" margin-left:10px;background-color: white;font-size: 14px;height: 30px; width: 20%;">
               <span style="margin-left: 30px;">活动时间</span>
               <el-select v-model="form.activetime" placeholder="请选择" style=" margin-left:10px;height: 30px;font-size: 12px; width: 20%;">
                 <el-option v-for="item in activetimeOptions" :key="item.value" :label="item.label" :value="item.value"/>
               </el-select>
               <span style="margin-left: 30px;">活动编号</span>
-              <input placeholder="    请输入活动编号" v-model="queryItems.name"
+              <input placeholder="    请输入活动编号" v-model="queryItems.activityNumber"
                      style=" margin-left:10px;background-color: white;font-size: 14px;height: 30px; width: 20%;">
             </v-col>
             <v-col cols="2">
@@ -49,6 +48,9 @@
               <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width || ''" align="center">
                 <template v-slot="scope" v-if="item.type === 'date'">
                   {{ formatTime(scope.row[item.prop]) }}
+                </template>
+                <template v-slot="scope" v-if="item.type === 'array'">
+                  {{ formatArray(scope.row[item.prop]) }}
                 </template>
               </el-table-column>
               <el-table-column label="操作" align='center' width="200">
@@ -139,10 +141,12 @@
             }
         },
         queryItems: {
-          userId: '',
-          name: '',
-          applyTime: [],
-          pageSize: 10,
+          activityName: '',
+          activityNumber: '',
+          page: {                                  // 分页或其他需要的字段
+            pageSize: 10,
+            pageNumber: 1
+          }
         },
         tableData: [],
         parentForm:[],
@@ -172,15 +176,22 @@
           },
           {
             label: '发展阶段',
-            prop: 'developmentPhase',
+            prop: 'developmentPhases',
+            type: 'array',
+            width:200
           },
           {
             label: '主办单位',
             prop: 'activitySponsor',
           },
           {
-            label: '活动时间',
-            prop: 'activityDate',
+            label: '活动开始时间',
+            prop: 'activityStartDate',
+            type: 'date'
+          },
+          {
+            label: '活动结束时间',
+            prop: 'activityEndDate',
             type: 'date'
           },
           {
@@ -190,7 +201,6 @@
           {
             label: '提交文件/申请学时',
             prop: 'appliedStudyHour',
-            width: 200
           },
           {
             label: '状态',
@@ -255,9 +265,13 @@
           // 用户取消删除操作
         });
       },
+      formatArray(arr) {
+        const phasesArray = JSON.parse(arr);
+        return phasesArray.join('、');  
+      },
       formatTime(timestamp) {
         if (!timestamp) {
-          return '';
+          return '未设置';
         }
         let date = new Date(timestamp);
         let year = date.getFullYear();
@@ -275,10 +289,12 @@
       },
       queryList() {
         this.batchDialogVisible = false;
-        this.$axios.get('/activities/')
+        this.$axios.post('/activities/pageAdmin',this.queryItems)
             .then(response => {
-              this.tableData = response.data.activities;
-              this.tableBottom.totalNum = response.data.total;
+              if (response.code == "200"){
+                this.tableData = response.data.records;
+                this.tableBottom.totalNum = response.data.total;
+              }
             })
             .catch(error => {
               console.error('请求失败:', error);
@@ -288,9 +304,8 @@
         this.batchDialogVisible = false;
       },
       clearInputMessage() {
-        this.queryItems.userId = '';
-        this.queryItems.name = '';
-        this.queryItems.applyTime = [];
+        this.queryItems.activityNumber = '';
+        this.queryItems.activityName = '';
       },
       handleSizeChange(size) {
         this.queryItems.pageSize = size;
@@ -309,6 +324,32 @@
         this.parentForm = {...item}
         this.isEdit = true
         this.batchDialogVisible = true
+      },
+      handleDelete(index, item){
+        const ids = [item.id]
+        this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post('/activities/deleteByBatch', ids )
+              .then(response => {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.queryList();
+              })
+              .catch(error => {
+                this.$message({
+                  type: 'error',
+                  message: '删除失败!'
+                });
+                console.error('删除失败:', error);
+              });
+        }).catch(() => {
+          // 用户取消删除操作
+        });
       },
       addActivity(){
         this.parentForm = {}

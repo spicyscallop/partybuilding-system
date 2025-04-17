@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { ElMessage } from "element-plus";
+import {ElLoading, ElMessage} from "element-plus";
 
 export default {
   name: "ImportStudentListDialog",
@@ -135,6 +135,11 @@ export default {
       const formData = new FormData();
       formData.append("file", this.form.file);
       this.loading = true;
+      const loadingInstance = ElLoading.service({
+        lock: true,
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
       this.$axios.post('/files/importUsers', formData, {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -160,6 +165,7 @@ export default {
           })
           .finally(() => {
             this.loading = false;
+            loadingInstance.close();
           });
     }
   }

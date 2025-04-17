@@ -5,7 +5,7 @@
         <span>人员管理</span>
       </div>
       <div style="margin-bottom: 20px;">
-        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center;flex-wrap: wrap;align-items: center">
+        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center;flex-wrap: wrap;">
           <el-form-item label="学号">
             <el-input v-model="searchForm.userNumber" placeholder="请输入学号" style="width:150px"></el-input>
           </el-form-item>
@@ -57,7 +57,7 @@
             <el-button type="primary" @click="search">搜索</el-button>
             <el-button @click="resetSearch">重置</el-button>
           </el-form-item>
-          <div style="margin-left: auto; display: flex; gap: 10px;align-items: center">
+          <div style="margin-left: auto; display: flex; gap: 10px; align-items: center">
             <el-tooltip placement="top" content="单个人员新增" v-if="isDangWei">
               <el-icon class="el-icon--right" @click="$router.push({name : 'addUserWithUserList'})">
                 <Plus/>
@@ -71,6 +71,10 @@
             <el-button type="primary" @click="dialogVisible = true" style="width:100px;">
               添加列
             </el-button>
+            <!-- 新增：批量删除按钮 -->
+            <el-button v-if="isDangWei" type="danger" @click="handleBatchDelete" style="width:100px;">
+              批量删除
+            </el-button>
           </div>
         </el-form>
         <import-student-list-dialog
@@ -78,7 +82,9 @@
             @fetchStudents="fetchStudents"
         />
       </div>
-      <el-table :data="tableData" stripe border style="width: 100%">
+      <!-- 在el-table上添加 selection-change 事件，并新增 selection 列 -->
+      <el-table :data="tableData" stripe border style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
         <!-- 固定左侧列：学工号和用户姓名（不可取消） -->
         <el-table-column prop="userNumber" label="学工号" fixed="left" :formatter="renderCell"></el-table-column>
         <el-table-column prop="userName" label="用户姓名" fixed="left" :formatter="renderCell"></el-table-column>
@@ -288,7 +294,9 @@ export default {
         ]
       },
       // 新增：用于存放党支部搜索选项
-      searchBranchOptions: []
+      searchBranchOptions: [],
+      // 新增：用于存放批量选择的行数据
+      multipleSelection: []
     };
   },
   created() {
@@ -432,7 +440,7 @@ export default {
     },
     edit(row) {
       if (!this.isDangWei) {
-        return this.$message.warning("无权限")
+        return this.$message.warning("无权限");
       }
       this.$router.push({
         name: 'editUserWithUserList',
@@ -441,7 +449,7 @@ export default {
     },
     deleteRow(row) {
       if (!this.isDangWei) {
-        return this.$message.warning("无权限")
+        return this.$message.warning("无权限");
       }
       this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -517,6 +525,36 @@ export default {
       } else {
         this.selectedColumnProps = this.selectedColumnProps.filter(prop => !categoryProps.includes(prop));
       }
+    },
+    // 新增：记录表格的多选项变化
+    handleSelectionChange(selection) {
+      this.multipleSelection = selection;
+    },
+    // 新增：批量删除方法
+    handleBatchDelete() {
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning("请选择要删除的记录");
+        return;
+      }
+      this.$confirm('此操作将永久删除选中的记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const ids = this.multipleSelection.map(item => item.id);
+        this.$axios.post('stage/deleteByBatch', ids)
+            .then(response => {
+              this.$message.success("批量删除成功");
+              this.fetchData();
+              this.multipleSelection = [];
+            })
+            .catch(error => {
+              this.$message.error("批量删除失败");
+              console.error("批量删除失败：", error);
+            });
+      }).catch(() => {
+        this.$message.info("已取消删除");
+      });
     }
   }
 };

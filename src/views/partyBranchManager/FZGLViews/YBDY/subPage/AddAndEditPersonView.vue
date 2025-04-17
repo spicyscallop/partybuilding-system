@@ -7,74 +7,6 @@
         </SubpageTitle>
       </v-col>
     </v-row>
-    <!-- 入党介绍人选择对话框 -->
-    <el-dialog v-model="dialogVisible" title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入党介绍人选择" width="850" height="600"
-               draggable align-center>
-      <div style="margin: 0px 20px;">
-        <v-row>
-          <!-- 左侧表格 -->
-          <v-col cols="9" style="background-color: white;">
-            <div class="flex-grow-1 overflow-auto">
-              <!-- 查询条件 -->
-              <div
-                  style="background-color: #F35339; border-radius: 10px; height: 50px; display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="color: #ffffff;margin: 0 20px;font-size: 16px;">查询条件</span>
-                <el-input v-model="queryItems.userNumber" placeholder="请输入学工号" size="normal"
-                          style="width: 200px;margin: 0 10px;"></el-input>
-                <el-input v-model="queryItems.userName" placeholder="请输入姓名" size="normal"
-                          style="width: 200px;margin: 0 10px;"></el-input>
-                <el-button class="redBtn" size="normal" type="primary" style="margin-left: 30px" @click="queryUserList">
-                  查询
-                </el-button>
-                <el-button class="whiteBtn" size="normal" @click="clearUserQuery">清除</el-button>
-              </div>
-              <!-- 用户列表表格 -->
-              <el-table ref="multipleTable" :data="userTableData" max-height="400" :key="tableKey"
-                        style="border-radius: 15px;background-color: #F7F7F7;"
-                        @selection-change="handleUserSelectionChange">
-                <el-table-column type="selection">
-                </el-table-column>
-                <el-table-column prop="userNumber" label="学工号" align='center'>
-                </el-table-column>
-                <el-table-column prop="userName" label="姓名" align='center'>
-                </el-table-column>
-                <!-- 如果有其他字段，可以在此添加 -->
-              </el-table>
-              <!-- 分页 -->
-              <div style="display: inline-block;margin-top: 10px;">
-                <el-pagination @size-change="handleUserSizeChange" @current-change="handleUserCurrentChange"
-                               :current-page="userTableBottom.currentPage" :page-sizes="userTableBottom.pageSizeList"
-                               background
-                               :page-size="queryItems.pageSize" small :pager-count="3"
-                               layout="total, sizes, prev, pager, next, jumper" :total="userTableBottom.totalNum">
-                </el-pagination>
-              </div>
-            </div>
-          </v-col>
-          <!-- 右侧已选人员 -->
-          <v-col cols="3" style="background-color: white;">
-            <v-row style="margin-top: 20px;margin-left: 3px;">
-              <span>已选人员(</span>
-              <span style="color: #2B99FF;">{{ checkedUsers.length }}</span>
-              <span>)</span>
-            </v-row>
-            <v-row>
-              <el-table :data="checkedUsers" style="width: 100%" max-height="250">
-                <el-table-column prop="userName" label="姓名"/>
-                <el-table-column prop="phoneNumber" label="手机号码" width="120"/>
-              </el-table>
-            </v-row>
-          </v-col>
-        </v-row>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button class="redBtn" type="primary" @click="chooseUsers">提交</el-button>
-          <el-button class="whiteBtn" @click="dialogVisible = false">取消</el-button>
-        </div>
-      </template>
-    </el-dialog>
-
     <!-- 表单内容 -->
     <v-row class="d-flex justify-space-around mb-6" style="height: 10%;background-color: #ffffff;margin-top: 20px;">
       <v-col cols="4">
@@ -100,7 +32,7 @@
           <v-col cols="6">
             <div style="margin-bottom: 5px;"><span>入党介绍人</span></div>
             <div>
-              <el-input v-model="form.partySponsor" placeholder="" @click="openDialog" 
+              <el-input v-model="form.partySponsor" placeholder=""
               :disabled="isEdit" style="width: 92%;height: 40px;"></el-input>
             </div>
           </v-col>
@@ -210,7 +142,6 @@ export default {
       ],
       placeholder: '请选择',
       // 入党介绍人对话框相关数据
-      dialogVisible: false,
       userTypes: [
         {value: 'teacher', label: '教师'},
         {value: 'student', label: '学生'},
@@ -245,10 +176,6 @@ export default {
           .catch(error => {
             console.error('获取数据失败:', error);
           });
-    },
-    openDialog() {
-      this.dialogVisible = true;
-      this.queryUserList();
     },
     // 查询用户列表
     queryUserList() {
@@ -292,21 +219,8 @@ export default {
       this.userTableBottom.currentPage = page;
       this.queryUserList();
     },
-    // 选择入党介绍人
-    chooseUsers() {
-      if (this.checkedUsers.length > 0) {
-        this.form.partySponsor = this.checkedUsers.map(user => user.userName).join(', ');
-        this.dialogVisible = false;
-      } else {
-        this.$message({
-          type: 'warning',
-          message: '请选择至少一名人员！'
-        });
-      }
-    },
     onSubmit() {
       const submitData = {...this.form};
-
       if (this.isEdit) {
         this.$axios.post('/stage/update', submitData)
             .then(response => {

@@ -94,7 +94,9 @@
         <el-dialog
 			:title="isEdit ? '编辑支部' : '添加支部'"
 			v-model="dialogVisible"
-			width="50%">
+			width="50%"
+			@close="onDialogClose"
+			>
 			<el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
 				<el-row :gutter="10">
 					<el-col :span="12">
@@ -197,8 +199,8 @@ export default {
 				branchName: [
 					{ required: true, message: '请输入支部名称', trigger: 'blur' },
 				],
-				branchLeaderName: [
-					{ required: true, message: '请输入支部书记', trigger: 'blur' },
+				branchSecretaryId: [
+					{ required: true, message: '请选择支部书记', trigger: 'blur' },
 				],
 			},
             selectedIds: [],
@@ -282,11 +284,14 @@ export default {
 			}
 		},
 		handleEdit(index, item) {
+			this.dialogVisible = true;
 			this.isEdit = true
 			this.currentRowId = item.branch.id || ""
-			this.form.branch.branchName = item.branch.branchName
-			this.form.branchSecretaryId = item.branchSecretaryId
-			this.dialogVisible = true;
+			this.$nextTick(() => {
+				this.form.branch.branchName = item.branch.branchName
+				this.form.branchSecretaryId = item.branchSecretaryId
+			})
+
 		},
 		clearAddForm() {
 			this.form.branch = {
@@ -374,7 +379,11 @@ export default {
 			}
 			this.checkedCols = new_checkedCols;
 			this.handleCheckChange();
-		}
+		},
+		// dialog 关闭时清空表单验证信息
+		onDialogClose() {
+            this.$refs['form'].resetFields();
+        }
     }
 };
 </script>
