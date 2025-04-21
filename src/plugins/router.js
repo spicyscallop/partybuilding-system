@@ -219,6 +219,16 @@ const router = createRouter({
           name: 'addUserWithUserList',
           component: () => import('@/views/userList/add.vue')
         },
+        {
+          path: '/teacher/selfStudy/index',
+          name: 'selfStudy',
+          component: () => import('@/views/selfStudy/index.vue')
+        },
+        {
+          path: '/teacher/selfStudy/AddOrEdit',
+          name: 'selfStudyAddOrEdit',
+          component: () => import('@/views/selfStudy/AddOrEdit.vue')
+        },
       ]
     },
     {
