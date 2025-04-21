@@ -127,6 +127,7 @@
                 :title="isEdit ? '编辑公告' : '新增公告'"
                 v-model="addAndEditDialogVisible"
                 width="40%"
+                @close="onDialogClose()"
             >
                 <!-- 表单 -->
                 <el-form
@@ -418,15 +419,17 @@
         },
         // 点击编辑按钮
         handleEdit(row) {
+            this.addAndEditDialogVisible = true;
             this.isEdit = true;
             this.currentRowId = row.id;
-            // 回显数据
-            this.form.title = row.title;
-            this.form.institution = row.institution;
-            this.form.type = row.type;
-            this.form.content = row.content || '';
-            this.form.url = row.url || '';
-            this.addAndEditDialogVisible = true;
+            this.$nextTick(() => {
+                // 回显数据
+                this.form.title = row.title;
+                this.form.institution = row.institution;
+                this.form.type = row.type;
+                this.form.content = row.content || '';
+                this.form.url = row.url || '';                
+            });
         },
         // 提交（新增或编辑）
         handleSubmit() {
@@ -534,6 +537,10 @@
                     message: '已取消删除',
                 });
             });
+        },
+        // dialog 关闭时清空表单验证信息
+        onDialogClose() {
+            this.$refs['form'].resetFields();
         }
     },
   }

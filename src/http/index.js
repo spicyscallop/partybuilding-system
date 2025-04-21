@@ -56,11 +56,13 @@ instance.interceptors.request.use((config) => {
 //响应拦截器
 instance.interceptors.response.use((response) => {
     hideLoading()
+    if (!response.data.success) {
+        let message = response.data.message || '请求异常';
+        return Promise.reject(new Error(message));
+    }
     //响应成功
     return response.data;
 }, (error) => {
-    console.log(error)
-    
     // 请求失败也应该取消Loading
     hideLoading()
 
