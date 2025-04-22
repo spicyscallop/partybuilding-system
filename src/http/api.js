@@ -11,6 +11,10 @@ export const userLogin = (data) => {
     return axios.post( "/user/login", data)
 }
 
+export const resetPwd = (data) => {
+    return axios.post( "/user/resetPwd", data)
+}
+
 /**
  * 获取验证码图片接口
  * @author 郭宗豪
