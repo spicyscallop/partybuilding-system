@@ -31,9 +31,7 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ Math.max(0, allHours - activityList.filter(item => item.attendStatus == "已参加").reduce((sum, item)=>{
-                                                return sum + item.activityDuringTime
-                                            }, 0)/60) }}
+                                            {{ Math.max(0, allHours - allStudyHour) }}
                                         </div>
                                     </div>
                                     <label style="font-size:18px">年度剩余学时</label>
@@ -76,7 +74,7 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ (100*activityList.filter(item => item.attendStatus == "已参加").length/activityList.length).toFixed(0) }}%
+                                            {{ (100*(1.0-activityList.filter(item => item.attendStatus == "请假").length/activityList.length)).toFixed(0) }}%
                                         </div>
                                     </div>
                                     <label style="font-size:18px">支部活动出勤率</label>
@@ -265,6 +263,9 @@
                                             <td></td><td></td><td></td>
                                             <td class="blue-color">{{ item.remark }}</td>
                                         </tr>
+                                        <tr v-if = "honorList.length == 0" style="color: #9a9898;">
+                                            <td>暂时未获得荣誉</td>
+                                        </tr>
                                         <!-- <tr>
                                             <td>01</td>
                                             <td>2019-05-21</td>
@@ -344,8 +345,9 @@
 
 <script>
 
-import { getBranchActivities, getPartyHonors } from '@/http/api';
+import { getBranchActivities, getPartyHonors, getCenterNumber1 } from '@/http/api';
 import { ref } from 'vue';
+import { toPre0String } from '@/utils/StringUtils.js'
 
 // defineEmits(['drawerToggle']);
 
@@ -359,22 +361,31 @@ export default {
             activityList: ref([]),
             honorList: ref([]),
             allHours: ref(30), // todo总共的学时数
+            allStudyHour:ref(0)
         }
     },
     created(){
         this.listBranchActivities()
         this.listPartyHonors()
+        this.getYearStudyHours()
     },
     methods: {
         listBranchActivities(){
             let _this = this
-            getBranchActivities().then(res=>{
+            const params = {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10,
+                }
+            }
+            getBranchActivities(params).then(res=>{
                 _this.activityList = []
-
-                if(res.error_message == 'success'){
-                    _this.activityList = res.activities
+                console.log(res)  
+                if(res.code == "200"){
+                    _this.activityList = res.data.records
                     for(const activity of _this.activityList){
-                        activity.activityStartTime = activity.activityStartTime.split(" ")[0]
+                        console.log(activity)
+                        activity.activityStartTime = this.formattedDate(activity.activityStartDate)
                     }
 
 
@@ -388,12 +399,26 @@ export default {
                 }
             })
         },
+        formattedDate(timestamp) {
+            const date = new Date(timestamp);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
         listPartyHonors(){
             let _this = this
-            getPartyHonors().then(res=>{
+            const params = {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10,
+                }
+            }
+            getPartyHonors(params).then(res=>{
                 _this.honorList = []
-                if(res.error_message == 'success'){
-                    _this.honorList = res.honors
+                console.log(res)  
+                if(res.code == "200"){
+                    _this.honorList = res.data
                     for(const honor of _this.honorList){
                         honor.honorTime = honor.honorTime.split(" ")[0]
                     }
@@ -404,6 +429,17 @@ export default {
                         type: 'error',
                         duration: 3000
                     })
+                }
+            })
+        },
+        getYearStudyHours(){
+            getCenterNumber1().then(res=>{
+                if(res.code == "200"){
+                    this.allStudyHour = toPre0String(res.data, 2)
+                    console.log(this.allStudyHour)
+                }
+                else{
+                    this.allStudyHour = toPre0String(0, 2)
                 }
             })
         }

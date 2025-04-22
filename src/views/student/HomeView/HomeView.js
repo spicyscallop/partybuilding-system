@@ -5,9 +5,8 @@ import UnReadListCard from '@/components/homepage/UnReadListCard.vue';
 import IconParty from '@/components/icons/IconParty.vue';
 import IconPhases from '@/views/student/FZJDView/components/IconPhases.vue'
 import { getUserInfo, getCenterNumber1, getCenterNumber2, getUnreadMessages } from '@/http/api';
-import axios from "axios";
-import dayjs from "dayjs";
-import qs from 'qs';
+import {pageBranches} from '@/http/party';
+import { getCurrentUser } from '@/utils/auth';
 import { toPre0String } from '@/utils/StringUtils.js'
 
 
@@ -144,50 +143,69 @@ export default {
         }
     },
     methods:{
-        getUserInfoV(userNumber) { // 根据学号获取个人信息
-            getUserInfo(userNumber).then(res=>{
-                // console.log(res)
-                this.code = res.code
-                if(res.success){
-                    console.log('getUserInfo success')
-                    this.userInfo.userName = res.data.userName
-                    this.userInfo.sex = Number(res.data.sex)
-                    this.userInfo.userId = res.data.userNumber 
-                    this.userInfo.politicsStatus = res.data.politicsStatus
-                    this.userInfo.developmentPhase = res.data.developmentPhase
-                    this.userInfo.partyBranch = res.data.partyBranch
-                    this.messages = res.messages
-                }
-                else{
-                    console.log('getUserInfo fail')
-                    this.userInfo.userName = ""
-                    this.userInfo.sex = 0
-                    this.userInfo.userId = 
-                    this.userInfo.politicsStatus = ""
-                    this.userInfo.developmentPhase = ""
-                    this.userInfo.partyBranch = ""
-                }
-            })
+        getUserInfoV(user) { // 根据学号获取个人信息
+            if(user){
+                console.log('getUserInfo success')
+                this.userInfo.userName = user.userName
+                this.userInfo.sex = Number(user.sex)
+                this.userInfo.userId = user.userNumber
+                if (user.isLeague == 0 && user.developmentPhase != "正式党员") {
+                    // 值为 0，直接设为群众
+                    this.userInfo.politicsStatus = "群众";
+                  } else if (user.isLeague == 1) {
+                    // 值为 1，继续判断发展阶段
+                    const phase = user.developmentPhase;
+                    if (phase == "预备党员") {
+                      this.userInfo.politicsStatus = "中共预备党员";
+                    } else if (phase == "正式党员") {
+                      this.userInfo.politicsStatus = "中共党员";
+                    } else {
+                      // 非党员阶段，默认设为共青团员
+                      this.userInfo.politicsStatus = "共青团员";
+                    }
+                } 
+                this.userInfo.developmentPhase = user.developmentPhase
+                pageBranches({
+                    id:user.partyBranchId,
+                    page: {
+                        pageNumber: 0,
+                        pageSize: 1,
+                      },
+                }).then(res=>{
+                    if(res.code == "200"){
+                        this.userInfo.partyBranch = res.data.records[0].branch.branchName
+                    }else{
+                        this.userInfo.partyBranch = ""
+                    }
+                })   
+            }
+            else{
+                console.log('getUserInfo fail')
+                this.userInfo.userName = ""
+                this.userInfo.sex = 0
+                this.userInfo.userId = 
+                this.userInfo.politicsStatus = ""
+                this.userInfo.developmentPhase = ""
+                this.userInfo.partyBranch = ""
+            }
         },
-        getCenterNumberV(userNumber){ // 根据学号获取培训总时长、当前阶段培训时长 接口待完善，请勿删
-            getCenterNumber1(userNumber).then(res=>{
-                this.code = res.code
-                if(res.success){
-                    this.centerNumber.nowStudyHour = toPre0String(res.data, 2)
-                    this.messages = res.messages
-                }
-                else{
-                    this.centerNumber.nowStudyHour = toPre0String(1, 2)
-                }
-            })
-            getCenterNumber2(userNumber).then(res=>{
-                this.code = res.code
-                if(res.success){
+        getCenterNumberV(developmentPhase){ // 根据学号获取培训总时长、当前阶段培训时长 接口待完善，请勿删 
+            getCenterNumber1().then(res=>{
+                if(res.code == "200"){
                     this.centerNumber.allStudyHour = toPre0String(res.data, 2)
                     this.messages = res.messages
                 }
                 else{
-                    this.centerNumber.allStudyHour = toPre0String(2, 2)
+                    this.centerNumber.allStudyHour = toPre0String(0, 2)
+                }
+            })
+            getCenterNumber2(developmentPhase).then(res=>{
+                if(res.code == "200"){
+                    this.centerNumber.nowStudyHour = toPre0String(res.data, 2)
+                    this.messages = res.messages
+                }
+                else{
+                    this.centerNumber.nowStudyHour = toPre0String(0, 2)
                 }
             })
         },
@@ -216,9 +234,11 @@ export default {
         }
     },
     mounted: function () {
-        this.getUserInfoV(auth.userNumber)
-        this.getCenterNumberV(auth.userNumber)
-        this.getUnreadMessagesV(auth.userId)
+        const user = getCurrentUser();
+        console.log(user)
+        this.getUserInfoV(user)
+        this.getCenterNumberV(user.developmentPhase)
+        this.getUnreadMessagesV(user.userNumber)
         
     },
 }
