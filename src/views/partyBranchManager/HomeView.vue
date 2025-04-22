@@ -127,7 +127,6 @@ export default {
     this.$axios.get("/auth/branch/getBranchOverview").then((res) => {
       console.log(res.data);
     });
-
   }
 }
 </script>

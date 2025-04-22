@@ -373,7 +373,7 @@
             const createTime = new Date(row.createTime);
             const updateTime = new Date(row.updateTime);
 
-            // 如果 updateTime 大于 createTime，返回“已更改”，否则返回“未更改”
+            // 如果 updateTime 大于 createTime，返回"已更改"，否则返回"未更改"
             return updateTime > createTime ? '已更改' : '未更改';
         },
         handleWatch(row) {
@@ -387,19 +387,33 @@
             this.dateRange = []
         },
         clearAddForm() {
-            this.form.title = "";
-            this.form.type = "";
-            this.form.institution = "";
-            this.form.content = "";
-            this.form.url = "";
+            this.form = {
+                title: "",
+                institution: "",
+                type: "",
+                content: "",
+                url: "",
+                isStudyExample: true,
+            };
             this.currentRowId = "";
             this.isEdit = false;
+            
+            // 如果表单引用存在，重置表单验证状态
+            if (this.$refs.form) {
+                this.$refs.form.resetFields();
+            }
         },
         // 点击新增按钮
         handleAdd() {
-            this.isEdit = false;
-            this.clearAddForm();
-            this.addAndEditDialogVisible = true;
+            // 先关闭对话框
+            this.addAndEditDialogVisible = false;
+            
+            // 使用 nextTick 确保 DOM 更新后再执行下面的操作
+            this.$nextTick(() => {
+                this.isEdit = false;
+                this.clearAddForm();
+                this.addAndEditDialogVisible = true;
+            });
         },
         // 点击编辑按钮
         handleEdit(row) {

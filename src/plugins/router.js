@@ -196,8 +196,23 @@ const router = createRouter({
                   name: 'RYJX',
                   component: () => import('@/views/teacher/ZBGL/RYFC/RYJXView.vue'),
                 },
-              ],
+              ]
             },
+            {
+              path: '/teacher/zbgl/jdbf',
+              name: 'JDBF',
+              component: () => import('@/views/teacher/ZBGL/JDBF/IndexView.vue')
+            },
+            {
+              path: '/teacher/zbgl/jfgl',
+              name: 'JFGL',
+              component: () => import('@/views/teacher/ZBGL/JFGLView.vue')
+            },
+            {
+              path: '/teacher/zbgl/dagl',
+              name: 'DAGL',
+              component: () => import('@/views/teacher/ZBGL/DAGLView.vue')
+            }
           ],
         },
         {

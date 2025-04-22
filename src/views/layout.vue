@@ -183,10 +183,9 @@ export default {
               title: '支部管理',
               icon: 'mdi-home',
               children: [
-                { title: '档案管理', link: '/teacher/xxx' }, //TODO
-                { title: '经费管理', link: '/teacher/xxx' }, //TODO
-                { title: '结对帮扶录入', link: '/teacher/xxx' }, //TODO
-                { title: '志愿服务录入', link: '/teacher/xxx' }, //TODO
+                { title: '档案管理', link: '/teacher/zbgl/dagl' }, 
+                { title: '经费管理', link: '/teacher/zbgl/jfgl' }, 
+                { title: '结对帮扶录入', link: '/teacher/zbgl/jdbf' }, 
                 { title: '荣誉风采录入', link: '/teacher/zbgl/ryfc' }
               ],
             },
