@@ -120,8 +120,8 @@ export default {
               title: '活动安排',
               icon: 'mdi-calendar-range',
               children: [
-                { title: '自主学习', link: '/teacher/hdap/zzxx' },
                 { title: '自主活动', link: '/teacher/hdap/zzhd' },
+                { title: '自主学习', link: '/teacher/selfStudy/index' }
               ],
             },
             { title: '风采记录', icon: 'mdi-folder-multiple-image', link: '/partyManager/album' },
@@ -168,7 +168,8 @@ export default {
               icon: 'mdi-calendar-range',
               children: [
                 { title: '三会一课', link: '/teacher/zzsh/shyk' },
-                { title: '理论学习与实践', link: '/teacher/xxx' } //TODO
+                { title: '理论学习与实践', link: '/teacher/xxx' }, //TODO
+                { title: '自主学习', link: '/teacher/selfStudy/index' }
               ],
             },
             {

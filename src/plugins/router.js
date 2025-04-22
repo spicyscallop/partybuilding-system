@@ -99,6 +99,11 @@ const router = createRouter({
           name: 'T_Message',
           component: () => import('@/views/common/MessageView.vue')
         },
+        {
+          path: '/teacher/fzgl/wjmb',
+          name: 'T_WJMB',
+          component: () => import('@/views/teacher/FZGLViews/WJMB/WJMBView.vue')
+        },
         //风采记录
         {
           path: '/teacher/album',
@@ -239,6 +244,16 @@ const router = createRouter({
           path: '/teacher/userList/add',
           name: 'addUserWithUserList',
           component: () => import('@/views/userList/add.vue')
+        },
+        {
+          path: '/teacher/selfStudy/index',
+          name: 'selfStudy',
+          component: () => import('@/views/selfStudy/index.vue')
+        },
+        {
+          path: '/teacher/selfStudy/AddOrEdit',
+          name: 'selfStudyAddOrEdit',
+          component: () => import('@/views/selfStudy/AddOrEdit.vue')
         },
       ]
     },

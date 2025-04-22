@@ -13,9 +13,6 @@
                     <v-sheet rounded="lg" class="d-flex flex-column justify-space-between bg-grey-lighten-4" style="width: 100%;">
                         <div class="d-flex justify-space-between">
                             <h1 class="ml-5 mt-4 mb-3 text-h5">个人信息</h1>
-                            <v-btn class="mr-0 mt-4 justify-end" append-icon="mdi-chevron-right" variant="plain" @click="" style="font-size: 16px;">
-                                设置
-                            </v-btn>
                         </div>
                         <v-container class="d-flex flex-column flex-grow-1 justify-space-between"
                             style="font-size: 18px;padding:30px 16px">

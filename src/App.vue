@@ -1,3 +1,4 @@
+npm cache clean --force
 <template>
 	<v-app>
 		<RouterView></RouterView>

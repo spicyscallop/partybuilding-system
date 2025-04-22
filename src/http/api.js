@@ -11,6 +11,10 @@ export const userLogin = (data) => {
     return axios.post( "/user/login", data)
 }
 
+export const resetPwd = (data) => {
+    return axios.post( "/user/resetPwd", data)
+}
+
 /**
  * 获取验证码图片接口
  * @author 郭宗豪
@@ -57,8 +61,8 @@ export const getUserInfo = (userNumber) => {
  * @argument 
  * @returns
  */
-export const getCenterNumber1 = (userNumber) => {
-    return axios.get("/selfstudy/allstudyhour")
+export const getCenterNumber1 = () => {
+    return axios.get(`/selfstudy/allstudyhour`)
 }
 
 /**
@@ -67,8 +71,10 @@ export const getCenterNumber1 = (userNumber) => {
  * @argument 
  * @returns
  */
-export const getCenterNumber2 = (userNumber) => {
-    return axios.get("/selfstudy/getallstudyhour/nowdevelopmentPhase")
+export const getCenterNumber2 = (developmentPhase) => {
+    return axios.get("/selfstudy/allstudyhour",{
+        params: { developmentPhase },
+    })
 }
 
 /**
@@ -78,7 +84,7 @@ export const getCenterNumber2 = (userNumber) => {
  * @returns
  */
 export const getUnreadMessages = (userId) => {
-    return axios.get("/userMessages/allmessagetext")
+    return axios.get("/userMessages/getNotRead",userId)
 }
 
 /**
@@ -87,8 +93,8 @@ export const getUnreadMessages = (userId) => {
  * @argument 
  * @returns
  */
-export const getBranchActivities = () => {
-    return axios.get("/branchactivity/list/")
+export const getBranchActivities = (params) => {
+    return axios.post("/activities/pageStudent",params)
 }
 
 /**
@@ -98,7 +104,7 @@ export const getBranchActivities = () => {
  * @returns
  */
 export const getPartyHonors = () => {
-    return axios.get("/partyhonor/list/")
+    return axios.get("/prize/selectByUser")
 }
 
 /**
