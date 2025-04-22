@@ -93,6 +93,11 @@ const router = createRouter({
           name: 'T_Message',
           component: () => import('@/views/common/MessageView.vue')
         },
+        {
+          path: '/teacher/fzgl/wjmb',
+          name: 'T_WJMB',
+          component: () => import('@/views/teacher/FZGLViews/WJMB/WJMBView.vue')
+        },
         //风采记录
         {
           path: '/teacher/album',
