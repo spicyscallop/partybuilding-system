@@ -57,11 +57,15 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use((response) => {
     hideLoading()
     if (!response.data.success) {
-        let message = response.data.message || '请求异常';
-        return Promise.reject(new Error(message));
+        let message = response.data.message || response.data.msg || '请求异常';
+        ElMessage.error(message);
+        return Promise.reject(response.data);
+    } else {
+        //响应成功
+        return response.data;
     }
-    //响应成功
-    return response.data;
+
+
 }, (error) => {
     // 请求失败也应该取消Loading
     hideLoading()
