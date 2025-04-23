@@ -197,7 +197,7 @@ export default {
                 pageSizeList: [5, 10, 20, 30, 40]
             },
             rules: {
-				branchName: [
+				'branch.branchName': [
 					{ required: true, message: '请输入支部名称', trigger: 'blur' },
 				],
 				// branchSecretaryId: [
