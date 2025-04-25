@@ -25,7 +25,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       }
     }
-  },
+  }, 
   plugins: [
     vue(),
     vuetify({ autoImport: true, styles: { configFile: 'src/settings.scss' } }),
