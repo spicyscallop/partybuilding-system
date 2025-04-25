@@ -61,7 +61,7 @@
                     <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="handleBatchDelete">删除奖项</el-button>
             </div>
         </v-row>
-            <v-row class="d-flex flex-column h-100 mt-10 mb-10">
+        <v-row class="d-flex flex-column h-100 mt-10 mb-10">
             <el-table
                 :key="tableKey"
                 :data="ryjx"

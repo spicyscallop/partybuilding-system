@@ -186,6 +186,7 @@ export default {
               children: [
                 { title: '系统公告', link: '/teacher/xtgg' },
                 { title: '学习样板', link: '/teacher/xxyb' },
+                { title: '荣誉风采录入', link: '/teacher/ryfc' }
               ],
             },
             {
@@ -194,8 +195,7 @@ export default {
               children: [
                 { title: '档案管理', link: '/teacher/zbgl/dagl' }, 
                 { title: '经费管理', link: '/teacher/zbgl/jfgl' }, 
-                { title: '结对帮扶录入', link: '/teacher/zbgl/jdbf' }, 
-                { title: '荣誉风采录入', link: '/teacher/zbgl/ryfc' }
+                { title: '结对帮扶录入', link: '/teacher/zbgl/jdbf' },
               ],
             },
             {

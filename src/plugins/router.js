@@ -179,29 +179,29 @@ const router = createRouter({
           name: 'XXYB',
           component: () => import('@/views/teacher/FBGL/XXYBView.vue')
         },
+        {
+          path: '/teacher/ryfc',
+          name: 'RYFC',
+          component: () => import('@/views/teacher/FBGL/RYFC/IndexView.vue'),
+          redirect: '/teacher/ryfc/hdfc',
+          children: [
+            {
+              path: '/teacher/ryfc/hdfc',
+              name: 'HDFC',
+              component: () => import('@/views/teacher/FBGL/RYFC/HDFCView.vue'),
+            },
+            {
+              path: '/teacher/ryfc/ryjx',
+              name: 'RYJX',
+              component: () => import('@/views/teacher/FBGL/RYFC/RYJXView.vue'),
+            },
+          ]
+        },
         // 支部管理
         {
           path: '/teacher/zbgl',
           name: 'ZBGL',
           children: [
-            {
-              path: '/teacher/zbgl/ryfc',
-              name: 'RYFC',
-              component: () => import('@/views/teacher/ZBGL/RYFC/IndexView.vue'),
-              redirect: '/teacher/zbgl/ryfc/hdgl',
-              children: [
-                {
-                  path: '/teacher/zbgl/ryfc/hdgl',
-                  name: 'HDGL',
-                  component: () => import('@/views/teacher/ZBGL/RYFC/HDGLView.vue'),
-                },
-                {
-                  path: '/teacher/zbgl/ryfc/ryjx',
-                  name: 'RYJX',
-                  component: () => import('@/views/teacher/ZBGL/RYFC/RYJXView.vue'),
-                },
-              ]
-            },
             {
               path: '/teacher/zbgl/jdbf',
               name: 'JDBF',
