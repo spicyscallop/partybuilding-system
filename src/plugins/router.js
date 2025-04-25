@@ -25,6 +25,12 @@ const router = createRouter({
           name: 'EditOverview',
           component: () => import('@/views/teacher/EditOverview.vue')
         },
+        // 编辑支委概况 
+        {
+          path: '/partyBranchManager/edit-overview',
+          name: 'EditOverview',
+          component: () => import('@/views/partyBranchManager/EditOverview.vue')
+        },
         //自主学习
         {
           path: '/teacher/zzxx/llxx',
@@ -195,8 +201,23 @@ const router = createRouter({
                   name: 'RYJX',
                   component: () => import('@/views/teacher/ZBGL/RYFC/RYJXView.vue'),
                 },
-              ],
+              ]
             },
+            {
+              path: '/teacher/zbgl/jdbf',
+              name: 'JDBF',
+              component: () => import('@/views/teacher/ZBGL/JDBF/IndexView.vue')
+            },
+            {
+              path: '/teacher/zbgl/jfgl',
+              name: 'JFGL',
+              component: () => import('@/views/teacher/ZBGL/JFGLView.vue')
+            },
+            {
+              path: '/teacher/zbgl/dagl',
+              name: 'DAGL',
+              component: () => import('@/views/teacher/ZBGL/DAGLView.vue')
+            }
           ],
         },
         {

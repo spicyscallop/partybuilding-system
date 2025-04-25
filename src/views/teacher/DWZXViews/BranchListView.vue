@@ -197,7 +197,7 @@ export default {
                 pageSizeList: [5, 10, 20, 30, 40]
             },
             rules: {
-				branchName: [
+				'branch.branchName': [
 					{ required: true, message: '请输入支部名称', trigger: 'blur' },
 				],
 				// branchSecretaryId: [
@@ -260,30 +260,32 @@ export default {
             }
         },
         submit() {
-			if (!this.isEdit) {
-				addBranch(this.form).then(res => {
-					this.$message.success("添加支部成功")
-					this.dialogVisible = false
-					this.clearAddForm()
-					this.queryList();
-				}).catch(err => {
-					this.$message.error("添加支部失败")
-					console.log(err);
-				});
-			} else {
-				let editData = { ...this.form};
-				editData.branch.id = this.currentRowId
-				editBranch(editData).then(res => {
-					this.$message.success("编辑支部成功")
-					this.dialogVisible = false
-					this.clearAddForm()
-					this.queryList();
-				}).catch(err => {
-					this.$message.error("编辑支部失败")
-					console.log(err);
-				});
-			}
-		},
+            this.$refs.form.validate((valid) => {
+                if (!this.isEdit) {
+                    addBranch(this.form).then(res => {
+                        this.$message.success("添加支部成功")
+                        this.dialogVisible = false
+                        this.clearAddForm()
+                        this.queryList();
+                    }).catch(err => {
+                        this.$message.error("添加支部失败")
+                        console.log(err);
+                    });
+                } else {
+                    let editData = { ...this.form};
+                    editData.branch.id = this.currentRowId
+                    editBranch(editData).then(res => {
+                        this.$message.success("编辑支部成功")
+                        this.dialogVisible = false
+                        this.clearAddForm()
+                        this.queryList();
+                    }).catch(err => {
+                        this.$message.error("编辑支部失败")
+                        console.log(err);
+                    });
+                }
+            });
+        },
 		handleEdit(index, item) {
 			this.dialogVisible = true;
 			this.isEdit = true
