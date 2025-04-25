@@ -115,7 +115,11 @@ const router = createRouter({
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
-        // 党委中心
+        {
+          path: '/teacher/dwzx/personlist',
+          name: 'PersonList',
+          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
+        },
         {
           path: '/teacher/dwfc',
           name: 'DWFC',
@@ -145,11 +149,6 @@ const router = createRouter({
           path: '/teacher/zsdy/edit-person/:id?',
           name: 'EditPersonViewZSDYT',
           component: () => import('@/views/teacher/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
-        },
-        {
-          path: '/teacher/dwzx/personlist',
-          name: 'PersonList',
-          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
         },
         // 权限管理
         {
@@ -273,10 +272,40 @@ const router = createRouter({
       name: 'PartyManagerMain',
       component: () => import('@/views/layout.vue'),
       children: [
+        // 支部概况
         {
           path: '/partyManager/home',
           name: 'PartyManagerHome',
           component: () => import('@/views/partyBranchManager/HomeView.vue')
+        },
+        // 编辑支部概况 
+        {
+          path: '/partyManager/edit-overview',
+          name: 'PartyBranchEditOverview',
+          component: () => import('@/views/partyBranchManager/EditOverview.vue')
+        },
+        // 支部中心
+        {
+          path: '/partyManager/zbzx',
+          name: 'ZBZX',
+          component: () => import('@/views/partyBranchManager/ZBZX/ZBZXView.vue')
+        },
+        {
+          path: '/partyManager/zbzx/personlist',
+          name: 'PersonList',
+          component: () => import('@/views/partyBranchManager/ZBZX/PersonListView.vue')
+        },
+        // 支部风采
+        {
+          path: '/partyManager/zbfc',
+          name: 'ZBFC',
+          component: () => import('@/views/partyBranchManager/ZBFCView.vue')
+        },
+        // 发展管理
+        {
+          path: '/partyManager/fzgl',
+          name: 'FZGL',
+          redirect: '/partyManager/fzgl/rdsq'
         },
         // 发展阶段
         {

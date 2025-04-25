@@ -101,7 +101,15 @@ export default {
             permission: '/partyManager/permission',
           };
           this.sidebarItems = [
-            { title: '支委概况', icon: 'mdi-home', link: '/partyManager/home' },
+            {
+              title: '支部信息',
+              icon: 'mdi-home',
+              children: [
+                { title: '支委概况', link: '/partyManager/home' },
+                { title: '支部中心', link: '/partyManager/zbzx' },
+                { title: '支部风采', link: '/partyManager/zbfc' }
+              ],
+            },
             {
               title: '发展管理',
               icon: 'mdi-account-check',
