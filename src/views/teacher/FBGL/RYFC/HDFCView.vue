@@ -111,7 +111,6 @@
         <el-dialog
             :title="isEdit ? '编辑记录' : '新增记录'"
             v-model="addAndEditDialogVisible"
-            width="40%"
             @close="onDialogClose()"
         >
             <!-- 表单 -->
@@ -181,7 +180,9 @@
                                 :auto-upload="false"
                                 :file-list="fileList"
                                 :on-change="handleChange"
+                                :on-preview="handlePreview"
                                 :before-upload="beforeUpload"
+                                list-type="picture"
                                 >
                                 <el-button size="small">{{ isEdit ? "重新上传" : "点击上传" }}</el-button>
                                 <template v-slot:tip>
@@ -535,6 +536,9 @@ export default {
         // dialog 关闭时清空表单验证信息
         onDialogClose() {
             this.$refs['form'].resetFields();
+            this.clearAddForm();
+        },
+        handlePreview(file) {
         }
     },
 }
