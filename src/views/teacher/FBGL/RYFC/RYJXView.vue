@@ -23,7 +23,7 @@
                                 placeholder="选择日期">
                             </el-date-picker>
                         </v-col>
-                        <v-col cols="4" class="d-flex align-center">
+                        <!-- <v-col cols="4" class="d-flex align-center">
                             <span style="white-space: nowrap; min-width: 60px;">获奖人</span>
                             <el-select v-model="queryItems.winner" placeholder="请选择" style="flex: 1; margin-left: 20px;">
                                 <el-option label="全部" value="全部"></el-option>
@@ -34,7 +34,7 @@
                                     :value="item.value">
                                 </el-option>
                             </el-select>
-                        </v-col>
+                        </v-col> -->
                         <v-col cols="4" class="d-flex align-center">
                             <span style="white-space: nowrap; min-width: 60px;">荣誉等级</span>
                             <el-select v-model="queryItems.honorLevel" placeholder="请选择" style="flex: 1; margin-left: 20px;">
@@ -72,7 +72,7 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="id" label="奖项编号" width="200"></el-table-column>
             <el-table-column prop="name" label="奖项名称"></el-table-column>
-            <el-table-column prop="winner" label="获奖人" width="120"></el-table-column>
+            <!-- <el-table-column prop="winner" label="获奖人" width="120"></el-table-column> -->
             <el-table-column prop="createTime" label="发布时间" width="120">
                 <template #default="{ row }">
                     <span>{{ formatDate(row.createTime) }}</span>
@@ -107,6 +107,7 @@
             :title="isEdit ? '编辑奖项' : '新增奖项'"
             v-model="addAndEditDialogVisible"
             width="40%"
+            @close="onDialogClose()"
         >
             <!-- 表单 -->
             <el-form
@@ -129,8 +130,7 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
-                    <el-col :span="12">
-                        <!-- 发布单位 -->
+                    <!-- <el-col :span="12">
                         <el-form-item label="获奖单位" prop="winner" required>
                             <el-select v-model="form.winner" placeholder="请选择获奖单位" style="width: 100%;">
                                 <el-option
@@ -141,7 +141,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                     <el-col :span="12">
                         <el-form-item label="获奖等级" prop="honorLevel" required>
                             <el-select v-model="form.honorLevel" placeholder="请选择" style="width: 100%;">
@@ -157,7 +157,7 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="发布时间" prop="createTime" required>
+                        <el-form-item label="发布时间" prop="createTime">
                             <el-date-picker
                                 v-model="form.createTime"
                                 type="date"
@@ -179,14 +179,21 @@
   </template>
   
   
-  <script>
-  import SubpageTitle from '@/components/SubpageTitle.vue';
-  import DropDownBox from '@/components/dropDown/DropDownBox.vue';
-  import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
-  import { ArrowDown } from '@element-plus/icons-vue';
-  import "@/style/Common.css"
+<script>
+import SubpageTitle from '@/components/SubpageTitle.vue';
+import DropDownBox from '@/components/dropDown/DropDownBox.vue';
+import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+import { ArrowDown } from '@element-plus/icons-vue';
+import { 
+    getPrizePage, 
+    addPrize, 
+    updatePrize,
+    deletePrize, 
+    deletePrizeByBatch 
+} from "@/http/api";
+import "@/style/Common.css"
   
-  export default {
+export default {
     components: {
         SubpageTitle,
         DropDownBox,
@@ -205,38 +212,33 @@
             },
             queryItems: {
                 id: "",
-                title: "",
-                institution: "",
+                name: "",
+                // winner: "",
                 createTime: "",
-                type: "",
+                honorLevel: "",
                 page: {
                     pageNumber: 1,
                     pageSize: 10,
                     searchCount: true
                 }
             },
-            ryjx: [
-                { id: "20240001", createTime: "2024-03", name: "IF", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
-                { id: "20240002", createTime: "2023-12", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
-                { id: "20240003", createTime: "2023-10", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
-                { id: "20240004", createTime: "2023-09", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" }
-            ],
+            ryjx: [],
             form: {
                 id: "",
                 name: "",
-                winner: "",
+                // winner: "",
                 honorLevel: "",
                 createTime: "",
             },
             rules: {
                 name: [{ required: true, message: '请输入奖项名称', trigger: 'blur' }],
-                winner: [{ required: true, message: '请选择获奖单位', trigger: 'change' }],
+                // winner: [{ required: true, message: '请选择获奖单位', trigger: 'change' }],
                 honorLevel: [{ required: true, message: '请选择获奖等级', trigger: 'change' }],
             },
-            winnerOptions: [
-                { label: '软件学院团队', value: '软件学院团队' },
-                { label: 'xx实验室', value: 'xx实验室' },
-            ],
+            // winnerOptions: [
+            //     { label: '软件学院团队', value: '软件学院团队' },
+            //     { label: 'xx实验室', value: 'xx实验室' },
+            // ],
             honorLevelOptions: [
                 { label: '国家级', value: '国家级' },
                 { label: '省部级', value: '省部级' },
@@ -251,10 +253,11 @@
     methods: {
         queryList() {
             if (this.queryItems.honorLevel === "全部") this.queryItems.honorLevel = "";
-            if (this.queryItems.winner === "全部") this.queryItems.winner = "";
-            // TODO: 调用后端接口查询活动数据，此处仅为模拟数据示例
-            this.$message.warning("后端接口暂未开发")
-            this.tableBottom.totalNum = this.ryjx.length;
+            // if (this.queryItems.winner === "全部") this.queryItems.winner = "";
+            getPrizePage(this.queryItems).then(res => {
+                this.ryjx = res.data.records;
+                this.tableBottom.totalNum = res.data.total;
+            })
         },
         goTo(route) {
             this.$router.push(route);
@@ -290,18 +293,22 @@
             return date.split(' ')[0];
         },
         clearInputMessage() {
-            this.queryItems.name = ""
-            this.queryItems.id = ""
-            this.queryItems.createTime = ""
-            this.queryItems.winner = ""
-            this.queryItems.honorLevel = ""
+            this.queryItems = {
+                id: "",
+                name: "",
+                // winner: "",
+                createTime: "",
+                honorLevel: "",
+            }
         },
         clearAddForm() {
-            this.form.name = "";
-            this.form.id = "";
-            this.form.winner = "";
-            this.form.honorLevel = "";
-            this.form.createTime = "";
+            this.form = {
+                id: "",
+                name: "",
+                // winner: "",
+                honorLevel: "",
+                createTime: "",
+            },
             this.currentRowId = "";
             this.isEdit = false;
         },
@@ -313,24 +320,44 @@
         },
         // 点击编辑按钮
         handleEdit(row) {
+            this.addAndEditDialogVisible = true;
             this.isEdit = true;
             this.currentRowId = row.id;
             // 回显数据
-            this.form.name = row.name;
-            this.form.id = row.id;
-            this.form.winner = row.winner;
-            this.form.honorLevel = row.honorLevel;
-            this.form.createTime = this.formatDate(row.createTime);
-            this.addAndEditDialogVisible = true;
+            this.$nextTick(() => {
+                this.form = {
+                    id: row.id,
+                    name: row.name,
+                    // winner: form.winner,
+                    honorLevel: row.honorLevel,
+                    createTime: this.formatDateToYMD(row.createTime),
+                }
+            })
         },
         // 提交（新增或编辑）
         handleSubmit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     if (this.isEdit) {
-                        // TODO: 编辑奖项
+                        updatePrize(this.form).then(res => {
+                            this.queryList();
+                            this.$message.success("编辑成功");
+                            this.addAndEditDialogVisible = false;
+                            this.clearAddForm();
+                        }).catch(err => {
+                            this.$message.error("编辑失败")
+                            console.log(err);
+                        });
                     } else {
-                        // TODO: 新增奖项
+                        addPrize(this.form).then(res => {
+                            this.queryList();
+                            this.$message.success("添加成功");
+                            this.addAndEditDialogVisible = false;
+                            this.clearAddForm();
+                        }).catch(err => {
+                            this.$message.error("添加失败")
+                            console.log(err);
+                        });
                     }
                 } else {
                     return false;
@@ -347,7 +374,12 @@
 				confirmButtonClass: 'redBtn',
 				cancelButtonClass: 'whiteBtn',
 			}).then(() => {
-				// TODO：删除奖项
+                deletePrize(id).then(res => {
+                    this.queryList();
+                    this.$message.success("删除成功");
+                }).catch(err => {
+                    this.$message.error("删除失败")
+                })
 			}).catch(() => {
 				this.$message({
 					type: 'info',
@@ -367,17 +399,26 @@
                 confirmButtonClass: 'redBtn',
                 cancelButtonClass: 'whiteBtn',
             }).then(() => {
-                // TODO：批量删除奖项
+                deletePrizeByBatch(this.selectedIds).then(res => {
+                    this.queryList();
+                    this.$message.success(`成功删除 ${this.selectedIds.length} 条记录`);
+                }).catch(err => {
+                    this.$message.error("批量删除失败")
+                })
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除',
                 });
             });
+        },
+        // dialog 关闭时清空表单验证信息
+        onDialogClose() {
+            this.$refs['form'].resetFields();
         }
     },
-  }
-  </script>
+}
+</script>
   
 <style scoped>
     .bar {

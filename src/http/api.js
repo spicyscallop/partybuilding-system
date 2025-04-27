@@ -272,3 +272,55 @@ export const fileUpload = (formData) => {
         headers: { "Content-Type": 'multipart/form-data' } 
     })
 }
+
+/**
+ * 获取荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getPrizePage = (data) => {
+    return instance.post("/prize/page", data)
+}
+
+/**
+ * 新增荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addPrize = (data) => {
+    return instance.post("/prize/add", data)
+}
+
+/**
+ * 编辑荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const updatePrize = (data) => {
+    return instance.post("/prize/update", data)
+}
+
+/**
+ * 删除荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deletePrize = (id) => {
+    return axios.post("/prize/delete", { id: id }, { 
+        headers: { "Content-Type": "application/x-www-form-urlencoded" } 
+    })
+}
+
+/**
+ * 批量删除荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deletePrizeByBatch = (ids) => {
+    return axios.post("/prize/deleteByBatch", ids)
+}

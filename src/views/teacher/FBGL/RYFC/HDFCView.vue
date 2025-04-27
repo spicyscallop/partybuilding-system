@@ -241,7 +241,7 @@ import {
     deleteActivityHighlight, 
     deleteActivityHighlightByBatch 
 } from "@/http/api";
-  import "@/style/Common.css"
+import "@/style/Common.css"
   
 export default {
     components: {
@@ -371,7 +371,7 @@ export default {
                 activityType: "",
                 createTime: "",
                 activityContent: "",
-                filePath: "",
+                fileId: "",
             },
             this.currentRowId = "";
             this.fileList = [];
@@ -396,7 +396,7 @@ export default {
                     activityType: row.activityType,
                     createTime: this.formatDate(row.createTime),
                     activityContent: row.activityContent || "",
-                    filePath: row.filePath || ""
+                    fileId: row.fileId || ""
                 }
             })
         },
@@ -406,13 +406,13 @@ export default {
                 if (valid) {
                     if (this.isEdit) {
                         const file = this.fileList[0];
-                        if (!this.form.filePath && !file) {
+                        if (!this.form.fileId && !file) {
                             this.$message.error("请上传封面图片");
                             return;
                         }
                         if (file) {
                             this.uploadCoverImage(file.raw).then(res => {
-                                this.form.filePath = res.path
+                                this.form.fileId = res.id
                                 this.form.createTime = new Date().getTime();
                                 updateActivityHighlight(this.form).then(res => {
                                     this.queryList();
@@ -434,8 +434,7 @@ export default {
                             return;
                         }
                         this.uploadCoverImage(file.raw).then(res => {
-                            this.form.filePath = res.path
-                            this.form.createTime = new Date().getTime();
+                            this.form.fileId = res.id
                             addActivityHighlight(this.form).then(res => {
                                 this.queryList();
                                 this.$message.success("添加成功");
