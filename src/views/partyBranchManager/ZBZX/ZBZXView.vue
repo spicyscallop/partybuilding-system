@@ -15,7 +15,7 @@
             </v-row>
             <v-row no-gutters>
                 <v-col
-                    v-for="(item, index) in dwzx"
+                    v-for="(item, index) in zbzx"
                     :key="index"
                     cols="12"
                     sm="4"
@@ -72,7 +72,7 @@ export default {
     },
     data() {
         return {
-            dwzx: [
+            zbzx: [
                 {
                     count: 0,
                     title: "",
@@ -86,13 +86,25 @@ export default {
     },
     mounted() {
         getBranchOverview().then(res => {
-            this.dwzx = res.data
-            this.dwzx.forEach(x => {
+            this.zbzx = res.data
+            let totalCount = 0
+            this.zbzx.forEach(x => {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"
                 x.viewLink = "/partyManager/zbzx/personlist"
-                x.phase = x.title.split("数量")[0]
+                x.phase = x.title
+                totalCount += x.count
             })
+            this.zbzx.reverse()
+            // 在列表最前面插入一个总人数项
+            this.zbzx.unshift({
+                title: "总人员数量",
+                subtitle: "浙江大学软件学院党支部",
+                buttonText: "人员列表",
+                viewLink: "/partyManager/zbzx/personlist",
+                phase: "",
+                count: totalCount
+            });
         })
     },
     methods: {

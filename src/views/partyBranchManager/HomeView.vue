@@ -122,6 +122,18 @@ let zbzx = ref([]);
 onMounted(() => {
   getBranchOverview().then(res => {
 		zbzx.value = res.data
+		let totalCount = 0
+		zbzx.value.forEach(x => {
+			totalCount += x.count
+		})
+		zbzx.value.reverse()
+		zbzx.value.unshift(
+			{
+				title: "总人员数量",
+				subtitle: "浙江大学软件学院党支部",
+				count: totalCount
+			},
+		);
 	})
 });
 

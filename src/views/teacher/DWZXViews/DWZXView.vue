@@ -130,12 +130,24 @@ export default {
         })
         getPartyOverview().then(res => {
             this.dwzx = res.data
+            let totalCount = 0
             this.dwzx.forEach(x => {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"
                 x.viewLink = "/teacher/dwzx/personlist"
-                x.phase = x.title.split("数量")[0]
+                x.phase = x.title
+                totalCount += x.count
             })
+            this.dwzx.reverse() // 正式党员在最前面
+
+            this.dwzx.unshift({
+                title: "人员数量",
+                subtitle: "浙江大学软件学院党支部",
+                buttonText: "人员列表",
+                viewLink: "/teacher/dwzx/personlist",
+                phase: "",
+                count: totalCount
+            });
         })
     },
     methods: {
