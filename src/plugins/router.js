@@ -313,7 +313,7 @@ const router = createRouter({
         },
         {
           path: '/partyManager/zbzx/personlist',
-          name: 'PersonList',
+          name: 'PartyManagerPersonList',
           component: () => import('@/views/partyBranchManager/ZBZX/PersonListView.vue')
         },
         // 支部风采

@@ -208,3 +208,67 @@ export const addStageMember = (data) => {
 export const getBranchOverview = () => {
     return instance.get("/auth/branch/getBranchOverview")
 }
+
+/**
+ * 获取活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getActivityHighlightsPage = (data) => {
+    return instance.post("/exhibit/page", data)
+}
+
+/**
+ * 新增活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addActivityHighlight = (data) => {
+    return instance.post("/exhibit/add", data)
+}
+
+/**
+ * 编辑活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const updateActivityHighlight = (data) => {
+    return instance.post("/exhibit/update", data)
+}
+
+/**
+ * 删除活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteActivityHighlight = (id) => {
+    return axios.post("/exhibit/delete", { id: id }, { 
+        headers: { "Content-Type": "application/x-www-form-urlencoded" } 
+    })
+}
+
+/**
+ * 批量删除活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteActivityHighlightByBatch = (ids) => {
+    return axios.post("/exhibit/deleteByBatch", ids)
+}
+
+/**
+ * 文件上传
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const fileUpload = (formData) => {
+    return axios.post("/files/upload", formData, { 
+        headers: { "Content-Type": 'multipart/form-data' } 
+    })
+}

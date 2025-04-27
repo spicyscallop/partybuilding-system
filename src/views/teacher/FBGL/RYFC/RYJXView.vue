@@ -37,10 +37,10 @@
                         </v-col>
                         <v-col cols="4" class="d-flex align-center">
                             <span style="white-space: nowrap; min-width: 60px;">荣誉等级</span>
-                            <el-select v-model="queryItems.level" placeholder="请选择" style="flex: 1; margin-left: 20px;">
+                            <el-select v-model="queryItems.honorLevel" placeholder="请选择" style="flex: 1; margin-left: 20px;">
                                 <el-option label="全部" value="全部"></el-option>
                                 <el-option
-                                    v-for="item in levelOptions"
+                                    v-for="item in honorLevelOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -78,7 +78,7 @@
                     <span>{{ formatDate(row.createTime) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="level" label="荣誉等级" width="100"></el-table-column>
+            <el-table-column prop="honorLevel" label="荣誉等级" width="100"></el-table-column>
             <!-- 操作 -->
             <el-table-column label="操作" width="150">
                 <template #default="{ row }">
@@ -143,10 +143,10 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="获奖等级" prop="level" required>
-                            <el-select v-model="form.level" placeholder="请选择" style="width: 100%;">
+                        <el-form-item label="获奖等级" prop="honorLevel" required>
+                            <el-select v-model="form.honorLevel" placeholder="请选择" style="width: 100%;">
                                 <el-option
-                                    v-for="item in levelOptions"
+                                    v-for="item in honorLevelOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -216,28 +216,28 @@
                 }
             },
             ryjx: [
-                { id: "20240001", createTime: "2024-03", name: "IF", level: "国家级", winner: "软件学院团队", awardTime: "2024-12" },
-                { id: "20240002", createTime: "2023-12", name: "ACM", level: "国家级", winner: "软件学院团队", awardTime: "2024-12" },
-                { id: "20240003", createTime: "2023-10", name: "ACM", level: "国家级", winner: "软件学院团队", awardTime: "2024-12" },
-                { id: "20240004", createTime: "2023-09", name: "ACM", level: "国家级", winner: "软件学院团队", awardTime: "2024-12" }
+                { id: "20240001", createTime: "2024-03", name: "IF", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
+                { id: "20240002", createTime: "2023-12", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
+                { id: "20240003", createTime: "2023-10", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" },
+                { id: "20240004", createTime: "2023-09", name: "ACM", honorLevel: "国家级", winner: "软件学院团队", getTime: "2024-12" }
             ],
             form: {
                 id: "",
                 name: "",
                 winner: "",
-                level: "",
+                honorLevel: "",
                 createTime: "",
             },
             rules: {
                 name: [{ required: true, message: '请输入奖项名称', trigger: 'blur' }],
                 winner: [{ required: true, message: '请选择获奖单位', trigger: 'change' }],
-                level: [{ required: true, message: '请选择获奖等级', trigger: 'change' }],
+                honorLevel: [{ required: true, message: '请选择获奖等级', trigger: 'change' }],
             },
             winnerOptions: [
                 { label: '软件学院团队', value: '软件学院团队' },
                 { label: 'xx实验室', value: 'xx实验室' },
             ],
-            levelOptions: [
+            honorLevelOptions: [
                 { label: '国家级', value: '国家级' },
                 { label: '省部级', value: '省部级' },
                 { label: '校级', value: '校级' },
@@ -250,7 +250,7 @@
     },
     methods: {
         queryList() {
-            if (this.queryItems.level === "全部") this.queryItems.level = "";
+            if (this.queryItems.honorLevel === "全部") this.queryItems.honorLevel = "";
             if (this.queryItems.winner === "全部") this.queryItems.winner = "";
             // TODO: 调用后端接口查询活动数据，此处仅为模拟数据示例
             this.$message.warning("后端接口暂未开发")
@@ -294,13 +294,13 @@
             this.queryItems.id = ""
             this.queryItems.createTime = ""
             this.queryItems.winner = ""
-            this.queryItems.level = ""
+            this.queryItems.honorLevel = ""
         },
         clearAddForm() {
             this.form.name = "";
             this.form.id = "";
             this.form.winner = "";
-            this.form.level = "";
+            this.form.honorLevel = "";
             this.form.createTime = "";
             this.currentRowId = "";
             this.isEdit = false;
@@ -319,7 +319,7 @@
             this.form.name = row.name;
             this.form.id = row.id;
             this.form.winner = row.winner;
-            this.form.level = row.level;
+            this.form.honorLevel = row.honorLevel;
             this.form.createTime = this.formatDate(row.createTime);
             this.addAndEditDialogVisible = true;
         },
