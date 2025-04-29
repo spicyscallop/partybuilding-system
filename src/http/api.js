@@ -31,8 +31,8 @@ export const getCaptcha = (data) => {
  * @argument 
  * @returns
  */
-export const getPersonDetail = (userId) => {
-    return axios.get("/users/findUser")
+export const getPersonDetail = (id) => {
+    return axios.get("/stage/get",id)
 }
 
 /**
@@ -42,7 +42,7 @@ export const getPersonDetail = (userId) => {
  * @returns
  */
 export const motifyPersonSetting = (dataFrame) => {
-    return axios.get("/users/updateUser")
+    return axios.post("/stage/update",dataFrame)
 }
 
 /**
@@ -75,6 +75,16 @@ export const getCenterNumber2 = (developmentPhase) => {
     return axios.get("/selfstudy/allstudyhour",{
         params: { developmentPhase },
     })
+}
+
+/**
+ * 当前阶段培训时长接口 查看自主学习列表
+ * @author 秦宇阳
+ * @argument 
+ * @returns
+ */
+export const getStudyList = () => {
+    return axios.get("/selfstudy/list")
 }
 
 /**
