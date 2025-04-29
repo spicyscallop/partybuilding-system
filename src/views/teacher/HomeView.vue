@@ -4,7 +4,7 @@
 			<v-row class="flex-shrink-0 flex-grow-0" style="flex-basis: 0; overflow: visible;">
 			<v-col class="d-flex justify-space-between align-center">
 				<SubpageTitle text="党委概况" icon="mdi-home" @drawerToggle="$emit('drawerToggle')"></SubpageTitle>
-				<RouterLink to="/partyBranchManager/edit-overview" class="edit-link mr-5">
+				<RouterLink to="/teacher/edit-overview" class="edit-link mr-5">
 					<v-icon small class="mr-1">mdi-pencil</v-icon>
 					编辑党委概况
 				</RouterLink>

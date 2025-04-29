@@ -61,7 +61,7 @@
                 <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="handleBatchDelete">删除记录</el-button>
             </div>
         </v-row>
-            <v-row class="d-flex flex-column h-100 mt-10 mb-10">
+        <v-row class="d-flex flex-column h-100 mt-10 mb-10">
             <el-table
                 :key="tableKey"
                 :data="hdfc"
@@ -172,7 +172,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="封面图片">
+                        <el-form-item label="封面图片" required>
                             <el-upload
                                 action
                                 ref="upload"
@@ -184,7 +184,7 @@
                                 :before-upload="beforeUpload"
                                 list-type="picture"
                                 >
-                                <el-button size="small">{{ isEdit ? "重新上传" : "点击上传" }}</el-button>
+                                <el-button size="small">{{ form.fileId ? "重新上传" : "点击上传" }}</el-button>
                                 <template v-slot:tip>
                                     <div class="el-upload__tip">只能上传 jpg/jpeg/png 文件，且不超过 2mb</div>
                                 </template>
@@ -313,6 +313,13 @@ export default {
         queryList() {
             if (this.queryItems.publishingUnit === "全部") this.queryItems.publishingUnit = "";
             if (this.queryItems.activityType === "全部") this.queryItems.activityType = "";
+            // TODO: 发布时间的条件查询还有问题
+            if (this.queryItems.createTime != "") {
+                const date = new Date(this.queryItems.createTime);
+                if (!isNaN(date.getTime())) {
+                    this.queryItems.createTime = date.getTime();
+                }
+            }
             getActivityHighlightsPage(this.queryItems).then(res => {
                 this.hdfc = res.data.records;
                 this.tableBottom.totalNum = res.data.total;
@@ -395,7 +402,7 @@ export default {
                     title: row.title,
                     publishingUnit: row.publishingUnit,
                     activityType: row.activityType,
-                    createTime: this.formatDate(row.createTime),
+                    createTime: row.createTime,
                     activityContent: row.activityContent || "",
                     fileId: row.fileId || ""
                 }
@@ -407,7 +414,7 @@ export default {
                 if (valid) {
                     if (this.isEdit) {
                         const file = this.fileList[0];
-                        if (!this.form.fileId && !file) {
+                        if (this.form.fileId == "" && !file) {
                             this.$message.error("请上传封面图片");
                             return;
                         }
@@ -426,6 +433,17 @@ export default {
                                 });
                             }).catch(err => {
                                 this.$message.error("上传封面图片失败");
+                            });
+                        } else {
+                            // 说明没有重新上传
+                            updateActivityHighlight(this.form).then(res => {
+                                this.queryList();
+                                this.$message.success("编辑成功");
+                                this.addAndEditDialogVisible = false;
+                                this.clearAddForm();
+                            }).catch(err => {
+                                this.$message.error("编辑失败")
+                                console.log(err);
                             });
                         }
                     } else {
