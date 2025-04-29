@@ -176,6 +176,7 @@ export default {
               icon: 'mdi-calendar-range',
               children: [
                 { title: '三会一课', link: '/teacher/zzsh/shyk' },
+                { title: '三会一课管理', link: '/teacher/zzsh/shykgl' },
                 { title: '理论学习与实践', link: '/teacher/xxx' }, //TODO
                 { title: '自主学习', link: '/teacher/selfStudy/index' }
               ],
