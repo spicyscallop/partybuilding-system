@@ -118,7 +118,10 @@ let zbzx = ref([]);
 
 onMounted(() => {
 	// 获取支部荣誉奖项
-	getPrizePage({page: {}}).then(res => {
+	getPrizePage({
+		page: {},
+		needAwardWinnersUserDetail: true
+	}).then(res => {
 		zbry.value = res.data.records
 	})
 	getBranchOverview().then(res => {

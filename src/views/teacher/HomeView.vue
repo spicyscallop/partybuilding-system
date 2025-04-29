@@ -142,8 +142,10 @@ let dwzx = ref([]);
 
 onMounted(() => {
 	// 获取党委荣誉奖项
-	getPrizePage({page: {}}).then(res => {
-		// console.log("!!!",  res.data.records)
+	getPrizePage({
+		page: {},
+		needAwardWinnersUserDetail: true
+	}).then(res => {
 		dwry.value = res.data.records
 	})
 	// 获取党支部数量

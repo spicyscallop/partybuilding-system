@@ -15,9 +15,9 @@
                     </v-row>
                     <v-row>
                         <v-col cols="4" class="d-flex align-center">
-                            <span style="white-space: nowrap; min-width: 60px;">发布时间</span>
+                            <span style="white-space: nowrap; min-width: 60px;">获奖时间</span>
                             <el-date-picker
-                                v-model="queryItems.createTime"
+                                v-model="queryItems.getTime"
                                 type="date"
                                 style="margin-left: 20px;"
                                 placeholder="选择日期">
@@ -73,9 +73,9 @@
             <el-table-column prop="id" label="奖项编号"></el-table-column>
             <el-table-column prop="name" label="奖项名称"></el-table-column>
             <!-- <el-table-column prop="winner" label="获奖人" width="120"></el-table-column> -->
-            <el-table-column prop="createTime" label="发布时间">
+            <el-table-column prop="getTime" label="获奖时间">
                 <template #default="{ row }">
-                    <span>{{ formatDateToYMD(row.createTime) }}</span>
+                    <span>{{ formatDateToYMD(row.getTime) }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="honorLevel" label="荣誉等级"></el-table-column>
@@ -241,7 +241,7 @@ export default {
                 id: "",
                 name: "",
                 // winner: "",
-                createTime: "",
+                getTime: "",
                 honorLevel: "",
                 page: {
                     pageNumber: 1,
@@ -257,6 +257,7 @@ export default {
                 // winner: "",
                 honorLevel: "",
                 createTime: "",
+                getTime: "",
                 awardWinnersUserIds: "",
             },
             rules: {
@@ -284,6 +285,12 @@ export default {
         queryList() {
             if (this.queryItems.honorLevel === "全部") this.queryItems.honorLevel = "";
             // if (this.queryItems.winner === "全部") this.queryItems.winner = "";
+            if (this.queryItems.getTime != "") {
+                const date = new Date(this.queryItems.getTime);
+                if (!isNaN(date.getTime())) {
+                    this.queryItems.getTime = date.getTime();
+                }
+            }
             getPrizePage(this.queryItems).then(res => {
                 this.ryjx = res.data.records;
                 this.tableBottom.totalNum = res.data.total;
@@ -326,7 +333,7 @@ export default {
             this.queryItems.id = ""
             this.queryItems.name = ""
             // this.queryItems.winner = ""
-            this.queryItems.createTime = ""
+            this.queryItems.getTime = ""
             this.queryItems.honorLevel = ""
         },
         clearAddForm() {
