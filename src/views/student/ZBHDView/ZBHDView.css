@@ -35,3 +35,10 @@
 .custom_table_class thead{
     background-color: #F5F5F5;
    }
+
+td {
+    text-align: center;
+}
+th{
+    text-align: center !important;
+}

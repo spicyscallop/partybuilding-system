@@ -54,7 +54,7 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ activityList.length }}
+                                            {{ activityList.filter(item => item.attendStatus == "已参加").length }}
                                         </div>
                                     </div>
                                     <label style="font-size:18px">参加支部活动次数</label>
@@ -64,17 +64,17 @@
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ activityList.filter(item => item.attendStatus == "请假").length }}
+                                            {{ activityList.length}}
                                         </div>
                                     </div>
-                                    <label style="font-size:18px">请假次数</label>
+                                    <label style="font-size:18px">支部活动总次数</label>
                                 </v-col>
                                 <v-col class="d-flex flex-column justify-center align-center pb-5">
                                     <div class="d-flex justify-center align-center mb-6"
                                         style="background-color: #eeeeee;border-radius: 55px; height: 110px; width: 110px; text-align: center;vertical-align: center;">
                                         <div
                                             style="background-color: #d9d9d9;border-radius: 40px; height: 80px; width: 80px;line-height: 80px;font-weight: 800;font-size: 24px;">
-                                            {{ (100*(1.0-activityList.filter(item => item.attendStatus == "请假").length/activityList.length)).toFixed(0) }}%
+                                            {{ (100*(activityList.filter(item => item.attendStatus == "已参加").length/activityList.length)).toFixed(0) }}%
                                         </div>
                                     </div>
                                     <label style="font-size:18px">支部活动出勤率</label>
@@ -112,12 +112,12 @@
                                                 活动名称
                                             </th>
                                             <th style="background-color: #f5f5f5;color: black;">
-                                                活动地点
+                                                活动主办方
                                             </th>
-                                            <th style="background-color: #f5f5f5;color: black;width: 100px;">
-                                                三会一课类型
+                                            <th style="background-color: #f5f5f5;color: black;">
+                                                活动类型
                                             </th>
-                                            <th style="background-color: #f5f5f5;color: black;width:90px;">
+                                            <th style="background-color: #f5f5f5;color: black;">
                                                 参加情况
                                             </th>
 
@@ -128,12 +128,13 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="(item, idx) in activityList" :key="idx">
-                                            <td>{{ idx }}</td>
+                                            <td>{{ idx+1 }}</td>
                                             <td>{{ item.activityStartTime }}</td>
                                             <td>{{ item.activityName }}</td>
-                                            <td>{{ item.activityPlace }}</td>
+                                            <td>{{ item.activitySponsor }}</td>
                                             <td>{{ item.activityType }}</td>
-                                            <td>{{ item.attendStatus }}</td>
+                                            <td v-if="item.attendStatus == '已参加'" >{{ item.attendStatus }}</td>
+                                            <td v-else style="color:#9a9898">{{ item.attendStatus }}</td>
                                             <td class="blue-color">{{ item.remark }}</td>
                                         </tr>
                                         <!-- <tr style="color: black;">
@@ -345,9 +346,10 @@
 
 <script>
 
-import { getBranchActivities, getPartyHonors, getCenterNumber1 } from '@/http/api';
+import { getBranchActivities, getPartyHonors, getStudyList } from '@/http/api';
 import { ref } from 'vue';
 import { toPre0String } from '@/utils/StringUtils.js'
+import { getCurrentUser } from '@/utils/auth';
 
 // defineEmits(['drawerToggle']);
 
@@ -361,13 +363,16 @@ export default {
             activityList: ref([]),
             honorList: ref([]),
             allHours: ref(30), // todo总共的学时数
-            allStudyHour:ref(0)
+            allStudyHour:ref(0),
+            user: ref({}),
+            studyList: ref([]),
         }
     },
     created(){
+        this.getStudyListV()
         this.listBranchActivities()
         this.listPartyHonors()
-        this.getYearStudyHours()
+        this.user = getCurrentUser()
     },
     methods: {
         listBranchActivities(){
@@ -376,19 +381,17 @@ export default {
                 page: {
                     pageNumber: 0,
                     pageSize: 10,
-                }
+                },
             }
             getBranchActivities(params).then(res=>{
                 _this.activityList = []
-                console.log(res)  
                 if(res.code == "200"){
                     _this.activityList = res.data.records
                     for(const activity of _this.activityList){
-                        console.log(activity)
+                        const isUserParticipating = activity.users.some(user => user.userNumber == this.user.userNumber);
+                        activity.attendStatus = isUserParticipating ? '已参加' : '未参加';
                         activity.activityStartTime = this.formattedDate(activity.activityStartDate)
                     }
-
-
                 }
                 else{
                     this.$message({
@@ -432,16 +435,28 @@ export default {
                 }
             })
         },
-        getYearStudyHours(){
-            getCenterNumber1().then(res=>{
+        getStudyListV(){
+            getStudyList().then(res=>{
+                console.log(res)
                 if(res.code == "200"){
-                    this.allStudyHour = toPre0String(res.data, 2)
-                    console.log(this.allStudyHour)
-                }
-                else{
-                    this.allStudyHour = toPre0String(0, 2)
+                    this.studyList = res.data
+                    this.getYearStudyHours()
                 }
             })
+        },
+        getYearStudyHours(){
+            const currentYear = new Date().getFullYear()
+            // 统计本年度学习时长
+            let totalStudyHours = 0
+                this.studyList.forEach(item => {
+                // 从 appliedDate 中提取年份
+                const year = parseInt(item.appliedDate.split('-')[0]); 
+                // 如果年份与当前年份一致，则累加学习时长
+                if (year === currentYear) {
+                    totalStudyHours += item.appliedStudyHour;
+                }
+            });
+            this.allStudyHour = totalStudyHours
         }
     }
 

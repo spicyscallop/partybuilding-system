@@ -17,7 +17,7 @@
                     <SettingInput @update-value="handleEducation" :readonly="readonly" title="学历"
                         :content="dataForm.education"></SettingInput>
                     <SettingInput @update-value="handleStudentId" :readonly="readonly" title="学号"
-                        :content="dataForm.studentId" :isrequire="true">
+                        :content="dataForm.userId" :isrequire="true">
                     </SettingInput>
                     <SettingInput @update-value="handleEnrollmentTime" :readonly="readonly" title="入团时间"
                         :content="dataForm.enrollmentTime"></SettingInput>
@@ -27,7 +27,7 @@
                         :content="dataForm.volunteerForParty">
                     </SettingInput>
                     <SettingInput @update-value="handleDevelopmentStage" :readonly="readonly" title="发展阶段"
-                        :content="dataForm.developmentStage"></SettingInput>
+                        :content="dataForm.developmentPhase"></SettingInput>
                     <SettingInput @update-value="handleEmail" :readonly="readonly" title="电子邮箱" :content="dataForm.email"
                         :isrequire="true">
                     </SettingInput>
@@ -60,9 +60,11 @@
             </v-row>
             <v-row>
                 <v-col></v-col>
-                <v-col><v-btn @click="edit"
-                        style="background-color: #5686F0; width: 80px;height: 30px;color: #ffffff;">编辑</v-btn></v-col>
-                <v-col><v-btn @click="save"
+                <v-col><v-btn @click="goback"
+                        style="background-color: #5686F0; width: 80px;height: 30px;color: #ffffff;">返回</v-btn></v-col>
+                <v-col v-if="readonly"><v-btn @click="edit"
+                        style="background-color: #C83C23; width: 80px;height: 30px;color:#ffffff ">编辑</v-btn></v-col>
+                <v-col v-else><v-btn @click="save"
                         style="background-color: #C83C23; width: 80px;height: 30px;color:#ffffff ">保存</v-btn></v-col>
                 <v-col></v-col>
             </v-row>
@@ -113,6 +115,10 @@ export default {
         },
         edit() {
             this.readonly = false
+            console.log(this.readonly)
+        },
+        goback(){
+            this.$router.push('/student/home')
         },
         save() {
             console.log("点击了保存")
@@ -176,30 +182,31 @@ export default {
         handlePhoneNumber(data) {
             this.dataForm.phoneNumber = data
         },
-        getPersonDetailV() {
-            getPersonDetail(auth.userId).then(res => {
-                // console.log(res.userId)
-                if (res.success) {
-                    if (res.data.length != 0) {
-                        this.dataForm.name = res.data[0].username
-                        this.dataForm.numberId = res.data[0].identityId
-                        this.dataForm.education = res.data[0].qualification
-                        this.dataForm.studentId = res.data[0].userNumber
-                        this.dataForm.enrollmentTime = res.data[0].leagueJoinTime
-                        this.dataForm.volunteer = "暂无"
-                        this.dataForm.volunteerForParty = res.data[0].ifApply
-                        this.dataForm.developmentStage = res.data[0].developmentPhase
-                        this.dataForm.email = res.data[0].email
-                        this.dataForm.wechat = "暂无"
-                        this.dataForm.sex = int2sex(res.data[0].sex)
-                        this.dataForm.nationality = res.data[0].nationality
-                        this.dataForm.readingStatus = res.data[0].readingStatus
-                        this.dataForm.politicsStatus = res.data[0].politicsStatus
-                        this.dataForm.leagueNum = res.data[0].leagueNum
-                        this.dataForm.partyJoinTime = res.data[0].partyJoinTime
-                        this.dataForm.partyBranch = res.data[0].partyBranch
-                        this.dataForm.QQ = "暂无"
-                        this.dataForm.phoneNumber = res.data[0].phone
+        getPersonDetailV(myId) {
+            getPersonDetail(myId).then(res => {
+                console.log(res)
+                if (res.code == "200") {
+                    if (res.data) {
+                        this.dataForm.name = res.data.userName || ""; // "霍思远"
+                        this.dataForm.numberId = res.data.identityId || ""; // null
+                        this.dataForm.userId = res.data.userNumber
+                        this.dataForm.education = res.data.qualification || ""; // "本科"
+                        this.dataForm.studentId = res.data.userNumber || ""; // "22351097"
+                        this.dataForm.enrollmentTime = res.data.leagueJoinTime || ""; // null
+                        this.dataForm.volunteer = res.data.isLeague === 1 ? "已提交" : "暂无"; // 根据 isLeague 推断，1 表示已提交
+                        this.dataForm.volunteerForParty = res.data.state === "提交入党申请书" ? "已提交" : "未提交"; // 根据 state 推断
+                        this.dataForm.developmentPhase = res.data.developmentPhase || ""; // "预备党员"
+                        this.dataForm.email = res.data.email || ""; // "22351097@zju.edu.cn"
+                        this.dataForm.wechat = "暂无"; // 数据中无微信信息，保持默认值
+                        this.dataForm.gender = int2sex(res.data.sex) || ""; // 1 转换为 "男"
+                        this.dataForm.ethnicity = res.data.nationality || ""; // "汉族"
+                        this.dataForm.studyStatus = res.data.readingStatus || ""; // null
+                        this.dataForm.politics = res.data.state || ""; // "提交入党申请书"
+                        this.dataForm.membershopNumber = res.data.leagueNum || ""; // null
+                        this.dataForm.dateOfJoiningParty = res.data.partyJoinTime || ""; // null
+                        this.dataForm.partyOrganization = res.data.branchName || ""; // "软件学院电子信息专业硕士生第十五党支部"
+                        this.dataForm.QQ = "暂无"; // 数据中无 QQ 信息，保持默认值
+                        this.dataForm.phoneNumber = res.data.phone || ""; // null
                     }
                 } else {
                     this.$message({
@@ -212,23 +219,24 @@ export default {
         },
         motifyPersonSettingV() {
             let dataFrame = {
-                "developmentPhase": this.dataForm.developmentStage,
-                "email": this.dataForm.email,
-                "id": auth.userId,
-                "identityId": this.dataForm.numberId,
-                "ifApply": this.dataForm.volunteerForParty,
-                "leagueJoinTime": this.dataForm.enrollmentTime,
-                "leagueNum": this.dataForm.leagueNum,
-                "nationality": this.dataForm.nationality,
-                "partyBranch": this.dataForm.partyBranch,
-                "partyJoinTime": this.dataForm.partyJoinTime,
-                "phone": this.dataForm.phoneNumber,
-                "politicsStatus": this.dataForm.politicsStatus,
-                "qualification": this.dataForm.education,
-                "readingStatus": this.dataForm.readingStatus,
-                "sex": sex2int(this.dataForm.sex),
+                "developmentPhase": this.dataForm.developmentStage, // 对应 res.data.developmentPhase
+                "email": this.dataForm.email, // 对应 res.data.email
+                "id": this.dataForm.userId, // 不变，保持原样
+                "identityId": this.dataForm.numberId, // 对应 res.data.identityId
+                "ifApply": this.dataForm.volunteerForParty, // 对应 res.data.state === "提交入党申请书" ? "已提交" : "未提交"
+                "leagueJoinTime": this.dataForm.enrollmentTime, // 对应 res.data.leagueJoinTime
+                "leagueNum": this.dataForm.membershopNumber, // 对应 res.data.leagueNum
+                "nationality": this.dataForm.ethnicity, // 对应 res.data.nationality
+                "partyBranch": this.dataForm.partyOrganization, // 对应 res.data.branchName
+                "partyJoinTime": this.dataForm.dateOfJoiningParty, // 对应 res.data.partyJoinTime
+                "phone": this.dataForm.phoneNumber, // 对应 res.data.phone
+                "politicsStatus": this.dataForm.politics, // 对应 res.data.state
+                "qualification": this.dataForm.education, // 对应 res.data.qualification
+                "readingStatus": this.dataForm.studyStatus, // 对应 res.data.readingStatus
+                "sex": sex2int(this.dataForm.gender), 
                 "username": this.dataForm.name
             }
+            console.log(dataFrame)
             motifyPersonSetting(dataFrame).then(response => {
                 console.log(response)
                 if (response.success) {
@@ -253,8 +261,8 @@ export default {
 
     },
     mounted() {
-        this.getPersonDetailV()
-
+        const myId = this.$route.query.userId
+        this.getPersonDetailV(myId)
     },
 }
 </script>
