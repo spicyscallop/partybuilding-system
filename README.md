@@ -1,3 +1,4 @@
+np
 # smartPartyBusiness
 
 > 💡：ZJU-CST Party Business System——软件学院智慧党建系统

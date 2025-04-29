@@ -168,6 +168,11 @@ const router = createRouter({
           name: 'SHYK',
           component: () => import('@/views/teacher/ZZSH/SHYKView.vue')
         },
+        {
+          path: '/teacher/zzsh/shykgl',
+          name: 'SHYKGL',
+          component: () => import('@/views/teacher/ZZSH/SHYKGLView.vue')
+        },
         // 发布管理
         {
           path: '/teacher/xtgg',
