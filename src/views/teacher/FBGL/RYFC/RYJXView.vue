@@ -69,18 +69,18 @@
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
             >
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="id" label="奖项编号" width="200"></el-table-column>
+            <el-table-column type="selection"></el-table-column>
+            <el-table-column prop="id" label="奖项编号"></el-table-column>
             <el-table-column prop="name" label="奖项名称"></el-table-column>
             <!-- <el-table-column prop="winner" label="获奖人" width="120"></el-table-column> -->
-            <el-table-column prop="createTime" label="发布时间" width="120">
+            <el-table-column prop="createTime" label="发布时间">
                 <template #default="{ row }">
-                    <span>{{ formatDate(row.createTime) }}</span>
+                    <span>{{ formatDateToYMD(row.createTime) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="honorLevel" label="荣誉等级" width="100"></el-table-column>
+            <el-table-column prop="honorLevel" label="荣誉等级"></el-table-column>
             <!-- 操作 -->
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作">
                 <template #default="{ row }">
                 <el-button link @click="handleEdit(row)">编辑</el-button>
                 <el-button link style="color: red;" @click="handleDelete(row.id)">删除</el-button>
@@ -106,9 +106,19 @@
         <el-dialog
             :title="isEdit ? '编辑奖项' : '新增奖项'"
             v-model="addAndEditDialogVisible"
-            width="40%"
             @close="onDialogClose()"
+            append-to-body
         >
+            <el-dialog
+                title="录入获奖人员"
+                v-model="innerVisible"
+                append-to-body>
+                <UserSelectionDialog
+                    ref="userSelectionDialog"
+                    @confirm="handleConfirm"
+                    @cancel="handleCancel"
+                />
+            </el-dialog>
             <!-- 表单 -->
             <el-form
                 :model="form"
@@ -154,8 +164,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row :gutter="20">
+
                     <el-col :span="12">
                         <el-form-item label="发布时间" prop="createTime">
                             <el-date-picker
@@ -167,6 +176,21 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="获奖时间" prop="getTime">
+                            <el-date-picker
+                                v-model="form.getTime"
+                                type="date"
+                                placeholder="请选择获奖时间">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-button class="redBtn" @click="innerVisible = true">录入获奖人员</el-button>
+                        <span class="ml-5 mt-2" v-if="form.awardWinnersUserIds != ''">已选择（{{ awardWinnersUserCount }}）人</span>
+                    </el-col>
+                </el-row>
             </el-form>
 
             <!-- 底部按钮 -->
@@ -176,7 +200,7 @@
             </template>
         </el-dialog>
     </v-col>
-  </template>
+</template>
   
   
 <script>
@@ -184,6 +208,7 @@ import SubpageTitle from '@/components/SubpageTitle.vue';
 import DropDownBox from '@/components/dropDown/DropDownBox.vue';
 import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
+import UserSelectionDialog from './UserSelectionDialog.vue';
 import { 
     getPrizePage, 
     addPrize, 
@@ -199,10 +224,12 @@ export default {
         DropDownBox,
         AttributeSelection,
         ArrowDown,
+        UserSelectionDialog
     },
     data() {
         return {
             addAndEditDialogVisible: false,
+            innerVisible: false,
             tableKey: 0,
             isEdit: false,
             currentRowId: "",
@@ -220,7 +247,8 @@ export default {
                     pageNumber: 1,
                     pageSize: 10,
                     searchCount: true
-                }
+                },
+                needAwardWinnersUserDetail: true
             },
             ryjx: [],
             form: {
@@ -229,6 +257,7 @@ export default {
                 // winner: "",
                 honorLevel: "",
                 createTime: "",
+                awardWinnersUserIds: "",
             },
             rules: {
                 name: [{ required: true, message: '请输入奖项名称', trigger: 'blur' }],
@@ -245,6 +274,7 @@ export default {
                 { label: '校级', value: '校级' },
             ],
             selectedIds: [],
+            awardWinnersUserCount: 0,
         }
     },
     mounted() {
@@ -293,13 +323,11 @@ export default {
             return date.split(' ')[0];
         },
         clearInputMessage() {
-            this.queryItems = {
-                id: "",
-                name: "",
-                // winner: "",
-                createTime: "",
-                honorLevel: "",
-            }
+            this.queryItems.id = ""
+            this.queryItems.name = ""
+            // this.queryItems.winner = ""
+            this.queryItems.createTime = ""
+            this.queryItems.honorLevel = ""
         },
         clearAddForm() {
             this.form = {
@@ -308,6 +336,8 @@ export default {
                 // winner: "",
                 honorLevel: "",
                 createTime: "",
+                getTime: "",
+                awardWinnersUserIds: "",
             },
             this.currentRowId = "";
             this.isEdit = false;
@@ -331,6 +361,7 @@ export default {
                     // winner: form.winner,
                     honorLevel: row.honorLevel,
                     createTime: this.formatDateToYMD(row.createTime),
+                    getTime: this.formatDateToYMD(row.getTime),
                 }
             })
         },
@@ -415,7 +446,17 @@ export default {
         // dialog 关闭时清空表单验证信息
         onDialogClose() {
             this.$refs['form'].resetFields();
-        }
+        },
+        handleConfirm(selectedIds) {
+            this.innerVisible = false;
+            this.awardWinnersUserCount = selectedIds.length;
+            this.form.awardWinnersUserIds = JSON.stringify(selectedIds)
+            // console.log("确认录入，选中的人员 ID:", JSON.stringify(selectedIds));
+            // console.log(this.form)
+        },
+        handleCancel() {
+            this.innerVisible = false;
+        },
     },
 }
 </script>
