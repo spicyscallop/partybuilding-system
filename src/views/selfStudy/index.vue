@@ -61,6 +61,7 @@
           </el-form-item>
         </el-form>
         <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
+          <el-button type="primary" @click="$refs.importThreeMeetingsOneLessonActivityDialog.openDialog()" style="width: 150px;">三会一课 批量导入</el-button>
           <el-button type="primary" @click="addRecord" style="width: 100px;">新增</el-button>
           <el-button type="danger" @click="handleBatchDelete" style="width: 100px;">批量删除</el-button>
         </div>
@@ -140,14 +141,17 @@
         />
       </div>
     </el-card>
+    <ImportThreeMeetingsOneLessonActivityDialog ref="importThreeMeetingsOneLessonActivityDialog" @refresh="fetchData"></ImportThreeMeetingsOneLessonActivityDialog>
   </div>
 </template>
 
 <script>
 import {getCurrentUser} from '@/utils/auth';
+import ImportThreeMeetingsOneLessonActivityDialog from "./ImportThreeMeetingsOneLessonActivitttDialog.vue";
 
 export default {
   name: 'SelfStudyManagement',
+  components: {ImportThreeMeetingsOneLessonActivityDialog},
   data() {
     return {
       tableData: [],
