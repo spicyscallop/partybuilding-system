@@ -1,19 +1,21 @@
 <template>
   <div class="self-study-page">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>自主学习管理</span>
+      <div slot="header" class="clearfix" style="padding: 20px 0">
+        <span>自主学习/三会一课 管理</span>
       </div>
-      <div class="controls" style="margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <el-form :inline="true" :model="searchForm" style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div class="controls"
+           style="margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <el-form :inline="true" :model="searchForm"
+                 style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
           <el-form-item label="学号">
-            <el-input v-model="searchForm.userNumber" placeholder="请输入学号" style="width: 150px;" />
+            <el-input v-model="searchForm.userNumber" placeholder="请输入学号" style="width: 150px;"/>
           </el-form-item>
           <el-form-item label="用户名">
-            <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 150px;" />
+            <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 150px;"/>
           </el-form-item>
           <el-form-item label="活动名称">
-            <el-input v-model="searchForm.activityName" placeholder="请输入活动名称" style="width: 150px;" />
+            <el-input v-model="searchForm.activityName" placeholder="请输入活动名称" style="width: 150px;"/>
           </el-form-item>
           <el-form-item label="发展阶段">
             <el-select
@@ -22,14 +24,25 @@
                 @change="search"
                 style="width: 150px;"
             >
-              <el-option label="共青团员" value="共青团员" />
-              <el-option label="入党申请人" value="入党申请人" />
-              <el-option label="积极分子" value="积极分子" />
-              <el-option label="发展对象" value="发展对象" />
-              <el-option label="预备党员" value="预备党员" />
-              <el-option label="正式党员" value="正式党员" />
+              <el-option label="共青团员" value="共青团员"/>
+              <el-option label="入党申请人" value="入党申请人"/>
+              <el-option label="积极分子" value="积极分子"/>
+              <el-option label="发展对象" value="发展对象"/>
+              <el-option label="预备党员" value="预备党员"/>
+              <el-option label="正式党员" value="正式党员"/>
             </el-select>
           </el-form-item>
+          <el-form-item label="类型" prop="type">
+            <el-select
+                v-model="searchForm.type"
+                placeholder="选择类型"
+                style="width: 100px;"
+            >
+              <el-option label="自主学习" value="自主学习"/>
+              <el-option label="三会一课" value="三会一课"/>
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="审核状态">
             <el-select
                 v-model="searchForm.auditStatus"
@@ -37,9 +50,9 @@
                 @change="search"
                 style="width: 150px;"
             >
-              <el-option label="审核中" value="审核中" />
-              <el-option label="通过" value="通过" />
-              <el-option label="拒绝" value="拒绝" />
+              <el-option label="审核中" value="审核中"/>
+              <el-option label="通过" value="通过"/>
+              <el-option label="拒绝" value="拒绝"/>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -60,17 +73,24 @@
           style="width: 100%;"
           @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
+        <el-table-column type="selection" width="55"/>
         <!-- 新增两列：用户名、学工号 -->
-        <el-table-column prop="userNumber" label="学工号" fixed="left" />
-        <el-table-column prop="username" label="用户名" fixed="left" />
-        <el-table-column prop="activityName" label="活动名称" fixed="left" />
-        <el-table-column prop="appliedDate" label="申请时间" />
-        <el-table-column prop="appliedStudyHour" label="申请学时" />
+        <el-table-column prop="userNumber" label="学工号" fixed="left"/>
+        <el-table-column prop="username" label="用户名" fixed="left"/>
+        <el-table-column prop="activityName" label="活动名称" fixed="left"/>
+        <el-table-column prop="appliedDate" label="申请时间"/>
+        <el-table-column prop="appliedStudyHour" label="申请学时"/>
         <el-table-column prop="developmentPhase" label="发展阶段">
           <template v-slot="scope">
             <el-tag :type="getTagType(scope.row.developmentPhase)">
               {{ scope.row.developmentPhase || '无' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" label="类型">
+          <template v-slot="scope">
+            <el-tag :type="getTagType(scope.row.type)">
+              {{ scope.row.type || '无' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -81,7 +101,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="auditTime" label="审核时间" />
+        <el-table-column prop="auditTime" label="审核时间"/>
         <el-table-column label="操作" width="350" fixed="right">
           <template v-slot="scope">
             <el-button size="mini" type="primary" @click="edit(scope.row)" style="color: #FFF">编辑</el-button>
@@ -93,14 +113,16 @@
                 @click="approve(scope.row)"
                 :disabled="scope.row.auditStatus==='通过'"
                 style="color: #FFF"
-            >通过</el-button>
+            >通过
+            </el-button>
             <el-button
                 size="mini"
                 type="warning"
                 @click="reject(scope.row)"
                 :disabled="scope.row.auditStatus==='拒绝'"
                 style="color: #FFF"
-            >拒绝</el-button>
+            >拒绝
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,20 +144,22 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@/utils/auth';
+import {getCurrentUser} from '@/utils/auth';
+
 export default {
   name: 'SelfStudyManagement',
   data() {
     return {
       tableData: [],
       total: 0,
-      pageDTO: { pageSize: 10, pageNumber: 1 },
+      pageDTO: {pageSize: 10, pageNumber: 1},
       searchForm: {
         userNumber: '',
         userName: '',
         activityName: '',
         developmentPhase: '',
-        auditStatus: ''
+        auditStatus: '',
+        type: ''
       },
       multipleSelection: []
     };
@@ -144,10 +168,14 @@ export default {
     this.fetchData();
   },
   methods: {
-    getTagType(v) { /* 根据阶段返回 Tag 类型 */ return ''; },
+    getTagType(v) {
+      if (v === '三会一课') return 'success';
+      if (v === '自主学习') return 'warning';
+    },
     getAuditTagType(v) {
       if (v === '通过') return 'success';
       if (v === '拒绝') return 'danger';
+
       return 'warning';
     },
     renderCell(row, col, val) {
@@ -160,10 +188,11 @@ export default {
         auditStatus: this.searchForm.auditStatus,
         username: this.searchForm.userName,
         userNumber: this.searchForm.userNumber,
-        activityName: this.searchForm.activityName
+        activityName: this.searchForm.activityName,
+        type: this.searchForm.type
       };
       this.$axios
-          .get('/selfstudy/listByPartyBranch', { params })
+          .get('/selfstudy/listByPartyBranch', {params})
           .then(res => {
             this.tableData = res.data;
             this.total = res.data.length;
@@ -180,13 +209,13 @@ export default {
       this.search();
     },
     addRecord() {
-      this.$router.push({ name: 'selfStudyAddOrEdit' });
+      this.$router.push({name: 'selfStudyAddOrEdit'});
     },
     edit(row) {
-      this.$router.push({ name: 'selfStudyAddOrEdit', query: { id: row.id } });
+      this.$router.push({name: 'selfStudyAddOrEdit', query: {id: row.id}});
     },
     deleteRow(row) {
-      this.$confirm('确认删除该记录？', '提示', { type: 'warning' })
+      this.$confirm('确认删除该记录？', '提示', {type: 'warning'})
           .then(() => {
             this.$axios.delete(`/selfstudy/${row.id}`).then(() => {
               this.$message.success('删除成功');
