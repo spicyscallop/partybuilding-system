@@ -101,7 +101,15 @@ export default {
             permission: '/partyManager/permission',
           };
           this.sidebarItems = [
-            { title: '支委概况', icon: 'mdi-home', link: '/partyManager/home' },
+            {
+              title: '支委信息',
+              icon: 'mdi-home',
+              children: [
+                { title: '支部概况', link: '/partyManager/home' },
+                { title: '支部中心', link: '/teacher/dwzx' },//todo
+                { title: '支部风采', link: '/teacher/dwfc' } //todo
+              ],
+            },
             {
               title: '发展管理',
               icon: 'mdi-account-check',
@@ -115,22 +123,16 @@ export default {
                 { title: '活动信息管理', link: '/partyManager/fzgl/hdxx' }, 
               ],
             },
-            { title: '组织生活', icon: 'mdi-notebook-edit', link: '/partyManager/zzsh' },
             {
-              title: '活动安排',
-              icon: 'mdi-calendar-range',
+              title: '支部管理',
+              icon: 'mdi-home',
               children: [
-                { title: '自主活动', link: '/teacher/hdap/zzhd' },
-                { title: '自主学习', link: '/teacher/selfStudy/index' }
+                { title: '档案管理', link: '/partyManager/zbgl/dagl' }, 
+                { title: '经费管理', link: '/partyManager/zbgl/jfgl' }, 
+                { title: '结对帮扶录入', link: '/partyManager/zbgl/jdbf' }, 
+                { title: '荣誉风采录入', link: '/partyManager/zbgl/ryfc' },
+                { title: '人员管理', link: '/teacher/userList/index'},//todo
               ],
-            },
-            { title: '风采记录', icon: 'mdi-folder-multiple-image', link: '/partyManager/album' },
-            { title: '荣誉奖项', icon: 'mdi-medal', link: '/partyManager/award' },
-            { title: '档案管理', icon: 'mdi-file-cog', link: '/partyManager/file' },
-            {
-              title: '人员管理',
-              icon: 'mdi-calendar',
-              link: '/teacher/userList/index'
             },
           ];
       } else if (this.userRole === '学校党委' || this.userRole === '系统管理员') {
@@ -146,7 +148,7 @@ export default {
               children: [
                 { title: '党委概况', link: '/teacher/home' },
                 { title: '党委中心', link: '/teacher/dwzx' },
-                { title: '党委风采', link: '/teacher/dwfc' } //TODO
+                { title: '党委风采', link: '/teacher/dwfc' } 
               ],
             },
             {
@@ -160,7 +162,7 @@ export default {
                 { title: '预备党员阶段', link: '/teacher/fzgl/ybdy' },
                 { title: '正式党员阶段', link: '/teacher/fzgl/zsdy' },
                 { title: '活动信息管理', link: '/teacher/fzgl/hdxx' }, 
-                { title: '文件模板管理', link: '/teacher/fzgl/wjmb' } //TODO
+                { title: '文件模板管理', link: '/teacher/fzgl/wjmb' } 
               ],
             },
             {
@@ -168,7 +170,6 @@ export default {
               icon: 'mdi-calendar-range',
               children: [
                 { title: '三会一课', link: '/teacher/zzsh/shyk' },
-                { title: '理论学习与实践', link: '/teacher/xxx' }, //TODO
                 { title: '自主学习', link: '/teacher/selfStudy/index' }
               ],
             },
@@ -191,14 +192,12 @@ export default {
               ],
             },
             {
-              title: '约束告警',
-              icon: 'mdi-calendar',
-              link: '/teacher/reminder/index'
-            },
-            {
               title: '系统设置',
-              icon: 'mdi-calendar',
-              link: '/teacher/partyMemberRules/index'
+              icon: 'mdi-cog',
+              children: [
+                { title: '党员发展时间间隔', link: '/teacher/partyMemberRules/index' },
+                { title: '约束告警', link: '/teacher/reminder/index' }
+              ],
             },
             {
               title: '人员管理',

@@ -55,6 +55,12 @@
                     </v-col>
                 </div>
             </v-row>
+            <v-row style="width: 100%;" class="mt-5">
+				<div style="display: flex; width: 100%; justify-content: flex-end;">
+						<el-button class="redBtn" style="border-color: #A5A5A5;" @click="handleAdd">新增档案</el-button>
+						<el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="handleBatchDelete">删除档案</el-button>
+				</div>
+			</v-row>
              <v-row class="d-flex flex-column h-100 mt-10 mb-10">
                 <el-table
                     :key="tableKey"

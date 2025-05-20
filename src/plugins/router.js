@@ -22,13 +22,13 @@ const router = createRouter({
         // 编辑党委概况 
         {
           path: '/teacher/edit-overview',
-          name: 'EditOverview',
+          name: 'TeacherEditOverview',
           component: () => import('@/views/teacher/EditOverview.vue')
         },
         // 编辑支委概况 
         {
           path: '/partyBranchManager/edit-overview',
-          name: 'EditOverview',
+          name: 'PartyBranchManagerEditOverview',
           component: () => import('@/views/partyBranchManager/EditOverview.vue')
         },
         //自主学习
@@ -180,7 +180,7 @@ const router = createRouter({
           name: 'XXYB',
           component: () => import('@/views/teacher/FBGL/XXYBView.vue')
         },
-        // 支部管理
+        // (党委端）支部管理
         {
           path: '/teacher/zbgl',
           name: 'ZBGL',
@@ -304,6 +304,46 @@ const router = createRouter({
           path: '/partyManager/fzgl/fzgl',
           name: 'P_FZGL',
           component: () => import('@/views/partyBranchManager/FZGLViews/indexView.vue')
+        },
+        //(支委端）支部管理
+        {
+          path: '/partyManager/zbgl',
+          name: 'PartyManagerZBGL',
+          children: [
+            {
+              path: '/partyManager/zbgl/ryfc',
+              name: 'PartyManagerRYFC',
+              component: () => import('@/views/partyBranchManager/ZBGL/RYFC/IndexView.vue'),
+              redirect: '/partyManager/zbgl/ryfc/hdgl',
+              children: [
+                {
+                  path: '/partyManager/zbgl/ryfc/hdgl',
+                  name: 'PartyManagerHDGL',
+                  component: () => import('@/views/partyBranchManager/ZBGL/RYFC/HDGLView.vue'),
+                },
+                {
+                  path: '/partyManager/zbgl/ryfc/ryjx',
+                  name: 'PartyManagerRYJX',
+                  component: () => import('@/views/partyBranchManager/ZBGL/RYFC/RYJXView.vue'),
+                },
+              ]
+            },
+            {
+              path: '/partyManager/zbgl/jdbf',
+              name: 'PartyManagerJDBF',
+              component: () => import('@/views/partyBranchManager/ZBGL/JDBF/IndexView.vue')
+            },
+            {
+              path: '/partyManager/zbgl/jfgl',
+              name: 'PartyManagerJFGL',
+              component: () => import('@/views/partyBranchManager/ZBGL/JFGLView.vue')
+            },
+            {
+              path: '/partyManager/zbgl/dagl',
+              name: 'PartyManagerDAGL',
+              component: () => import('@/views/partyBranchManager/ZBGL/DAGLView.vue')
+            }
+          ],
         },
         {
           path: '/partyManager/fzgl/rdsq',
