@@ -15,6 +15,8 @@
           <div v-for="tdata in tableData">
           <el-tab-pane :label="tdata.phase">
             <div style="height:40px"></div>
+            <el-button type="danger" plain>添加文件</el-button>
+            <div style="height:10px"></div>
             <table style="width:100%;border-radius: 15px;background-color: #F7F7F7;">
               <thead>
               <tr>

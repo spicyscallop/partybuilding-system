@@ -102,12 +102,12 @@ export default {
           };
           this.sidebarItems = [
             {
-              title: '支委信息',
+              title: '支部信息',
               icon: 'mdi-home',
               children: [
-                { title: '支部概况', link: '/partyManager/home' },
-                { title: '支部中心', link: '/teacher/dwzx' },//todo
-                { title: '支部风采', link: '/teacher/dwfc' } //todo
+                { title: '支委概况', link: '/partyManager/home' },
+                { title: '支部中心', link: '/partyManager/zbzx' },
+                { title: '支部风采', link: '/partyManager/zbfc' }
               ],
             },
             {
@@ -127,12 +127,17 @@ export default {
               title: '支部管理',
               icon: 'mdi-home',
               children: [
-                { title: '档案管理', link: '/partyManager/zbgl/dagl' }, 
-                { title: '经费管理', link: '/partyManager/zbgl/jfgl' }, 
-                { title: '结对帮扶录入', link: '/partyManager/zbgl/jdbf' }, 
-                { title: '荣誉风采录入', link: '/partyManager/zbgl/ryfc' },
-                { title: '人员管理', link: '/teacher/userList/index'},//todo
+                { title: '自主活动', link: '/teacher/hdap/zzhd' },
+                { title: '组织生活管理', link: '/teacher/selfStudy/index' }
               ],
+            },
+            { title: '风采记录', icon: 'mdi-folder-multiple-image', link: '/partyManager/album' },
+            { title: '荣誉奖项', icon: 'mdi-medal', link: '/partyManager/award' },
+            { title: '档案管理', icon: 'mdi-file-cog', link: '/partyManager/file' },
+            {
+              title: '人员管理',
+              icon: 'mdi-calendar',
+              link: '/teacher/userList/index'
             },
           ];
       } else if (this.userRole === '学校党委' || this.userRole === '系统管理员') {
@@ -170,7 +175,9 @@ export default {
               icon: 'mdi-calendar-range',
               children: [
                 { title: '三会一课', link: '/teacher/zzsh/shyk' },
-                { title: '自主学习', link: '/teacher/selfStudy/index' }
+                { title: '三会一课管理', link: '/teacher/zzsh/shykgl' },
+                { title: '理论学习与实践', link: '/teacher/xxx' }, //TODO
+                { title: '组织生活管理', link: '/teacher/selfStudy/index' }
               ],
             },
             {
@@ -179,6 +186,7 @@ export default {
               children: [
                 { title: '系统公告', link: '/teacher/xtgg' },
                 { title: '学习样板', link: '/teacher/xxyb' },
+                { title: '荣誉风采录入', link: '/teacher/ryfc' }
               ],
             },
             {
@@ -187,8 +195,7 @@ export default {
               children: [
                 { title: '档案管理', link: '/teacher/zbgl/dagl' }, 
                 { title: '经费管理', link: '/teacher/zbgl/jfgl' }, 
-                { title: '结对帮扶录入', link: '/teacher/zbgl/jdbf' }, 
-                { title: '荣誉风采录入', link: '/teacher/zbgl/ryfc' }
+                { title: '结对帮扶录入', link: '/teacher/zbgl/jdbf' },
               ],
             },
             {

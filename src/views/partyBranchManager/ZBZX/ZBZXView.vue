@@ -7,7 +7,7 @@
             >
                 <v-col>
                     <SubpageTitle
-                        text="党委中心"
+                        text="支部中心"
                         :width="43"
                         :height="43"
                     ></SubpageTitle>
@@ -15,46 +15,7 @@
             </v-row>
             <v-row no-gutters>
                 <v-col
-                    cols="12"
-                    sm="4"
-                >
-                    <div class="d-flex fill-height align-stretch pt-3 pb-10">
-                        <v-sheet
-                            rounded="lg"
-                            class="flex-grow-1 flex-column ma-3 elevation-8 py-5 pl-5 pr-10"
-                            >
-                            <v-row class="mb-0  ">
-                                <v-col cols="auto">
-                                    <IconParty
-                                        class="mt-n1"
-                                        style="height: 80px"
-                                    ></IconParty>
-                                </v-col>
-                                <v-col>
-                                    <h1 class="text-h3 font-weight-bold">
-                                        {{ branchCount }}<v-label>个</v-label>
-                                    </h1>
-                                    <h2 class="text-h6">党支部数量</h2>
-                                    <h2 class="text-subtitle-1 text-blue">
-                                        浙江大学软件学院党支部
-                                    </h2>
-                                </v-col>
-                            </v-row>
-                            <v-row class="mb-0">
-                                <v-col cols="3"></v-col>
-                                <v-col cols="6">
-                                    <v-btn block style="background-color: red; color: white"
-                                    to="/teacher/dwzx/branchlist">
-                                        支部列表
-                                    </v-btn>
-                                </v-col>
-                                <v-col cols="3"></v-col>
-                            </v-row>
-                        </v-sheet>
-                    </div>
-                </v-col>
-                <v-col
-                    v-for="(item, index) in dwzx"
+                    v-for="(item, index) in zbzx"
                     :key="index"
                     cols="12"
                     sm="4"
@@ -102,7 +63,7 @@
 <script>
 import SubpageTitle from "@/components/SubpageTitle.vue";
 import IconParty from "@/components/icons/IconParty.vue";
-import { getPartyOverview, findAllBranches } from "@/http/party.js"
+import { getBranchOverview } from "@/http/api.js"
 
 export default {
     components: {
@@ -111,8 +72,7 @@ export default {
     },
     data() {
         return {
-            branchCount: 0,
-            dwzx: [
+            zbzx: [
                 {
                     count: 0,
                     title: "",
@@ -125,26 +85,23 @@ export default {
         };
     },
     mounted() {
-        findAllBranches().then(res => {
-            this.branchCount = res.data.length
-        })
-        getPartyOverview().then(res => {
-            this.dwzx = res.data
+        getBranchOverview().then(res => {
+            this.zbzx = res.data
             let totalCount = 0
-            this.dwzx.forEach(x => {
+            this.zbzx.forEach(x => {
                 x.subtitle = "浙江大学软件学院党支部"
                 x.buttonText = "人员列表"
-                x.viewLink = "/teacher/dwzx/personlist"
+                x.viewLink = "/partyManager/zbzx/personlist"
                 x.phase = x.title
                 totalCount += x.count
             })
-            this.dwzx.reverse() // 正式党员在最前面
-
-            this.dwzx.unshift({
-                title: "人员数量",
+            this.zbzx.reverse()
+            // 在列表最前面插入一个总人数项
+            this.zbzx.unshift({
+                title: "总人员数量",
                 subtitle: "浙江大学软件学院党支部",
                 buttonText: "人员列表",
-                viewLink: "/teacher/dwzx/personlist",
+                viewLink: "/partyManager/zbzx/personlist",
                 phase: "",
                 count: totalCount
             });

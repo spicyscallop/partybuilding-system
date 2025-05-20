@@ -51,6 +51,18 @@
             <el-option label="正式党员" value="正式党员" />
           </el-select>
         </el-form-item>
+
+        <el-form-item label="类型" prop="type">
+          <el-select
+              v-model="form.type"
+              placeholder="请选择类型"
+              style="width: 300px;"
+          >
+            <el-option label="自主学习" value="自主学习" />
+            <el-option label="三会一课" value="三会一课" />
+          </el-select>
+        </el-form-item>
+
         <!-- 新增审核状态字段，编辑时可见，新增默认 审核中 -->
         <el-form-item label="审核状态" prop="auditStatus">
           <el-select
@@ -98,7 +110,8 @@ export default {
         appliedStudyHour: 1,
         developmentPhase: '',
         auditStatus: '审核中',
-        auditTime: ''
+        auditTime: '',
+        type:'自主学习'
       },
       users: [],
       rules: {
@@ -146,7 +159,8 @@ export default {
           appliedStudyHour: data.appliedStudyHour,
           developmentPhase: data.developmentPhase,
           auditStatus: data.auditStatus,
-          auditTime: data.auditTime
+          auditTime: data.auditTime,
+          type: data.type
         };
       });
     },
@@ -190,7 +204,6 @@ export default {
 }
 
 .box-card {
-  max-width: 700px;
-  margin: 0 auto;
+
 }
 </style>

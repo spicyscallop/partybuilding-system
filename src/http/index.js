@@ -56,7 +56,8 @@ instance.interceptors.request.use((config) => {
 //响应拦截器
 instance.interceptors.response.use((response) => {
     hideLoading()
-    if (!response.data.success) {
+    console.log('response', response)
+    if (!response.data.success && response?.status !== 200) {
         let message = response.data.message || response.data.msg || '请求异常';
         ElMessage.error(message);
         return Promise.reject(response.data);

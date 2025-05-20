@@ -25,10 +25,10 @@
                         </v-col>
                         <v-col cols="4" class="d-flex align-center">
                             <span style="white-space: nowrap; min-width: 60px;">发布单位</span>
-                            <el-select v-model="queryItems.institution" placeholder="请选择" style="flex: 1; margin-left: 20px;">
+                            <el-select v-model="queryItems.publishingUnit" placeholder="请选择" style="flex: 1; margin-left: 20px;">
                                 <el-option label="全部" value="全部"></el-option>
                                 <el-option
-                                    v-for="item in institutionOptions"
+                                    v-for="item in publishingUnitOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -37,10 +37,10 @@
                         </v-col>
                         <v-col cols="4" class="d-flex align-center">
                             <span style="white-space: nowrap; min-width: 60px;">活动类型</span>
-                            <el-select v-model="queryItems.institution" placeholder="请选择" style="flex: 1; margin-left: 20px;">
+                            <el-select v-model="queryItems.activityType" placeholder="请选择" style="flex: 1; margin-left: 20px;">
                                 <el-option label="全部" value="全部"></el-option>
                                 <el-option
-                                    v-for="item in institutionOptions"
+                                    v-for="item in activityTypeOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -57,14 +57,14 @@
         </v-row>
         <v-row style="width: 100%;" class="mt-5">
             <div style="display: flex; width: 100%; justify-content: flex-end;">
-                    <el-button class="redBtn" style="border-color: #A5A5A5;" @click="handleAdd">新增记录</el-button>
-                    <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="handleBatchDelete">删除记录</el-button>
+                <el-button class="redBtn" style="border-color: #A5A5A5;" @click="handleAdd">新增记录</el-button>
+                <el-button class="whiteBtn" style="border-color: #A5A5A5;" @click="handleBatchDelete">删除记录</el-button>
             </div>
         </v-row>
-            <v-row class="d-flex flex-column h-100 mt-10 mb-10">
+        <v-row class="d-flex flex-column h-100 mt-10 mb-10">
             <el-table
                 :key="tableKey"
-                :data="HDList"
+                :data="hdfc"
                 border
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
@@ -72,14 +72,14 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="id" label="记录编号" width="200"></el-table-column>
             <el-table-column prop="title" label="活动名称"></el-table-column>
-            <el-table-column prop="institution" label="发布单位" width="120"></el-table-column>
+            <el-table-column prop="publishingUnit" label="发布单位" width="120"></el-table-column>
             <el-table-column prop="createTime" label="发布时间" width="120">
                 <template #default="{ row }">
-                    <span>{{ formatDate(row.createTime) }}</span>
+                    <span>{{ formatDateToYMD(row.createTime) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="type" label="活动类型" width="100"></el-table-column>
-            <el-table-column prop="content" label="活动内容" width="100">
+            <el-table-column prop="activityType" label="活动类型" width="100"></el-table-column>
+            <el-table-column prop="activityContent" label="活动内容" width="100">
                 <template #default="{ row }">
                     <el-button link @click="handleWatch(row)">查看</el-button>
                 </template>
@@ -111,7 +111,7 @@
         <el-dialog
             :title="isEdit ? '编辑记录' : '新增记录'"
             v-model="addAndEditDialogVisible"
-            width="40%"
+            @close="onDialogClose()"
         >
             <!-- 表单 -->
             <el-form
@@ -136,10 +136,10 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <!-- 发布单位 -->
-                        <el-form-item label="发布单位" prop="institution" required>
-                            <el-select v-model="form.institution" placeholder="请选择发布单位" style="width: 100%;">
+                        <el-form-item label="发布单位" prop="publishingUnit" required>
+                            <el-select v-model="form.publishingUnit" placeholder="请选择发布单位" style="width: 100%;">
                                 <el-option
-                                    v-for="item in institutionOptions"
+                                    v-for="item in publishingUnitOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -148,10 +148,10 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="活动类型" prop="type" required>
-                            <el-select v-model="form.type" placeholder="请选择" style="width: 100%;">
+                        <el-form-item label="活动类型" prop="activityType" required>
+                            <el-select v-model="form.activityType" placeholder="请选择" style="width: 100%;">
                                 <el-option
-                                    v-for="item in typeOptions"
+                                    v-for="item in activityTypeOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -162,7 +162,7 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="发布时间" prop="createTime" required>
+                        <el-form-item label="发布时间" prop="createTime">
                             <el-date-picker
                                 v-model="form.createTime"
                                 type="date"
@@ -171,13 +171,33 @@
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="封面图片" required>
+                            <el-upload
+                                action
+                                ref="upload"
+                                :accept="fileType.join(',')"
+                                :auto-upload="false"
+                                :file-list="fileList"
+                                :on-change="handleChange"
+                                :on-preview="handlePreview"
+                                :before-upload="beforeUpload"
+                                list-type="picture"
+                                >
+                                <el-button size="small">{{ form.fileId ? "重新上传" : "点击上传" }}</el-button>
+                                <template v-slot:tip>
+                                    <div class="el-upload__tip">只能上传 jpg/jpeg/png 文件，且不超过 2mb</div>
+                                </template>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 
                 <!-- 活动内容 -->
-                <el-form-item label="活动内容" required>
+                <el-form-item label="活动内容" prop="activityContent" required>
                     <el-input
                         type="textarea"
-                        v-model="form.content"
+                        v-model="form.activityContent"
                         placeholder="请输入活动内容"
                         :rows="5"
                     ></el-input>
@@ -209,14 +229,22 @@
   </template>
   
   
-  <script>
-  import SubpageTitle from '@/components/SubpageTitle.vue';
-  import DropDownBox from '@/components/dropDown/DropDownBox.vue';
-  import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
-  import { ArrowDown } from '@element-plus/icons-vue';
-  import "@/style/Common.css"
+<script>
+import SubpageTitle from '@/components/SubpageTitle.vue';
+import DropDownBox from '@/components/dropDown/DropDownBox.vue';
+import AttributeSelection from '@/components/dropDown/AttributeSelection.vue';
+import { ArrowDown } from '@element-plus/icons-vue';
+import { 
+    fileUpload,
+    getActivityHighlightsPage, 
+    addActivityHighlight, 
+    updateActivityHighlight,
+    deleteActivityHighlight, 
+    deleteActivityHighlightByBatch 
+} from "@/http/api";
+import "@/style/Common.css"
   
-  export default {
+export default {
     components: {
         SubpageTitle,
         DropDownBox,
@@ -237,46 +265,45 @@
             queryItems: {
                 id: "",
                 title: "",
-                institution: "",
+                publishingUnit: "",
                 createTime: "",
-                type: "",
+                activityType: "",
                 page: {
                     pageNumber: 1,
                     pageSize: 10,
                     searchCount: true
                 }
             },
-            HDList: [
-                { id: "1", title: "第三批全省高校党建双创培育创建对象", institution: "校党委", type: "xxx", content: "", createTime: "2023-09" },
-                { id: "2", title: "浙江大学xxxxxxx基地", institution: "校党委", type: "xxx", content: "", createTime: "2023-04" },
-                { id: "3", title: "浙江大学计算机科学与技术学院和软件学院党委", institution: "校党委", type: "xxx", content: "", createTime: "2023-02" },
-                { id: "4", title: "第三批全省高校党建双创培育创建对象", institution: "校党委", type: "xxx", content: "", createTime: "2023-09" },
-                { id: "5", title: "浙江大学xxxxxxx基地", institution: "校党委", type: "xxx", content: "", createTime: "2023-04" },
-                { id: "6", title: "浙江大学计算机科学与技术学院和软件学院党委", institution: "校党委", type: "xxx", content: "", createTime: "2023-02" }
+            hdfc: [
+                { id: "", title: "", publishingUnit: "", activityType: "", activityContent: "", creatTime: ""},
             ],
             form: {
                 id: "",
                 title: "",
-                institution: "",
-                type: "",
+                publishingUnit: "",
+                activityType: "",
                 createTime: "",
-                content: "",
+                activityContent: "",
             },
             currentContent: "",
             rules: {
                 title: [{ required: true, message: '请输入活动标题', trigger: 'blur' }],
-                institution: [{ required: true, message: '请选择发布单位', trigger: 'change' }],
-                type: [{ required: true, message: '请选择活动类型', trigger: 'change' }],
-                content: [{ required: true, message: '请选择活动内容', trigger: 'change' }],
+                publishingUnit: [{ required: true, message: '请选择发布单位', trigger: 'change' }],
+                activityType: [{ required: true, message: '请选择活动类型', trigger: 'change' }],
+                activityContent: [{ required: true, message: '请选择活动内容', trigger: 'change' }],
             },
-            institutionOptions: [
+            publishingUnitOptions: [
                 { label: '校党委', value: '校党委' },
                 { label: '支部书记', value: '支部书记' },
             ],
-            typeOptions: [
+            activityTypeOptions: [
                 { label: 'xxx', value: 'xxx' },
             ],
             selectedIds: [],
+            // 封面上传
+            fileList: [],
+            // 允许的文件类型
+            fileType: ["png", "jpg", "jpeg"],
         }
     },
     mounted() {
@@ -284,11 +311,21 @@
     },
     methods: {
         queryList() {
-            if (this.queryItems.institution === "全部") this.queryItems.institution = "";
-            if (this.queryItems.type === "全部") this.queryItems.type = "";
-            // TODO: 调用后端接口查询活动数据，此处仅为模拟数据示例
-            this.$message.warning("后端接口暂未开发")
-            this.tableBottom.totalNum = this.HDList.length;
+            if (this.queryItems.publishingUnit === "全部") this.queryItems.publishingUnit = "";
+            if (this.queryItems.activityType === "全部") this.queryItems.activityType = "";
+            // TODO: 发布时间的条件查询还有问题
+            if (this.queryItems.createTime != "") {
+                const date = new Date(this.queryItems.createTime);
+                if (!isNaN(date.getTime())) {
+                    this.queryItems.createTime = date.getTime();
+                }
+            }
+            getActivityHighlightsPage(this.queryItems).then(res => {
+                this.hdfc = res.data.records;
+                this.tableBottom.totalNum = res.data.total;
+            }).catch(err => {
+                this.$message.error("获取活动风采失败")
+            });
         },
         goTo(route) {
             this.$router.push(route);
@@ -324,24 +361,28 @@
             return date.split(' ')[0];
         },
         handleWatch(row) {
-            this.currentContent = row.content || "暂无内容"
+            this.currentContent = row.activityContent || "暂无内容"
             this.watchDialogVisible = true
         },
         clearInputMessage() {
             this.queryItems.title = ""
             this.queryItems.id = ""
             this.queryItems.createTime = ""
-            this.queryItems.institution = ""
-            this.queryItems.type = ""
+            this.queryItems.publishingUnit = ""
+            this.queryItems.activityType = ""
         },
         clearAddForm() {
-            this.form.title = "";
-            this.form.id = "";
-            this.form.institution = "";
-            this.form.type = "";
-            this.form.createTime = "";
-            this.form.content = "";
+            this.form = {
+                id: "",
+                title: "",
+                publishingUnit: "",
+                activityType: "",
+                createTime: "",
+                activityContent: "",
+                fileId: "",
+            },
             this.currentRowId = "";
+            this.fileList = [];
             this.isEdit = false;
         },
         // 点击新增按钮
@@ -352,25 +393,79 @@
         },
         // 点击编辑按钮
         handleEdit(row) {
+            this.addAndEditDialogVisible = true;
             this.isEdit = true;
             this.currentRowId = row.id;
-            // 回显数据
-            this.form.title = row.title;
-            this.form.id = row.id;
-            this.form.institution = row.institution;
-            this.form.type = row.type;
-            this.form.createTime = this.formatDate(row.createTime);
-            this.form.content = row.content || '';
-            this.addAndEditDialogVisible = true;
+            this.$nextTick(() => {
+                this.form = {
+                    id: row.id,
+                    title: row.title,
+                    publishingUnit: row.publishingUnit,
+                    activityType: row.activityType,
+                    createTime: row.createTime,
+                    activityContent: row.activityContent || "",
+                    fileId: row.fileId || ""
+                }
+            })
         },
         // 提交（新增或编辑）
         handleSubmit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     if (this.isEdit) {
-                        // TODO: 编辑活动
+                        const file = this.fileList[0];
+                        if (this.form.fileId == "" && !file) {
+                            this.$message.error("请上传封面图片");
+                            return;
+                        }
+                        if (file) {
+                            this.uploadCoverImage(file.raw).then(res => {
+                                this.form.fileId = res.id
+                                this.form.createTime = new Date().getTime();
+                                updateActivityHighlight(this.form).then(res => {
+                                    this.queryList();
+                                    this.$message.success("编辑成功");
+                                    this.addAndEditDialogVisible = false;
+                                    this.clearAddForm();
+                                }).catch(err => {
+                                    this.$message.error("编辑失败")
+                                    console.log(err);
+                                });
+                            }).catch(err => {
+                                this.$message.error("上传封面图片失败");
+                            });
+                        } else {
+                            // 说明没有重新上传
+                            updateActivityHighlight(this.form).then(res => {
+                                this.queryList();
+                                this.$message.success("编辑成功");
+                                this.addAndEditDialogVisible = false;
+                                this.clearAddForm();
+                            }).catch(err => {
+                                this.$message.error("编辑失败")
+                                console.log(err);
+                            });
+                        }
                     } else {
-                        // TODO: 新增活动
+                        const file = this.fileList[0];
+                        if (!file) {
+                            this.$message.error("请上传封面图片");
+                            return;
+                        }
+                        this.uploadCoverImage(file.raw).then(res => {
+                            this.form.fileId = res.id
+                            addActivityHighlight(this.form).then(res => {
+                                this.queryList();
+                                this.$message.success("添加成功");
+                                this.addAndEditDialogVisible = false;
+                                this.clearAddForm();
+                            }).catch(err => {
+                                this.$message.error("添加失败")
+                                console.log(err);
+                            });
+                        }).catch(err => {
+                            this.$message.error("上传封面图片失败");
+                        });
                     }
                 } else {
                     return false;
@@ -379,21 +474,26 @@
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning',
-				// center: true,
-				dangerouslyUseHTMLString: true,
-				confirmButtonClass: 'redBtn',
-				cancelButtonClass: 'whiteBtn',
-			}).then(() => {
-				// TODO：删除活动
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				});
-			});
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                // center: true,
+                dangerouslyUseHTMLString: true,
+                confirmButtonClass: 'redBtn',
+                cancelButtonClass: 'whiteBtn',
+            }).then(() => {
+                deleteActivityHighlight(id).then(res => {
+                    this.queryList();
+                    this.$message.success("删除成功");
+                }).catch(err => {
+                    this.$message.error("删除失败")
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         handleBatchDelete() {
             if (this.selectedIds.length === 0) {
@@ -407,17 +507,60 @@
                 confirmButtonClass: 'redBtn',
                 cancelButtonClass: 'whiteBtn',
             }).then(() => {
-                // TODO：批量删除活动
+                deleteActivityHighlightByBatch(this.selectedIds).then(res => {
+                    this.queryList();
+                    this.$message.success(`成功删除 ${this.selectedIds.length} 条记录`);
+                }).catch(err => {
+                    this.$message.error("批量删除失败")
+                })
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除',
                 });
             });
+        },
+        // 封面图片上传
+        uploadCoverImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            return fileUpload(formData).then(response => {
+                return response.data; // 返回文件路径
+            }).catch(error => {
+                this.$message.error('上传封面图片失败');
+                console.error(error);
+                return null;
+            });
+        },
+        beforeUpload(file) {
+            const isValidType = this.fileType.includes(file.type.split('/')[1].toLowerCase());
+            if (!isValidType) {
+                this.$message.error('只能上传 png/jpg/jpeg 文件');
+                return false;
+            }
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error("上传文件大小不能超过 2G!");
+                return false;
+            }
+            return true;
+        },
+        handleChange(file, list) {
+            if (list.length > 0) {
+                this.fileList = [list[list.length - 1]]
+            }
+        },
+        // dialog 关闭时清空表单验证信息
+        onDialogClose() {
+            this.$refs['form'].resetFields();
+            this.clearAddForm();
+        },
+        handlePreview(file) {
         }
     },
-  }
-  </script>
+}
+</script>
   
 <style scoped>
     .bar {
@@ -464,5 +607,10 @@
     .tab-divider {
         margin: 0 5px;
         color: #606266;
+    }
+    .el-button--small{
+        background-color: #C83C23;
+        border-color: #C83C23;
+        color: white;
     }
 </style>

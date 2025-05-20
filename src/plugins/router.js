@@ -121,7 +121,11 @@ const router = createRouter({
           name: 'BranchList',
           component: () => import('@/views/teacher/DWZXViews/BranchListView.vue')
         },
-        // 党委中心
+        {
+          path: '/teacher/dwzx/personlist',
+          name: 'PersonList',
+          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
+        },
         {
           path: '/teacher/dwfc',
           name: 'DWFC',
@@ -152,11 +156,6 @@ const router = createRouter({
           name: 'EditPersonViewZSDYT',
           component: () => import('@/views/teacher/FZGLViews/ZSDY/subPage/AddAndEditPersonView.vue')
         },
-        {
-          path: '/teacher/dwzx/personlist',
-          name: 'PersonList',
-          component: () => import('@/views/teacher/DWZXViews/PersonListView.vue')
-        },
         // 权限管理
         {
           path: '/teacher/permission',
@@ -169,6 +168,11 @@ const router = createRouter({
           name: 'SHYK',
           component: () => import('@/views/teacher/ZZSH/SHYKView.vue')
         },
+        {
+          path: '/teacher/zzsh/shykgl',
+          name: 'SHYKGL',
+          component: () => import('@/views/teacher/ZZSH/SHYKGLView.vue')
+        },
         // 发布管理
         {
           path: '/teacher/xtgg',
@@ -180,29 +184,30 @@ const router = createRouter({
           name: 'XXYB',
           component: () => import('@/views/teacher/FBGL/XXYBView.vue')
         },
+        {
+          path: '/teacher/ryfc',
+          name: 'RYFC',
+          component: () => import('@/views/teacher/FBGL/RYFC/IndexView.vue'),
+          redirect: '/teacher/ryfc/hdfc',
+          children: [
+            {
+              path: '/teacher/ryfc/hdfc',
+              name: 'HDFC',
+              component: () => import('@/views/teacher/FBGL/RYFC/HDFCView.vue'),
+            },
+            {
+              path: '/teacher/ryfc/ryjx',
+              name: 'RYJX',
+              component: () => import('@/views/teacher/FBGL/RYFC/RYJXView.vue'),
+            },
+          ]
+        },
+        // 支部管理
         // (党委端）支部管理
         {
           path: '/teacher/zbgl',
           name: 'ZBGL',
           children: [
-            {
-              path: '/teacher/zbgl/ryfc',
-              name: 'RYFC',
-              component: () => import('@/views/teacher/ZBGL/RYFC/IndexView.vue'),
-              redirect: '/teacher/zbgl/ryfc/hdgl',
-              children: [
-                {
-                  path: '/teacher/zbgl/ryfc/hdgl',
-                  name: 'HDGL',
-                  component: () => import('@/views/teacher/ZBGL/RYFC/HDGLView.vue'),
-                },
-                {
-                  path: '/teacher/zbgl/ryfc/ryjx',
-                  name: 'RYJX',
-                  component: () => import('@/views/teacher/ZBGL/RYFC/RYJXView.vue'),
-                },
-              ]
-            },
             {
               path: '/teacher/zbgl/jdbf',
               name: 'JDBF',
@@ -294,10 +299,40 @@ const router = createRouter({
       name: 'PartyManagerMain',
       component: () => import('@/views/layout.vue'),
       children: [
+        // 支部概况
         {
           path: '/partyManager/home',
           name: 'PartyManagerHome',
           component: () => import('@/views/partyBranchManager/HomeView.vue')
+        },
+        // 编辑支部概况 
+        {
+          path: '/partyManager/edit-overview',
+          name: 'PartyBranchEditOverview',
+          component: () => import('@/views/partyBranchManager/EditOverview.vue')
+        },
+        // 支部中心
+        {
+          path: '/partyManager/zbzx',
+          name: 'ZBZX',
+          component: () => import('@/views/partyBranchManager/ZBZX/ZBZXView.vue')
+        },
+        {
+          path: '/partyManager/zbzx/personlist',
+          name: 'PartyManagerPersonList',
+          component: () => import('@/views/partyBranchManager/ZBZX/PersonListView.vue')
+        },
+        // 支部风采
+        {
+          path: '/partyManager/zbfc',
+          name: 'ZBFC',
+          component: () => import('@/views/partyBranchManager/ZBFCView.vue')
+        },
+        // 发展管理
+        {
+          path: '/partyManager/fzgl',
+          name: 'FZGL',
+          redirect: '/partyManager/fzgl/rdsq'
         },
         // 发展阶段
         {

@@ -31,8 +31,8 @@ export const getCaptcha = (data) => {
  * @argument 
  * @returns
  */
-export const getPersonDetail = (userId) => {
-    return axios.get("/users/findUser")
+export const getPersonDetail = (id) => {
+    return axios.get("/stage/get",id)
 }
 
 /**
@@ -42,7 +42,7 @@ export const getPersonDetail = (userId) => {
  * @returns
  */
 export const motifyPersonSetting = (dataFrame) => {
-    return axios.get("/users/updateUser")
+    return axios.post("/stage/update",dataFrame)
 }
 
 /**
@@ -75,6 +75,16 @@ export const getCenterNumber2 = (developmentPhase) => {
     return axios.get("/selfstudy/allstudyhour",{
         params: { developmentPhase },
     })
+}
+
+/**
+ * 当前阶段培训时长接口 查看自主学习列表
+ * @author 秦宇阳
+ * @argument 
+ * @returns
+ */
+export const getStudyList = () => {
+    return axios.get("/selfstudy/list")
 }
 
 /**
@@ -207,4 +217,120 @@ export const addStageMember = (data) => {
  */
 export const getBranchOverview = () => {
     return instance.get("/auth/branch/getBranchOverview")
+}
+
+/**
+ * 获取活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getActivityHighlightsPage = (data) => {
+    return instance.post("/exhibit/page", data)
+}
+
+/**
+ * 新增活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addActivityHighlight = (data) => {
+    return instance.post("/exhibit/add", data)
+}
+
+/**
+ * 编辑活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const updateActivityHighlight = (data) => {
+    return instance.post("/exhibit/update", data)
+}
+
+/**
+ * 删除活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteActivityHighlight = (id) => {
+    return axios.post("/exhibit/delete", { id: id }, { 
+        headers: { "Content-Type": "application/x-www-form-urlencoded" } 
+    })
+}
+
+/**
+ * 批量删除活动风采接口
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deleteActivityHighlightByBatch = (ids) => {
+    return axios.post("/exhibit/deleteByBatch", ids)
+}
+
+/**
+ * 文件上传
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const fileUpload = (formData) => {
+    return axios.post("/files/upload", formData, { 
+        headers: { "Content-Type": 'multipart/form-data' } 
+    })
+}
+
+/**
+ * 获取荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const getPrizePage = (data) => {
+    return instance.post("/prize/page", data)
+}
+
+/**
+ * 新增荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const addPrize = (data) => {
+    return instance.post("/prize/add", data)
+}
+
+/**
+ * 编辑荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const updatePrize = (data) => {
+    return instance.post("/prize/update", data)
+}
+
+/**
+ * 删除荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deletePrize = (id) => {
+    return axios.post("/prize/delete", { id: id }, { 
+        headers: { "Content-Type": "application/x-www-form-urlencoded" } 
+    })
+}
+
+/**
+ * 批量删除荣誉奖项
+ * @author 安俊霖
+ * @argument 
+ * @returns
+ */
+export const deletePrizeByBatch = (ids) => {
+    return axios.post("/prize/deleteByBatch", ids)
 }
