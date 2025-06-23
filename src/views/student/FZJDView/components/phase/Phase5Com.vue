@@ -25,7 +25,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 501, 'unArrivePhase': phase <501 }">入党宣誓</span>
+                                        :class="{ 'arrivePhase': phase >= 501, 'unArrivePhase': phase <501, 'completed-title': activePhase >= 5 }">入党宣誓</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -85,7 +85,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 502, 'unArrivePhase': phase <502 }">预备党员党校培训</span>
+                                        :class="{ 'arrivePhase': phase >= 502, 'unArrivePhase': phase <502, 'completed-title': activePhase >= 5 }">预备党员党校培训</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -144,7 +144,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 503, 'unArrivePhase': phase <503 }">提交思想汇报</span>
+                                        :class="{ 'arrivePhase': phase >= 503, 'unArrivePhase': phase <503, 'completed-title': activePhase >= 5 }">提交思想汇报</span>
                                     <span v-if="phase >= 503" class="text-h6"
                                         style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下一次提交日期：2023.12.30</span>
                                 </v-col>
@@ -200,7 +200,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 504, 'unArrivePhase': phase <504 }">提交转正申请</span>
+                                        :class="{ 'arrivePhase': phase >= 504, 'unArrivePhase': phase <504, 'completed-title': activePhase >= 5 }">提交转正申请</span>
                                 </v-col>
                                 <v-col class="text-right mr-10 mt-8" style="margin-right: 1%;">
 
@@ -415,6 +415,10 @@ export default {
         phase: {
             type: Number,
             default: 1
+        },
+        activePhase: {
+            type: Number,
+            default: 1
         }
     },
     setup() {
@@ -482,4 +486,9 @@ export default {
 
 </script>
 
-<style src="./phaseCom.css" scoped></style>
+<style src="./phaseCom.css" scoped>
+.completed-title {
+    color: #FF5B5B;
+    font-weight: bold;
+}
+</style>

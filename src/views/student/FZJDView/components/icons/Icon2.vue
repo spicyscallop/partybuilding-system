@@ -10,7 +10,7 @@
                 </div>
             </v-row>
             <v-row class="justify-center">
-                <h5>{{ phaseName }}</h5>
+                <h5 :class="{'active-phase': nowPhase >= iconPhase || clickPhase == iconPhase}">{{ phaseName }}</h5>
             </v-row>
         </v-col>
     </v-sheet>
@@ -57,5 +57,8 @@ export default {
 
 </script>
 <style>
-
+.active-phase {
+    color: #FF5B5B;
+    font-weight: bold;
+}
 </style>

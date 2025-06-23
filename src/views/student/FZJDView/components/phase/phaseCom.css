@@ -62,3 +62,8 @@ h4{
 .unArrivePhase{
     color: #898989;
 }
+
+:deep(.completed-title) {
+    color: #FF5B5B !important;
+    font-weight: bold;
+}

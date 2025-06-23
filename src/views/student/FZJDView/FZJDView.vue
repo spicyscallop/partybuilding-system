@@ -16,11 +16,11 @@
                 </v-sheet>
             </v-row>
             <v-row class="" style="overflow: hidden;">
-                <Phase1Com v-if="clickPhase == 1" :phase="subPhase"></Phase1Com>
-                <Phase2Com v-if="clickPhase == 2" :phase="subPhase"></Phase2Com>
-                <Phase3Com v-if="clickPhase == 3" :phase="subPhase" style="width: 100%;"></Phase3Com>
-                <Phase4Com v-if="clickPhase == 4" :phase="subPhase" style="width: 100%;"></Phase4Com>
-                <Phase5Com v-if="clickPhase == 5" :phase="subPhase" style="width: 100%;"></Phase5Com>
+                <Phase1Com v-if="clickPhase == 1" :phase="subPhase" :activePhase="phase"></Phase1Com>
+                <Phase2Com v-if="clickPhase == 2" :phase="subPhase" :activePhase="phase"></Phase2Com>
+                <Phase3Com v-if="clickPhase == 3" :phase="subPhase" :activePhase="phase" style="width: 100%;"></Phase3Com>
+                <Phase4Com v-if="clickPhase == 4" :phase="subPhase" :activePhase="phase" style="width: 100%;"></Phase4Com>
+                <Phase5Com v-if="clickPhase == 5" :phase="subPhase" :activePhase="phase" style="width: 100%;"></Phase5Com>
             </v-row>
         </v-col>
     </v-container>
@@ -35,12 +35,12 @@ import Phase4Com from '@/views/student/FZJDView/components/phase/Phase4Com.vue';
 import Phase3Com from '@/views/student/FZJDView/components/phase/Phase3Com.vue';
 import Phase2Com from '@/views/student/FZJDView/components/phase/Phase2Com.vue';
 import Phase1Com from '@/views/student/FZJDView/components/phase/Phase1Com.vue';
+import { getCurrentUser } from '@/utils/auth';
+
 export default {
     components: {
         IconPhases,
         SubpageTitle,
-        // Popup_upload,
-        // Popup_download,
         Phase1Com,
         Phase2Com,
         Phase3Com,
@@ -49,20 +49,30 @@ export default {
     },
     data() {
         return {
-            phase: 2,
+            phase: 1,
             clickPhase: 1,
             subPhase: 205
         }
     },
     methods: {
         changePhaseEvent(clickPhase) {
-            // if(clickPhase<=this.phase){
-                this.clickPhase = clickPhase
-            // }
+            this.clickPhase = clickPhase
+        },
+        stateToPhase(state) {
+            // 和 IconPhases 里的顺序保持一致
+            const phaseNames = ["入党申请人", "入党积极分子", "发展对象", "预备党员", "考察与转正"];
+            return phaseNames.indexOf(state) + 1;
         }
     },
     mounted() {
-
+        const user = getCurrentUser();
+        if (user && user.developmentPhase) {
+            const phaseNum = this.stateToPhase(user.developmentPhase);
+            if (phaseNum > 0) {
+                this.phase = phaseNum;
+                this.clickPhase = phaseNum;
+            }
+        }
     }
 }
 </script>

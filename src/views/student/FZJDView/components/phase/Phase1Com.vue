@@ -31,7 +31,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <p>
-                                        <span class="text-h4" :class="{'arrivePhase':phase>=101,'unArrivePhase':phase<101}">提交《入党申请书》</span>
+                                        <span class="text-h4" :class="{'arrivePhase':phase>=101,'unArrivePhase':phase<101, 'completed-title': activePhase >= 1}">提交《入党申请书》</span>
                                     </p>
                                 </v-col>
                                 <v-col class="ml-10 mt-10 text-right" style="margin-right: 3%;">
@@ -88,7 +88,7 @@
                         <v-col>
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
-                                    <span class="text-h4" :class="{'arrivePhase':phase>=102,'unArrivePhase':phase<102}">党组织派人谈话</span>
+                                    <span class="text-h4" :class="{'arrivePhase':phase>=102,'unArrivePhase':phase<102, 'completed-title': activePhase >= 1}">党组织派人谈话</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -141,6 +141,10 @@ export default {
         phase:{
             type:Number,
             default:1
+        },
+        activePhase: {
+            type: Number,
+            default: 1
         }
     },
     setup() {
@@ -204,5 +208,8 @@ export default {
 </script>
 
 <style src="./phaseCom.css" scoped>
-
+.completed-title {
+    color: #FF5B5B;
+    font-weight: bold;
+}
 </style>

@@ -103,8 +103,13 @@ export default {
             this.$emit('child-event', clickPhase)
         }
     },
+    watch: {
+        nowPhase(newVal) {
+            this.clickPhase = newVal;
+        }
+    },
     mounted() {
-        this.clickPhase = this.nowPhase
+        this.clickPhase = this.nowPhase;
     },
 };
 

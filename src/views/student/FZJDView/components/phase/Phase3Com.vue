@@ -30,7 +30,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 301, 'unArrivePhase': phase < 301 }">确认发展对象</span>
+                                        :class="{ 'arrivePhase': phase >= 301, 'unArrivePhase': phase < 301, 'completed-title': activePhase >= 3 }">确认发展对象</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -92,7 +92,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 302, 'unArrivePhase': phase < 302 }">上级党委备案</span>
+                                        :class="{ 'arrivePhase': phase >= 302, 'unArrivePhase': phase < 302, 'completed-title': activePhase >= 3 }">上级党委备案</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -146,7 +146,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 303, 'unArrivePhase': phase < 303 }">确定入党介绍人</span>
+                                        :class="{ 'arrivePhase': phase >= 303, 'unArrivePhase': phase < 303, 'completed-title': activePhase >= 3 }">确定入党介绍人</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -206,7 +206,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 304, 'unArrivePhase': phase < 304 }">进行政治审查</span>
+                                        :class="{ 'arrivePhase': phase >= 304, 'unArrivePhase': phase < 304, 'completed-title': activePhase >= 3 }">进行政治审查</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -262,7 +262,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 305, 'unArrivePhase': phase < 305 }">发展对象培训班</span>
+                                        :class="{ 'arrivePhase': phase >= 305, 'unArrivePhase': phase < 305, 'completed-title': activePhase >= 3 }">发展对象培训班</span>
                                 </v-col>
                                 <v-col class="mr-3 mt-8" style="margin-right: 1%;">
                                     <v-col class="text-center" style="background-color: #d5d5d5;border-radius: 10px;">
@@ -318,7 +318,7 @@
                             <v-row>
                                 <v-col class="ml-10 mt-10" cols="8">
                                     <span class="text-h4"
-                                        :class="{ 'arrivePhase': phase >= 306, 'unArrivePhase': phase < 306 }">提交思想汇报</span>
+                                        :class="{ 'arrivePhase': phase >= 306, 'unArrivePhase': phase < 306, 'completed-title': activePhase >= 3 }">提交思想汇报</span>
                                     <span v-if="phase>=6" class="text-h6"
                                         style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下一次提交日期：2023.12.30</span>
                                 </v-col>
@@ -364,6 +364,10 @@ export default {
     },
     props: {
         phase: {
+            type: Number,
+            default: 1
+        },
+        activePhase: {
             type: Number,
             default: 1
         }
@@ -431,4 +435,9 @@ export default {
 
 </script>
 
-<style src="./phaseCom.css" scoped></style>
+<style src="./phaseCom.css" scoped>
+.completed-title {
+    color: #FF5B5B;
+    font-weight: bold;
+}
+</style>
